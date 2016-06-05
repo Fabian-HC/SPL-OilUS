@@ -45,7 +45,7 @@ adf.test(data$Stock, k=2)
 library(lmtest)
 bptest(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, data=data, studentize=F)
 
-#heterosk. and serial corr. consistent coefficient
+#heterosk. and serial corr. consistent coefficients
 coeftest(re, vcovHC(re,method="arellano"))
 stargazer(re,type="text",title="Arellano model",dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), out="arellanomodel.txt")
 
