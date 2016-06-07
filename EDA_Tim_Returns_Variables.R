@@ -95,8 +95,20 @@ class(data$Date)
 data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
 class(data$Date)
 
+#change company number -> name
+data$Company = as.character(data$Company)
+data$Company[data$Company== "1"] ="Exxon Mobil Corp"
+data$Company[data$Company== "2"] ="Apache Corp"
+data$Company[data$Company== "3"] ="CenterPoint Energy Inc"
+data$Company[data$Company== "4"] ="Chevron Corp"
+data$Company[data$Company== "5"] ="Horizons Enhanced"
+data$Company[data$Company== "6"] ="Murphy Oil Corporation"
+data$Company[data$Company== "7"] ="Occidental Petroleum Corp"
+data$Company[data$Company== "8"] ="PG&E Corp"
+data$Company[data$Company== "9"] ="Williams Cos Inc"
+
 # Generate and store date vector for later purposes
-DateVec <- subset(data$Date, data$Company == 1)
+DateVec <- subset(data$Date, data$Company == "Exxon Mobil Corp")
 #   data$Date[1:79]
 class(DateVec)
 DateVec <- sort(DateVec)
@@ -116,7 +128,7 @@ if(sum(row.has.na) != 0){
 tail(data)
 
 # Convert data into panel data
-data <- pdata.frame(data, index = c("Company", "Date"), drop.index = F, row.names = T) 
+data <- pdata.frame(data, index = c("Company", "Date"), drop.index = FALSE, row.names = TRUE) 
 
 # Has R read in the panel Data set with Date as date variable?
 class(data$Date)
@@ -129,7 +141,7 @@ class(data$Date)
 summary(data)
 
 # Set up a 'customized' Summary Table for the common factors
-CommonF <- data.frame(subset(data[, 8:10], data$Company == 1))
+CommonF <- data.frame(subset(data[, 8:10], data$Company == "Exxon Mobil Corp"))
 # a <- nrow(CommonF) # Not used here
 # variable.names(CommonF) # not used here
 # Note that variable Names are correctly copied!
