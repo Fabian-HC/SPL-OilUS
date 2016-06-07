@@ -1,0 +1,34 @@
+setwd("/Users/antton/Desktop/Statistique programming")
+data <- read.csv2("Dataset-FINALupdated_absolute.csv", stringsAsFactors=FALSE)
+
+View(data)
+
+install.packages("stargazer")
+install.packages("tseries")
+
+library(foreign)
+library(plm) 
+library(car)
+library(lmtest)   
+library(sandwich)
+library(stargazer)
+
+class(data$Date)
+data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
+class(data$Date)
+
+#subsetting
+Pre2008 = pdata.frame(subset(data, Date <= '2008-08-31'), index = c("Company", "Date"), drop.index = F, row.names = T) 
+Post2008 = pdata.frame(subset(data, Date > '2007-08-31'), index = c("Company", "Date"), drop.index = F, row.names = T) 
+
+
+#fixed effects model
+#pre 2008
+fepre2008 <- plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity + Oil + Gas + Market + EURUSD, model = "within", data=Pre2008)
+summary(fepre2008)
+stargazer(fepre2008,type="text",title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.txt")
+
+#post 2008  
+fePost2008 <- plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity + Oil + Gas + Market + EURUSD, model = "within", data=Post2008)
+summary(fePost2008)
+stargazer(fePost2008,type="text",title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.txt")
