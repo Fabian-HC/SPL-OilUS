@@ -1,11 +1,8 @@
 Dear people, 
 
-in this folder you will find the R code for how I managed (so far) transforming the initial dataset into one consisting of returns. 
+I managed to include the Z Scores as well, the dataset should now be fine. 
 
-Note that the returns are computed as: [P(t+1) - P(t)] / P(t). 
-The computation of log-returns à la ln[P(t+1) / P(t)] is a bit complicated because Net income takes on negative values and ln(-1000) returns a missing value. Does one of you have an idea how to fix that issue?
-
-Can one of you do me the favor and check once more whether the values of my transformation in R match with the ones of the Excel table we relied on so far? 
+Please check it once. 
 
 Regards
 Tim
