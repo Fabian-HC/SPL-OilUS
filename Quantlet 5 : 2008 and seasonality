@@ -1,0 +1,103 @@
+setwd("/Users/antton/Desktop/Statistique programming")
+data <- read.csv2("Dataset-FINALupdated_absolute.csv", stringsAsFactors=FALSE)
+
+View(data)
+
+install.packages("stargazer")
+install.packages("tseries")
+
+library(foreign)
+library(plm) 
+library(stargazer)
+
+class(data$Date)
+data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
+class(data$Date)
+
+########### BEFOR/AFTER 2008 ############
+
+# subsetting #
+Pre2008 = pdata.frame(subset(data, Date <= '2008-08-31'), index = c("Company", "Date"), drop.index = F, row.names = T) 
+Post2008 = pdata.frame(subset(data, Date > '2007-08-31'), index = c("Company", "Date"), drop.index = F, row.names = T) 
+
+#fixed effects model#
+#pre 2008
+  fepre2008 = plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity + Oil + Gas + Market + EURUSD, 
+                    model = "within", 
+                    data=Pre2008)
+  summary(fepre2008)
+
+#post 2008  
+  fePost2008 = plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity + Oil + Gas + Market + EURUSD, 
+                 model = "within", 
+                 data=Post2008)
+  summary(fePost2008)
+
+#results
+  stargazer(fepre2008, fePost2008, type="text", 
+          title="Oneway (individual) effect Within Model : C",
+          dep.var.labels=c("Stock return"),
+          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), 
+          out="femodel.txt")
+
+#using dummy varibales
+
+  #creating dummy#
+  DumP = as.numeric(data$Date <= '2008-08-31') 
+  length(DumP)
+  data2 = cbind(data, "oil 2008 crisis (=1)" = DumP)
+  class (DumP)
+  data2 = pdata.frame(data2, index = c("Company", "Date"), drop.index = F, 
+                      row.names = T) 
+  
+  #fixed effect with Dummy
+  DumyReg = plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity + Oil + Gas + Market + EURUSD + 
+                   DumP*Assets.to.Market.Cap + DumP*Net.Income + DumP*BV.Equity.to.Market.Cap + DumP*Debt.to.Equity + DumP*Oil + DumP*Gas + DumP*Market + DumP*EURUSD, 
+                   model = "within", 
+                   data=data2)
+  
+  stargazer(DumyReg,type="text",
+            title="Oneway (individual) effect Within Model",
+            dep.var.labels=c("Stock return"),
+            covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+                               "Debt over equity","Oil price","Gas price","DJI premium"), 
+            out="femodel.txt")
+  
+###############SEASONALITY#############
+  
+  ###creating factor###
+  #Function#
+  quarters = lapply(data$Date,quarters)
+  quarter2 = unlist(quarters)
+  
+  #Data#
+  data3 = cbind(data,"Quarter" = quarter2)
+  data3[,"Quarter"] <- factor(data3[,"Quarter"])
+  is.factor( data3[,"Quarter"])
+  dataQ = pdata.frame(data3, index = c("Company", "Date"), drop.index = F, row.names = T) 
+  
+  #regression#
+  re <- plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap 
+                    + Debt.to.Equity + Oil + Gas + Market + EURUSD + Quarter, 
+            model = "random",
+            data=dataQ)
+  stargazer(re,type="text",
+            title="Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)",
+            dep.var.labels=c("Stock return"),
+            covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+                               "Debt over equity","Oil price","Gas price","DJI premium"), 
+            out="remodel.txt")
+  
+  re <- plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap 
+            + Debt.to.Equity + Oil + Gas + Market + EURUSD + Quarter*Net.Income + Quarter*BV.Equity.to.Market.Cap 
+            + Quarter*Debt.to.Equity + Quarter*Oil + Quarter*Gas + Quarter*Market + Quarter*EURUSD, 
+            model = "random",
+            data=dataQ)
+  stargazer(re,type="text",
+            title="Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)",
+            dep.var.labels=c("Stock return"),
+            covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+                               "Debt over equity","Oil price","Gas price","DJI premium"), 
+            out="remodel.txt")
+  
+  
