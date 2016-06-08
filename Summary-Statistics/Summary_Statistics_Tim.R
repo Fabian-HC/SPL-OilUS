@@ -49,7 +49,17 @@ SumCustom <- function(x){
 }
 
 
-
+# associate names to compagnie 
+data$Company = as.character(data$Company)
+data$Company[data$Company== "1"] ="Exxon Mobil Corp"
+data$Company[data$Company== "2"] ="Apache Corp"
+data$Company[data$Company== "3"] ="CenterPoint Energy Inc"
+data$Company[data$Company== "4"] ="Chevron Corp"
+data$Company[data$Company== "5"] ="Hess Corp"
+data$Company[data$Company== "6"] ="Murphy Oil Corporation"
+data$Company[data$Company== "7"] ="Occidental Petroleum Corp"
+data$Company[data$Company== "8"] ="PG&E Corp"
+data$Company[data$Company== "9"] ="Williams Cos Inc"
 
 setwd("C:/Users/Trimme/Documents/Studium Master/Kurse/2016 SoSe/Statistical Programming Languages/Dataset")
 data <- read.csv2("Dataset-FINALupdated_absolute.csv", stringsAsFactors=FALSE)
