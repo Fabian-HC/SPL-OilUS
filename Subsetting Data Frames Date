@@ -1,6 +1,0 @@
-Hi Guys, 
-you can subset the dataset according to dates (pre / post 2008) via
-Pre2008 = subset(data, Date <= '2007-03-30')
-Post2008 = subset(data, Date > '2007-03-30')
-(got this from_: http://stackoverflow.com/questions/17708805/subset-data-frame-for-specific-dates) 
-This general procedure can be found in our slides of day 2.
