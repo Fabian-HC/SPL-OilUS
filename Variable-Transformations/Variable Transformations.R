@@ -1,3 +1,11 @@
+# Test Test Test
+
+# Bla Bla
+
+
+#adsfjahsf
+
+# asjdfhasjdf
 # Load packages
 
 library(Cairo)
@@ -182,7 +190,7 @@ while(i < 2){
     }
     i = i + 1
 }
-# Es gibt einen Umweg über die Funktion by oder 'aggregate'. Das
+# Es gibt einen Umweg ?ber die Funktion by oder 'aggregate'. Das
 # hat jedoch bei mir noch nicht geklappt
 
 
