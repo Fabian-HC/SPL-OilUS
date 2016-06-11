@@ -1,0 +1,114 @@
+# Test Test Test
+
+# Bla Bla
+
+
+#adsfjahsf
+
+# asjdfhasjdf
+# Load packages
+
+library(Cairo)
+
+# Package for sumamrizing data
+# install.packages("Hmisc")
+library(Hmisc)
+# for this command: describe(mydata)
+
+# Library for sumamrizing data 2
+# install.packages("psych")
+library(psych)
+# for this command: describe.by(mydata, group,...)
+
+# Working with Doby package for summary Statistics
+# install.packages("doBy")
+library(doBy)
+#summaryBy(mpg + wt ~ cyl + vs, data = mtcars, 
+#          FUN = function(x) { c(m = mean(x), s = sd(x)) } )
+
+# Importing files of other formats
+library(foreign)
+
+# Panel data analysis package
+library(plm) 
+
+library(car)
+
+library(lmtest)   
+
+library(sandwich)
+
+library(ggplot2)
+
+library(grid) # needed for plotting later
+library(lattice)
+library("reshape2")
+library(plyr)
+install.packages("plyr")
+install.packages("data.table")
+library(data.table)
+#
+
+# Define required functions
+
+zScoreFun = function(x){
+  n = length(x)
+  # result = scale(x, center = TRUE, scale = TRUE)
+  result = ((x - mean(x)) / sd(x)) 
+}
+
+logreturnsfun = function(x){
+  n = length(x)
+  logreturn = diff(log(x), lag(1))
+  # AS numeric part added
+}
+
+setwd("/Users/antton/Desktop/Statistique programming")
+data <- read.csv2("Dataset-FINALupdated_absolute.csv", stringsAsFactors=FALSE)
+
+# Convert Date such that R recognizes it as date
+class(data$Date)
+data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
+class(data$Date)
+
+#Change data order to us Logreturns
+datat = data[order(data$Company,data$Date),]
+
+#logreturn#
+LogR = apply (
+       X = datat[,c(8:11, 3, 4, 6)], 
+       MARGIN = 2 , 
+       logreturnsfun
+       )
+#deleting false log return#
+LogR = data.frame(LogR)
+LogR2 = subset(LogR, as.Date("1996-06-30")<Test2$Date)
+
+#verification which row have been deleted
+M1 = setkey(LogR)
+M2 = setkey(LogR2)
+na.omit(
+  M2[M1,which=TRUE])
+
+#Z score#
+Zscore = data.table(datat[,c(1,2,5,7)])
+Zscore2 = Zscore[,list(Date = Date,
+                 BV.Equity.to.Market.Cap = zScoreFun(BV.Equity.to.Market.Cap), 
+                 Net.Income=zScoreFun(Net.Income)), 
+           by=list(Company)]
+
+#preparing Merge (erasing value for which a log return could not be calculated)#
+Zscore3 = subset(Zscore2, Date > as.Date("1996-06-30"))
+
+#verification which row have been deleted
+M1 = setkey(Zscore2)
+M2 = setkey(Zscore3)
+na.omit(
+  M2[M1,which=TRUE])
+
+# Merge the 2 two data sections and keep the data only where it is logreturn are calculated
+DatatransA = cbind(Zscore3,LogR2)
+
+# Save the transformed dataset
+write.csv2(DatatransA, file = "Z_Transformed_variables_Quarterly_returns_as_Marcus.csv")
+
