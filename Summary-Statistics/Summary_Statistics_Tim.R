@@ -136,12 +136,17 @@ colnames(data[, 2:7])
 # That is the enterprise-specific information I would like to sumamrize
 specific <- data[, 2:7]
 # describeBy(specific, group = specific$Company) # result can be presented better
-EntSummaryMat <- describeBy(specific, group = specific$Company, mat = TRUE)
+EntSummaryMat <- describeBy(specific[, 2:6], group = specific$Company, mat = TRUE)
 SumTable <- data.frame(EntSummaryMat)
-SumTable <- orderBy(~group1, data = SumTable)
+### not needed for me : SumTable <- orderBy(~group1, data = SumTable) ##
 SumTable <- data.frame(SumTable[,2:15]) # remove more elegantly later
 SumTable = SumTable[, -which(colnames(SumTable) == "n")]
 SumTable
+
+#possibility 2#
+
+
+
 # Still substitute vars by variable names and then we would be fine
 # Subsetting the tables is also a problem, but that could be overcome!
 
