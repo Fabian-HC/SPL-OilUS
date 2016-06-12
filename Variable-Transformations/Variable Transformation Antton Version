@@ -82,6 +82,9 @@ LogR = apply (
        )
 #deleting false log return#
 LogR = data.frame(LogR)
+# Hi Antton, LogR2 is not generated anymore because the Test2 variable is not there
+# therefore, you can't call Test2$Date anymore
+# You could try to just delete Observation 1 or 80 from Log1 (the one being empty) at first
 LogR2 = subset(LogR, as.Date("1996-06-30")<Test2$Date)
 
 #verification which row have been deleted
