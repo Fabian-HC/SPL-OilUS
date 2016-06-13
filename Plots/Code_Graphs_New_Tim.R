@@ -81,6 +81,13 @@ histfun = function(x){
   lines(g1, dens1, col = "red")
 }
 
+plotfun = function(x){
+
+  Name = colnames(x)
+  p = plot(x, type = "l", ylab = Name)
+  # , main = paste("Company", i, sep = "")
+}
+
 # For my customized summary later on
 SumCustom <- function(x){
   r1 = mean(x)
@@ -190,27 +197,16 @@ plot(Sub1$Date, Sub1$Market, type = "l", xlab = "Year", ylab = "Dow Jones Index"
 # dev.off()
 
 # Plot each company with specific and common factors
-CompanyNames <- levels(data$Company) # Extract the 'Company Names'
-VarNames <- colnames(data[,3:10])
 
-par(mfrow = c(1,8)) # Set that I want to plot 8 graphs beside one and another
-par(mar=c(2,2,2,2)) # Insert margins between the different plots. 
 # Note that I would have to alter this conficurations when setting up other plots later
 #dev.off()
 i = 1
 while(i < 10){
-  NameFile <- paste("Company_", i,"_SpecificFact.jpg", sep = "")
-  jpeg(filename = NameFile, pointsize =24, quality = 200, bg = "white", res = NA, restoreConsole = TRUE, height = 400, width = 3600)
-  par(mfrow = c(1,8))
+  par(mfrow = c(1,9))
+  par(mar = c(2,2,2,2))
   Sub1 <- subset(data, data$Company == i)
-  j = 3
-  while(j < 11){
-    Filename <- paste("Company_", CompanyNames[i],"_", VarNames[j], ".jpeg", sep = "")
-    Yvalues <- Sub1[,j]
-    plot(Sub1$Date, Yvalues, type = "l", ylab = paste(VarNames[(j - 2)]) , main = paste("C_", i, sep = ""))
-    j = j + 1  
-  }
-  dev.off()
+  Date = Sub1$Date
+  apply(Sub1[,c(3:11)], MARGIN = 2, FUN = plotfun)
   i = i + 1
   # dev.off() - apparently not needed
 }
@@ -305,4 +301,31 @@ i = i + 1
 }
 
 
+# OLD CODE FOR GENERATING THE PLOTS OF THE COMPANY-SPECIFIC
+# VARIABLES
 
+CompanyNames <- levels(data$Company) # Extract the 'Company Names'
+VarNames <- colnames(data[,3:10])
+
+#dev.off()
+i = 1
+while(i < 10){
+  # NameFile <- paste("Company_", i,"_SpecificFact.jpg", sep = "")
+  #jpeg(filename = NameFile, pointsize =24, quality = 200, bg = "white", res = NA, restoreConsole = TRUE, height = 400, width = 3600)
+  par(mfrow = c(1,9))
+  par(mar = c(2,2,2,2))
+  Sub1 <- subset(data, data$Company == i)
+  Date = Sub1$Date
+  apply(Sub1[,c(3:11)], MARGIN = 2, FUN = plotfun)
+  #j = 3
+  #while(j < 11){
+  #Filename <- paste("Company_", CompanyNames[i],"_", VarNames[j], ".jpeg", sep = "")
+  #Yvalues <- Sub1[,j]
+  #plot(Sub1$Date, Yvalues, type = "l", ylab = paste(VarNames[(j - 2)]) , main = paste("C_", i, sep = ""))
+  #j = j + 1  
+  #}
+  #dev.off()
+  i = i + 1
+  # dev.off() - apparently not needed
+}
+# dev.off() - apparently not needed
