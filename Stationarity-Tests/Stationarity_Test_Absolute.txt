@@ -1,0 +1,20 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Mon Jun 13 12:17:57 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{llllllllll}
+  \hline
+ & Stock & Assets.to.Market.Cap & BV.Equity.to.Market.Cap & Debt.to.Equity & Net.Income & Oil & Gas & Market & EURUSD \\ 
+  \hline
+1 & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  2 & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  3 & not\_stationary & not\_stationary & not\_stationary & not\_stationary & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  4 & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  5 & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  6 & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  7 & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  8 & not\_stationary & not\_stationary & stationary & not\_stationary & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  9 & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+   \hline
+\end{tabular}
+\end{table}
