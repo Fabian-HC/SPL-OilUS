@@ -1,0 +1,15 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Tue Jun 14 16:04:57 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{ll}
+  \hline
+ & testresult \\ 
+  \hline
+Assets.to.Market.Cap & stationary \\ 
+  Debt.to.Equity & stationary \\ 
+  BV.Equity.to.Market.Cap & not\_stationary \\ 
+  Net.Income & not\_stationary \\ 
+   \hline
+\end{tabular}
+\end{table}

@@ -1,0 +1,20 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Tue Jun 14 16:05:02 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrlllll}
+  \hline
+ & Group.1 & Oil & Gas & Market & EURUSD & Stock \\ 
+  \hline
+1 & 1 & stationary & stationary & stationary & stationary & stationary \\ 
+  2 & 2 & stationary & stationary & stationary & stationary & stationary \\ 
+  3 & 3 & stationary & stationary & stationary & stationary & stationary \\ 
+  4 & 4 & stationary & stationary & stationary & stationary & stationary \\ 
+  5 & 5 & stationary & stationary & stationary & stationary & stationary \\ 
+  6 & 6 & stationary & stationary & stationary & stationary & stationary \\ 
+  7 & 7 & stationary & stationary & stationary & stationary & stationary \\ 
+  8 & 8 & stationary & stationary & stationary & stationary & stationary \\ 
+  9 & 9 & stationary & stationary & stationary & stationary & stationary \\ 
+   \hline
+\end{tabular}
+\end{table}
