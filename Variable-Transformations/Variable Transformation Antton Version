@@ -1,13 +1,3 @@
-# Test Test Test
-
-# Bla Bla
-
-
-#adsfjahsf
-
-# asjdfhasjdf
-# Load packages
-
 library(Cairo)
 
 # Package for sumamrizing data
@@ -76,15 +66,16 @@ datat = data[order(data$Company,data$Date),]
 
 #logreturn#
 LogR = apply (
-       X = datat[,c(8:11, 3, 4, 6)], 
-       MARGIN = 2 , 
-       logreturnsfun
-       )
+  X = datat[,c(8:11, 3, 4, 6)], 
+  MARGIN = 2 , 
+  logreturnsfun
+)
 #deleting false log return#
-LogR = data.frame(LogR)
-LogR2 = subset(LogR, as.Date("1996-06-30")<Test2$Date)
+LogR = data.frame(cbind(datat$Date[2:711],LogR))
+LogR2 = subset(LogR, as.Date("1996-06-30")<LogR$datat.Date.2.711.)
 
 #verification which row have been deleted
+
 M1 = setkey(LogR)
 M2 = setkey(LogR2)
 na.omit(
@@ -93,18 +84,18 @@ na.omit(
 #Z score#
 Zscore = data.table(datat[,c(1,2,5,7)])
 Zscore2 = Zscore[,list(Date = Date,
-                 BV.Equity.to.Market.Cap = zScoreFun(BV.Equity.to.Market.Cap), 
-                 Net.Income=zScoreFun(Net.Income)), 
-           by=list(Company)]
+                       BV.Equity.to.Market.Cap = zScoreFun(BV.Equity.to.Market.Cap), 
+                       Net.Income=zScoreFun(Net.Income)), 
+                 by=list(Company)]
 
 #preparing Merge (erasing value for which a log return could not be calculated)#
 Zscore3 = subset(Zscore2, Date > as.Date("1996-06-30"))
 
 #verification which row have been deleted
-M1 = setkey(Zscore2)
-M2 = setkey(Zscore3)
+M3 = setkey(Zscore2)
+M4 = setkey(Zscore3)
 na.omit(
-  M2[M1,which=TRUE])
+  M4[M3,which=TRUE])
 
 # Merge the 2 two data sections and keep the data only where it is logreturn are calculated
 DatatransA = cbind(Zscore3,LogR2)
