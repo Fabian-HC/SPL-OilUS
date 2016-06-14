@@ -23,7 +23,8 @@ ApacheCorp <- ts(ApacheCorp,start=c(1996,3), end=c(2015,4),frequency=4)
 plot(ApacheCorp[,"Stock"], type="l", lwd=2, col="red", xlab="Date", ylab="Stock")
 
 
-lin.model.Apache <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, data=ApacheCorp)
+lin.model.Apache <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+                    data=ApacheCorp)
 summary(lin.model.Apache)                   
 plot(lin.model.Apache)
 
@@ -33,7 +34,8 @@ influence.measures(lin.model.Apache)
 ApacheCorp<-ApacheCorp[-c(64),]
 dwtest(lin.model.Apache)
 
-lin.model.Apache <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, data=ApacheCorp)
+lin.model.Apache <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+                    data=ApacheCorp)
 summary(lin.model.Apache)                   
 plot(lin.model.Apache)
 #joint significance of ind. variables
@@ -68,7 +70,8 @@ wald.test(b=coef(resa.lags), Sigma=vcov(resa.lags), Terms=2:5)
 #Dynamically complete models should not have any serial correlation in the error term
 
 #1 lag:
-dyn.complete2 <- dyn$lm(Stock~lag(Stock,-1)+Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, data=ApacheCorp)
+dyn.complete2 <- dyn$lm(Stock~lag(Stock,-1)+Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap 
+                        + Debt.to.Equity+Oil+Gas+Market+EURUSD, data=ApacheCorp)
 summary(dyn.complete2)
 #lags not significant => model w/o lags already dynamically complete
 
