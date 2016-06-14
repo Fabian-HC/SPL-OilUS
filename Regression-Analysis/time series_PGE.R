@@ -20,7 +20,8 @@ PGECorp <- ts(PGECorp,start=c(1996,3), end=c(2015,4),frequency=4)
 
 plot(PGECorp[,"Stock"], type="l", lwd=2, col="red", xlab="Date", ylab="Stock")
 
-lin.model.PGE <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, data=PGECorp)
+lin.model.PGE <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, 
+                    data=PGECorp)
 summary(lin.model.PGE)                   
 plot(lin.model.PGE)
 outlierTest(lin.model.PGE)
@@ -65,7 +66,8 @@ wald.test(b=coef(resa.lags2), Sigma=vcov(resa.lags2), Terms=2:5)
 #Dynamically complete models should not have any serial correlation in the error term
 
 #1 lag:
-dyn.complete3 <- dyn$lm(Stock~lag(Stock,-1)+Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, data=PGECorp)
+dyn.complete3 <- dyn$lm(Stock~lag(Stock,-1)+Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap 
+                        + Debt.to.Equity+Oil+Gas+Market+EURUSD, data=PGECorp)
 summary(dyn.complete3)
 #lag 2 not significant => model w/o lag 2 already dynamically complete
 
@@ -84,12 +86,14 @@ adf.test(Stock2)
 #However, stationarity is not required for the asymptotic properties of OLS
 
 #Breusch-Pagan Test: Null is homosk.(which is the result with the lag)
-bptest(Stock~lag(Stock,-1)+Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, data=PGECorp)
+bptest(Stock~lag(Stock,-1)+Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, 
+      data=PGECorp)
 
 #adjusting for heterosk.(just testing)
 coeftest(lin.model.PGE, vcovHC)
 
 
-full.model <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, data=PGECorp)
+full.model <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, 
+              data=PGECorp)
 reduced.model <- step(full.model, direction="backward")
 
