@@ -23,14 +23,6 @@ lin.model.PGE <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Mark
                     data=PGECorp)
 summary(lin.model.PGE)                   
 plot(lin.model.PGE)
-outlierTest(lin.model.PGE)
-influence.measures(lin.model.PGE)
-
-#exclude outliers
-PGECorp<- as.ts(PGECorp[-c(58,60),])
-lin.model.PGE <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
-                    data=PGECorp)
-summary(lin.model.PGE)
 
 # output
 stargazer(lin.model.PGE,title="lin.model.PGE",dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.",
@@ -64,17 +56,6 @@ lin.model.Apache <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.M
                       data=ApacheCorp)
 summary(lin.model.Apache)                   
 plot(lin.model.Apache)
-
-outlierTest(lin.model.Apache)
-influence.measures(lin.model.Apache)
-
-# excluding outlier
-ApacheCorp<-as.ts(ApacheCorp[-c(64),])
-
-
-lin.model.Apache <- lm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
-                    data=ApacheCorp)
-summary(lin.model.Apache) 
 
 # output
 stargazer(lin.model.Apache,title="lin.model.Apache",dep.var.labels=c("Stock return"),
