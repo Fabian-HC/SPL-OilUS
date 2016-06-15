@@ -1,0 +1,58 @@
+install.packages("plyr")
+install.packages("dplyr")
+install.packages("data.table")
+library(data.table)
+library(zoo)
+library(dplyr)
+
+
+# Define required functions
+
+logreturnsfun = function(x){
+  n = length(x)
+  logreturn = diff(log(x), lag(1))
+  # AS numeric part added
+}
+
+firstdiffun = function(x){
+  n = length(x)
+  firstdif = diff(x, lag(1))
+}
+
+setwd("/Users/antton/Desktop/Statistique programming")
+data <- read.csv2("Dataset-FINALupdated_absolute.csv", stringsAsFactors=FALSE)
+
+# Convert Date such that R recognizes it as date
+class(data$Date)
+data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
+class(data$Date)
+
+#Change data order to us Logreturns
+datat = data[order(data$Company,data$Date),]
+
+#logreturn#
+LogR = apply (
+  X = datat[,c(8:11, 3, 4, 6)], 
+  MARGIN = 2 , 
+  logreturnsfun
+)
+
+#first difference
+FirstDiff = apply (
+  X = datat[,c(5,7)], 
+  MARGIN = 2 , 
+  firstdiffun
+)
+
+#deleting false log return#
+Datatrans = data.frame(cbind(datat$Date[2:711],LogR,FirstDiff))
+Datatrans1 = rename(Datatrans, c("V1"="Date"))
+Datatrans1$Date = as.Date(Datatrans1$Date)
+Datatrans2 = subset(Datatrans1, as.Date("1996-06-30")<Datatrans1$Date)
+
+#checking wich row have been deleted
+anti_join(Datatrans1,Datatrans2)
+
+# Save the transformed dataset
+write.csv2(Datatrans2, file = "Z_Transformed_variables_Quarterly_returns_as_Marcus.csv")
+
