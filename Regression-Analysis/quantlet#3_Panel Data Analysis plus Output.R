@@ -11,47 +11,60 @@ lapply(libraries, function(x) if (!(x %in% installed.packages())) {
 # Load packages
 lapply(libraries, library, quietly = TRUE, character.only = TRUE)
 
-#panel data now
+# panel data now
 data$Date<-as.Date(as.character(data$Date), "%d.%m.%Y")
 
 data <- pdata.frame(data, index = c("Company", "Date"), drop.index = F, row.names = T) 
 
-#fixed effects model
-fe <- plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, model = "within", data=data)
+# fixed effects model
+fe <- plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+          model = "within", data=data)
 summary(fe)
-stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.LATEX")
+stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),
+          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+          "Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.LATEX")
 
-#random effects model
-re <- plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, model = "random", data=data)
+# random effects model
+re <- plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+          model = "random", data=data)
 summary(re)
 res.2 <- re$residuals
-stargazer(fe,title="Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)",dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), out="remodel.LATEX")
+stargazer(fe,title="Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)",
+          dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income",
+          "Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), 
+          out="remodel.LATEX")
 
-#Hausman test comparing RE and FE
+# Hausman test comparing RE and FE
 phtest(fe, re)
 
-#test for serial correlation
+# test for serial correlation
 pbgtest(re)
 pdwtest(re)
 
-#test for heteroskedasticity
-bptest(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+factor(Company), data=data, studentize=F)
+# test for heteroskedasticity
+bptest(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+
+      factor(Company), data=data, studentize=F)
 
-#heterosk. and serial corr. consistent coefficient
+# heterosk. and serial corr. consistent coefficient
 arellano<-coeftest(re, vcovHC(re,method="arellano"))
 
-#output
-stargazer(arellano,title="Arellano model",dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), out="arellanomodel.LATEX")
+# output
+stargazer(arellano,title="Arellano model",dep.var.labels=c("Stock return"),
+          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+          "Debt over equity","Oil price","Gas price","DJI premium"), out="arellanomodel.LATEX")
 
-#cross-sectional dependence
+# cross-sectional dependence
 pcdtest(fe, test = c("lm"))
 
-## cross-sectional robust (Driscoll and Kraay)
+# cross-sectional robust (Driscoll and Kraay)
 DriscollandKray<-coeftest(re, vcov=vcovSCC)
 
 # output
-stargazer(DriscollandKray,title="cross-sectional robust",dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), out="DriscollandKray.LATEX")
+stargazer(DriscollandKray,title="cross-sectional robust",dep.var.labels=c("Stock return"),
+          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+          "Debt over equity","Oil price","Gas price","DJI premium"), out="DriscollandKray.LATEX")
 
-#GLS
-repggls <- pggls(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas, model = "pooling", data=data)
+# GLS
+repggls <- pggls(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas, 
+                model = "pooling", data=data)
 summary(repggls)
