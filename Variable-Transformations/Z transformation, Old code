@@ -1,0 +1,17 @@
+##################################   Z score  #################################################
+
+zScoreFun = function(x){
+  n = length(x)
+  # result = scale(x, center = TRUE, scale = TRUE)
+  result = ((x - mean(x)) / sd(x)) 
+}
+
+Zscore = data.table(datat[,c(1,2,5,7)])
+Zscore2 = Zscore[,list(Date = Date,
+                       BV.Equity.to.Market.Cap = zScoreFun(BV.Equity.to.Market.Cap), 
+                       Net.Income=zScoreFun(Net.Income)), 
+                 by=list(Company)]
+
+#preparing Merge (erasing value for which a log return could not be calculated)#
+Zscore3 = subset(Zscore2, Date > as.Date("1996-06-30"))
+
