@@ -1,9 +1,11 @@
-install.packages("plyr")
-install.packages("dplyr")
-install.packages("data.table")
-library(data.table)
-library(zoo)
-library(dplyr)
+# Install packages if not installed
+libraries = c("plyr","dplyr","data.table")
+lapply(libraries, function(x) if (!(x %in% installed.packages())) {
+  install.packages(x)
+})
+
+# Load packages
+lapply(libraries, library, quietly = TRUE, character.only = TRUE)
 
 
 # Define required functions
