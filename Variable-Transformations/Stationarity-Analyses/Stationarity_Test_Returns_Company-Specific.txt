@@ -1,0 +1,20 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Thu Jun 16 16:20:23 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrlllll}
+  \hline
+ & Group.1 & Stock & Assets.to.Market.Cap & BV.Equity.to.Market.Cap & Debt.to.Equity & Net.Income \\ 
+  \hline
+1 & 1 & 0.09 & 0.02 & 0.03 & 0.01 & 0.01 \\ 
+  2 & 2 & 0.01 & 0.01 & 0.19 & 0.79 & 0.25 \\ 
+  3 & 3 & 0.05 & 0.01 & 0.01 & 0.01 & 0.01 \\ 
+  4 & 4 & 0.06 & 0.01 & 0.02 & 0.09 & 0.01 \\ 
+  5 & 5 & 0.01 & 0.01 & 0.03 & 0.01 & 0.38 \\ 
+  6 & 6 & 0.03 & 0.01 & 0.02 & 0.05 & 0.13 \\ 
+  7 & 7 & 0.06 & 0.01 & 0.02 & 0.03 & 0.11 \\ 
+  8 & 8 & 0.02 & 0.01 & 0.01 & 0.02 & 0.01 \\ 
+  9 & 9 & 0.02 & 0.04 & 0.01 & 0.04 & 0.01 \\ 
+   \hline
+\end{tabular}
+\end{table}
