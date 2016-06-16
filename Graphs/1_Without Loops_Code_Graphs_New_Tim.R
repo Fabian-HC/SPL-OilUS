@@ -128,18 +128,30 @@ plot(x = StockSet[,6], y = NULL, type = "l", xaxt = 'n', ylim = c(min(StockSet[,
 apply(StockSet[,7:9], MARGIN = 2, FUN = plotlines)
 
 # The same story with ggplot
+DateVec = sort(DateVec)
 StockSet = cbind(DateVec, StockSet)
 names(StockSet)[names(StockSet) == "subset.data.Date..data.Company....1."] <- "Date"
+names(StockSet)[names(StockSet) == "X1"] = "Exxon"
 # Preparing Plot - Using GGPLOT
 VarSetMelt <- melt(StockSet, id = "Date")
+# VarSetMelt[VarSetMelt$variable == "X1"] = "Exxon"
 # Plot the Indexed Stock Prices Together
 # dev.off() # necessary befor plotting again
 #jpeg(filename = "All_Stocks_Plot.jpg")
 # Plot the indexed stock prices
 # ggplot(data=VarSetMelt, aes(x = VarSetMelt$DateVec, y=value, colour=variable)) + geom_line()
-p <- ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, colour=variable)) + geom_line()
+p <- ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, colour=variable)) + geom_line(size = 1.5)
+p = p + theme(legend.position="bottom")
+# p = p + guides(fill=guide_legend(title=NULL)) # cannot remove variable :(
+p = p + theme(panel.background = element_rect(fill="white"), axis.line = element_line(colour = "black"))
+p = p + xlab("Year") + ylab("Index 1996 = 100")
+p = p + theme(text = element_text(size=17))
+# Adjust the colors
+p = p + scale_color_manual(values=c("deeppink", "black", "darkgreen", "darkblue", "darkred", "darkgrey", "burlywood4", "darkmagenta", "darkgoldenrod1"  ))
+p = p + theme(panel.grid.major = element_line(colour = "black", size = 0.85))
+p = p + theme(axis.line = element_line(colour = "black", size = 1))
 p
-# dev.off()
+
 
 
 
