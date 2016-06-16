@@ -1,45 +1,20 @@
+# remove variables
+rm(list = ls())
+
+# reset graphics
+graphics.off()
+
+
+libraries = c("psych", "xtable")
+lapply(libraries, function(x) if (!(x %in% installed.packages())) {
+  install.packages(x)
+})
+
 # Load packages
+lapply(libraries, library, quietly = TRUE, character.only = TRUE)
+# Package loading done - variable can be deleted
+rm(libraries)
 
-library(Cairo)
-
-# Package for sumamrizing data
-# install.packages("Hmisc")
-library(Hmisc)
-# for this command: describe(mydata)
-
-# Library for sumamrizing data 2
-# install.packages("psych")
-library(psych)
-# for this command: describe.by(mydata, group,...)
-
-# Working with Doby package for summary Statistics
-# install.packages("doBy")
-library(doBy)
-#summaryBy(mpg + wt ~ cyl + vs, data = mtcars, 
-#          FUN = function(x) { c(m = mean(x), s = sd(x)) } )
-
-# Importing files of other formats
-library(foreign)
-
-# Panel data analysis package
-library(plm) 
-
-library(car)
-
-library(lmtest)   
-
-library(sandwich)
-
-library(ggplot2)
-
-library(grid) # needed for plotting later
-library(lattice)
-library("reshape2")
-library(xtable)
-
-# package for computing skewness
-install.packages("timeDate")
-library(timeDate)
 # For my customized summary later on
 SumCustom <- function(x){
   r1 = mean(x)
@@ -52,6 +27,8 @@ SumCustom <- function(x){
   return(SumMat)
   
 }
+
+
 
 
 
@@ -99,21 +76,38 @@ write.csv2(SumSpecF, file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _
 print.xtable(xtable(SumSpecF), file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.txt")
 
 
+rm(data, Sub1, SumCommonF, SumSpecF)
+#-------------------------------------------------------------
+#-------------------------------------------------------------
+# Summary statistics for return verion of variables
+load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TRUE)
 
-# Convert Date such that R recognizes it as date
-class(data$Date)
-data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
-class(data$Date)
-
-
-
+# Summary statistics for common factors
+Sub1 = subset(dataFinal, dataFinal$Company == 1)
+SumCommonF = data.frame(apply(Sub1[,8:11], MARGIN = 2, FUN = SumCustom))
+rownames(SumCommonF) = c("mean", "sd", "min", "q(25)", "q(50)", "q(75)", "max", "skew", "kurtosis")
 # Export as CSV
-write.csv2(SumMat, file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/Z _ Summary_Common_Factors_Absolute.csv")
-# Export in Latex
-xtable(SumMat)
-print.xtable(xtable(SumMat), file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/Z _ Summary_Common_Factors_Absolute.txt")
+write.csv2(SumCommonF, file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Common_Factors_returns.csv")
+# Export as TexFile
+print.xtable(xtable(SumCommonF), file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Common_Factors_returns.txt")
+
+# Summary statistics of company-specific variables
+SumSpecF = describeBy(dataFinal[,2:7], group = "Company", mat = TRUE, digits = 2)
+class(SumSpecF)
+SumSpecF = SumSpecF[-c(1:9),-c(4,8,9,12,15)]
+SumSpecF = SumSpecF[order(SumSpecF$group1, SumSpecF$vars),]
+SumSpecF = SumSpecF[,-(1:3)]
+write.csv2(SumSpecF, file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Specific_Factors_returns.csv")
+# Export as TexFile
+print.xtable(xtable(SumSpecF), file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Specific_Factors_returns.txt")
 
 
+
+
+# -------------------------------------------------------
+# -------------------------------------------------------
+
+# OLD CODE
 
 # An attempt to resort to one loop less
 # Define company-specific variable set
