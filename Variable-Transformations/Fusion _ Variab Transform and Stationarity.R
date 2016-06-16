@@ -69,16 +69,17 @@ Sub1 = subset(data, data$Company == 1)
 Sub1 = Sub1[,8:11]
 testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
 testresult = data.frame(testresult)
-#write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Absolute.csv") # csv table export
-#print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_CommonFactors_Absolute.txt")
+write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Absolute.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_CommonFactors_Absolute.txt")
 # Dataset Sub1 not needed now - discard it
 rm(Sub1)
+
 
 # Stationarity Test for company-specific factors
 testresult = aggregate(data[,3:7], by = list(data$Company), FUN = stattestFUN, simplify = FALSE)
 testresult = data.frame(testresult)
-# write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity__Absolute_Company.csv") # csv table export
-#print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Absolute_Company-Specific..txt")
+write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity__Absolute_Company.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Absolute_Company-Specific.txt")
 
 
 
@@ -106,7 +107,7 @@ anti_join(Datatrans,Datatrans2)
 dataFinal = Datatrans2[,c(1:4,10,5,11,6:9)]
 
 # remove auxiliary variables we do not need anymore
-rm(FirstDiff, LogR)
+rm(FirstDiff, LogR, Datatrans2, Datatrans)
 
 # Stationarity Test for common factors
 Sub1 = subset(dataFinal, dataFinal$Company == 1)
@@ -114,16 +115,16 @@ Sub1 = Sub1[,8:11]
 testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
 testresult = data.frame(testresult)
 # all values ok - all stationary
-#write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Absolute.csv") # csv table export
-#print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_CommonFactors_Absolute.txt")
+# write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Returns.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Returns_CommonFactors.txt")
 # Dataset Sub1 not needed now - discard it
 rm(Sub1, testresult)
 
 # Stationarity Test for company-specific factors
 testresult = aggregate(dataFinal[,3:7], by = list(dataFinal$Company), FUN = stattestFUN, simplify = FALSE)
 testresult = data.frame(testresult)
-# write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity__Absolute_Company.csv") # csv table export
-#print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Absolute_Company-Specific..txt")
+# write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity__Returns_Company_Cut2012.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Returns_Company-Specific.txt")
 
 
 
@@ -160,7 +161,6 @@ class(testresult[,1])
 # Most stationarity problems drop out when we exclude the years 2013 - 2015
 # write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity__Absolute_Company.csv") # csv table export
 print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Returns_Company-Specific_Cut2012..txt")
-
 
 
 
