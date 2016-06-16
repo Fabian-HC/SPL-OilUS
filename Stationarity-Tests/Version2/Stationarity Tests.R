@@ -41,7 +41,7 @@ library(tseries)
 stattestFUN = function(x){
   test = adf.test(x, alternative = "stationary")
   testresult = test$p.value
-  ReturnResult = if(testresult < 0.05){
+  ReturnResult = if(testresult < 0.1){
                   ReturnResult = "stationary"
                  }else{
                   ReturnResult ="not_stationary"
@@ -56,6 +56,7 @@ data = read.csv2("~/GitHub/R_Project/SPL-OilUS/Data-Set/Dataset-FINALupdated_abs
 
 
 # Convert Date such that R recognizes it as date
+
 class(data$Date)
 data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
 class(data$Date)
@@ -92,28 +93,21 @@ class(data$Date)
 # Done
 
 # Stationarity Test for common factors
-
-Sub1 = subset(data, data$Company == 3)
-apply(Sub1[,3:11], MARGIN = 2, FUN = stattestFUN)
-
-adf.test(Sub1$Stock, alternative = "explosive")
-
-i = 1
-while(i < 10){
-  Sub1 = subset(data, data$Company == i)
-  helpList = apply(Sub1[,3:11], MARGIN = 2, FUN = stattestFUN)
-  if(i == 1){
-  testresult = helpList }
-  else{
-  testresult = mapply(c, testresult, helpList,  SIMPLIFY = FALSE)
-  }
-  i = i + 1
-}
-
+Sub1 = subset(data, data$Company == 1)
+Sub1 = Sub1[,8:11]
+testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
 testresult = data.frame(testresult)
-write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Absolute.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Absolute.txt")
-rm(list = ls())
+write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Absolute.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_CommonFactors_Absolute.txt")
+
+# Stationarity Test for company-specific factors
+testresult = aggregate(data[,3:7], by = list(data$Company), FUN = stattestFUN, simplify = FALSE)
+testresult = data.frame(testresult)
+# write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity__Absolute_Company.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Absolute_Company-Specific..txt")
+
+
+rm(data, Sub1, testresult)
 # Then let's test our transformed variable set
 # setwd("C:/Users/Trimme/Documents/Studium Master/Kurse/2016 SoSe/Statistical Programming Languages/Dataset", st)
 data = read.csv2("~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Z_Transformed_variables_Quarterly_returns_as_Marcus.csv", stringsAsFactors = FALSE)
@@ -137,6 +131,28 @@ class(data$Date)
 #data$Company[data$Company== "8"] ="PG&E Corp"
 #data$Company[data$Company== "9"] ="Williams Cos Inc"
 
+# Stationarity Test for common factors
+Sub1 = subset(data, data$Company == 1)
+Sub1 = Sub1[,3:6]
+testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
+testresult = data.frame(testresult)
+write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Returns.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Returns.txt")
+
+
+# Stationarity Test for enterprise-specific factors by enterpirse
+testresult = aggregate(data[,7:11], by = list(data$Company), FUN = stattestFUN, simplify = FALSE)
+testresult = data.frame(testresult[,-1])
+class(testresult)
+# write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity__Absolute_Company.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Returns_Company-Specific..txt")
+
+
+
+
+
+
+# OLD CODE FOR TESTING STATIONARITY OF COMPANY SPECIFIC VARIABLES
 i = 1
 while(i < 10){
   Sub1 = subset(data, data$Company == i)
@@ -148,25 +164,3 @@ while(i < 10){
   }
   i = i + 1
 }
-
-testresult = data.frame(testresult)
-write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Returns.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Returns.txt")
-
-
-
-# There must be some way using the by-function
-# Or other ways, yet I did not find the key :(
-by(data = data, INDICES = list("Company"), FUN = stattestFUN)
-
-lapplyBy(~Company, data = data, FUN = stattestFUN, keep.groupid = TRUE)
-
-tapply(X = data[,c(2,8:11)], INDEX = data$Company, FUN = stattestFUN)
-
-length(data[,c(1,8:11)])
-length(data[,2])
-
-lapplyBy(~Company, data = data[,-c(1,2)], FUN = mean)
-
-??adf.test
-
