@@ -7,7 +7,10 @@ graphics.off()
 #load variable
 setwd("/Users/antton/Desktop/Statistique programming")
 load ("TransformedData.RData")
+data = dataFinal[dataFinal$Company != list (1,2)]
+data = dataFinal[!(dataFinal$Company==3 | dataFinal$Company==8),]
 
+class(dataFinal$Company)
 # Install packages if not installed
 libraries = c("stargazer","tseries","plm")
 lapply(libraries, function(x) if (!(x %in% installed.packages())) {
@@ -20,18 +23,26 @@ lapply(libraries, library, quietly = TRUE, character.only = TRUE)
 ########### BEFOR/AFTER 2008 ############
 
 # subsetting #
-Pre2008 = pdata.frame(subset(dataFinal, Date <= '2008-08-31'), index = c("Company", "Date"), drop.index = F, row.names = T) 
-Post2008 = pdata.frame(subset(dataFinal, Date > '2007-08-31'), index = c("Company", "Date"), drop.index = F, row.names = T) 
+Pre2008 = pdata.frame(subset(data, Date <= '2008-08-31'), 
+                      index = c("Company", "Date"), 
+                      drop.index = F, 
+                      row.names = T) 
+Post2008 = pdata.frame(subset(data, Date > '2007-08-31'), 
+                       index = c("Company", "Date"), 
+                       drop.index = F, 
+                       row.names = T) 
 
 #fixed effects model#
 #pre 2008
-repre2008 = plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity + Oil + Gas + Market + EURUSD, 
+repre2008 = plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap 
+                        + Debt.to.Equity + Oil + Gas + Market + EURUSD, 
                 model = "random", 
                 data=Pre2008)
 summary(repre2008)
 
 #post 2008  
-rePost2008 = plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity + Oil + Gas + Market + EURUSD, 
+rePost2008 = plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap
+                         + Debt.to.Equity + Oil + Gas + Market + EURUSD, 
                  model = "within", 
                  data=Post2008)
 summary(rePost2008)
@@ -40,22 +51,25 @@ summary(rePost2008)
 stargazer(repre2008, rePost2008, type="text", 
           title="Oneway (individual) effect Within Model : C",
           dep.var.labels=c("Stock return"),
-          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), 
+          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+                             "Debt over equity","Oil price","Gas price","DJI premium"), 
           out="femodel.txt")
 
 #using dummy varibales
 
 #creating dummy#
-DumP = as.numeric(dataFinal$Date <= '2008-08-31') 
+DumP = as.numeric(data$Date <= '2008-08-31') 
 length(DumP)
-data2 = cbind(dataFinal, "oil 2008 crisis (=1)" = DumP)
+data2 = cbind(data, "oil 2008 crisis (=1)" = DumP)
 class (DumP)
 data2 = pdata.frame(data2, index = c("Company", "Date"), drop.index = F, 
                     row.names = T) 
 
 #fixed effect with Dummy
-DumyReg = plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity + Oil + Gas + Market + EURUSD + 
-                DumP*Assets.to.Market.Cap + DumP*Net.Income + DumP*BV.Equity.to.Market.Cap + DumP*Debt.to.Equity + DumP*Oil + DumP*Gas + DumP*Market + DumP*EURUSD, 
+DumyReg = plm(Stock ~ Assets.to.Market.Cap + Net.Income + BV.Equity.to.Market.Cap 
+              + Debt.to.Equity + Oil + Gas + Market + EURUSD + DumP*Assets.to.Market.Cap 
+              + DumP*Net.Income + DumP*BV.Equity.to.Market.Cap + DumP*Debt.to.Equity 
+              + DumP*Oil + DumP*Gas + DumP*Market + DumP*EURUSD, 
               model = "random", 
               data=data2)
 
@@ -70,11 +84,11 @@ stargazer(DumyReg,type="text",
 
 ###creating factor###
 #Function#
-quarters = lapply(dataFinal$Date,quarters)
+quarters = lapply(data$Date,quarters)
 quarter2 = unlist(quarters)
 
 #Data#
-data3 = cbind(dataFinal,"Quarter" = quarter2)
+data3 = cbind(data,"Quarter" = quarter2)
 data3[,"Quarter"] <- factor(data3[,"Quarter"])
 is.factor( data3[,"Quarter"])
 dataQ = pdata.frame(data3, index = c("Company", "Date"), drop.index = F, row.names = T) 
