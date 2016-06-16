@@ -1,3 +1,9 @@
+# remove variables
+rm(list = ls())
+
+# reset graphics
+graphics.off()
+
 # Install packages if not installed
 libraries = c("plyr","dplyr","data.table")
 lapply(libraries, function(x) if (!(x %in% installed.packages())) {
@@ -22,7 +28,7 @@ firstdiffun = function(x){
 }
 
 setwd("/Users/antton/Desktop/Statistique programming")
-data <- read.csv2("Dataset-FINALupdated_absolute.csv", stringsAsFactors=FALSE)
+data = read.csv2("Dataset-FINALupdated_absolute.csv", stringsAsFactors=FALSE)
 
 # Convert Date such that R recognizes it as date
 class(data$Date)
@@ -54,5 +60,6 @@ anti_join(Datatrans,Datatrans2)
 #final changes#
 dataFinal = Datatrans2[,c(1:4,10,5,11,6:9)]
 
-# Save the transformed dataset
-write.csv2(dataFinal, file = "Z_Transformed_variables_Quarterly_returns_as_Marcus.csv")
+# Save the transformed dataset (if you save it as follow Date remanes Date)
+save(dataFinal, file="TransformedData.RData")
+#write.csv2(dataFinal, file = "Z_Transformed_variables_Quarterly_returns_as_Marcus.csv")
