@@ -138,6 +138,31 @@ load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TR
 #write.csv2(dataFinal, file = "Z_Transformed_variables_Quarterly_returns_as_Marcus.csv")
 
 
+# Set a cutoff at 2012
+
+dataFinal = subset(dataFinal, as.Date("2013-03-28")>dataFinal$Date)
+
+# Stationarity Test for common factors
+Sub1 = subset(dataFinal, dataFinal$Company == 1)
+Sub1 = Sub1[,8:11]
+testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
+testresult = data.frame(testresult)
+# all values ok - all stationary
+#write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Absolute.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_CommonFactors_Returns_Cut2012.txt")
+# Dataset Sub1 not needed now - discard it
+rm(Sub1, testresult)
+
+# Stationarity Test for company-specific factors
+testresult = aggregate(dataFinal[,3:7], by = list(dataFinal$Company), FUN = stattestFUN, simplify = FALSE)
+testresult = data.frame(testresult[,-1])
+class(testresult[,1])
+# Most stationarity problems drop out when we exclude the years 2013 - 2015
+# write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity__Absolute_Company.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Returns_Company-Specific_Cut2012..txt")
+
+
+
 
 
 # associate names to compagnie 
