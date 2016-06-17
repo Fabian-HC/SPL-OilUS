@@ -11,6 +11,9 @@ lapply(libraries, function(x) if (!(x %in% installed.packages())) {
 # Load packages
 lapply(libraries, library, quietly = TRUE, character.only = TRUE)
 
+# exclude electr. companies(3&8)
+data <- subset(data, data$Company!=3 & data$Company!=8)
+
 # panel data now
 data$Date<-as.Date(as.character(data$Date), "%d.%m.%Y")
 
