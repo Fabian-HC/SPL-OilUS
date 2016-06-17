@@ -5,7 +5,7 @@ rm(list = ls())
 graphics.off()
 
 # Install packages if not installed
-libraries = c("plyr","dplyr","data.table", "tseries", "xtable")
+libraries = c("plyr","dplyr","data.table", "tseries", "xtable", "plm")
 lapply(libraries, function(x) if (!(x %in% installed.packages())) {
   install.packages(x)
 })
@@ -51,7 +51,24 @@ data = data[order(data$Company,data$Date),]
 # Note that panel data transformation has not been applied on this data set so far
 save(data, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Date_OK.RData")
 
+load(file="~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Date_OK.RData", verbose = TRUE)
 # Perform stationarity Tests on the absolute level
+
+
+data <- pdata.frame(data, index = c("Company", "Date"), drop.index = FALSE, row.names = TRUE)
+class(data$Date)
+
+data$Date <- as.Date(data$Date, format = "%Y-%m-%d")
+class(data$Date)
+
+save(data, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK.RData")
+
+rm(data)
+
+load(file="~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK.RData")
+
+class(data$Date)
+
 
 stattestFUN = function(x){
   test = adf.test(x, alternative = "stationary")
@@ -64,6 +81,12 @@ stattestFUN = function(x){
   #}
 }
 
+
+stattestFUN2 = function(x){
+  test = kpss.test(x, null = "Trend")
+  test = test$p.value
+  test = round(test, digits = 2)
+}
 # Stationarity Test for common factors
 Sub1 = subset(data, data$Company == 1)
 Sub1 = Sub1[,8:11]
@@ -72,6 +95,12 @@ testresult = data.frame(testresult)
 write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Absolute.csv") # csv table export
 print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_CommonFactors_Absolute.txt")
 # Dataset Sub1 not needed now - discard it
+
+testresult2 = apply(Sub1, MARGIN = 2, FUN = stattestFUN2)
+testresult2 = data.frame(testresult2)
+write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_CommonFactors_Absolute_KPSS.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_CommonFactors_Absolute_KPSS.txt")
+
 rm(Sub1)
 
 
@@ -162,8 +191,41 @@ class(testresult[,1])
 # write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity__Absolute_Company.csv") # csv table export
 print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Returns_Company-Specific_Cut2012..txt")
 
+# Save dataset with cutoff 2012
+save(dataFinal, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/Stationarity_2012.RData")
 
+rm(dataFinal, testresult)
 
+# ----------
+# Try to test whether all variables are stationary in the period 2012 - 2015
+load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TRUE)
+dataFinal = subset(dataFinal, as.Date("2012-12-31")<dataFinal$Date)
+
+# Stationarity Test for common factors
+Sub1 = subset(dataFinal, dataFinal$Company == 1)
+Sub1 = Sub1[,8:11]
+testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
+testresult = data.frame(testresult)
+# all values ok - all stationary
+#write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_CommonFactors_Returns_Post2012.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_CommonFactors_Returns_Post2012.txt")
+# Dataset Sub1 not needed now - discard it
+rm(Sub1, testresult)
+
+# Stationarity Test for company-specific factors
+testresult = aggregate(dataFinal[,3:7], by = list(dataFinal$Company), FUN = stattestFUN, simplify = FALSE)
+testresult = data.frame(testresult[,-1])
+class(testresult[,1])
+# Most stationarity problems drop out when we exclude the years 2013 - 2015
+# write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Specific_Returns_Post2012.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations/Stationarity_Test_Specific_Returns_Post2012.txt")
+
+# The takeaway from this test session is that the retu
+
+Sub1 = subset(dataFinal, dataFinal$Company == 1)
+plot(Sub1$Date, Sub1$Stock, type = "l")
+acf(Sub1$Stock)
+pacf(Sub1$Stock)
 
 # associate names to compagnie 
 #data$Company = as.character(data$Company)
