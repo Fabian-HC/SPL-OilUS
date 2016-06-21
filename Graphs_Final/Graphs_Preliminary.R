@@ -50,7 +50,7 @@ indexFUN = function(x){
 setwd("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Graphs_Final")
 
 # Load the RData Set
-load("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Date_OK.RData")
+load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames.RData")
 
 
 # Obtain all stock performances and Index them
@@ -76,16 +76,18 @@ if(class(StockSet[,1]) != "numeric"){
   print("Indexed stock performance data is already numeric")
 }
 
+colnames(StockSet) = levels(data$Company)
+
 # Save the stock set data
 save(data, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/Stock_Set_Indexed.RData")
 
-DateVec = subset(data$Date, data$Company == 1)
+DateVec = subset(data$Date, data$Company == levels(data$Company)[1])
 # The same story with ggplot
 # DateVec = sort(DateVec)
 StockSet = cbind(DateVec, StockSet)
 # Set the variable Names
-StockNames = c("Exxon", "Apache", "C. Point", "Chevron", "Hess", "Murphy Oil", "Occidental", "PG&E", "Williams")
-colnames(StockSet) = c("Date", StockNames)
+# StockNames = c("Exxon", "Apache", "C. Point", "Chevron", "Hess", "Murphy Oil", "Occidental", "PG&E", "Williams")
+colnames(StockSet) = c("Date", colnames(StockSet[,-1]))
 # Preparing Plot - Using GGPLOT
 VarSetMelt <- melt(StockSet, id = "Date")
 # VarSetMelt[VarSetMelt$variable == "X1"] = "Exxon"
@@ -118,7 +120,7 @@ dev.off()
 
 
 #  Plot Oil, Gas and Market beside one and another
-Sub1 = subset(data, data$Company == 1)
+Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,c(1,8:11)]
 #  Plot Oil, Gas and Market beside one and another
 # jpeg(filename = "Common_Factors_Development.jpg", height = 400, width = 1000)
@@ -164,17 +166,17 @@ dev.off()
 # Version with loops, but more presentable output
 # If necessary, load data set with comapany numbers, instead of names
 VarNames = colnames(data)
-VarNames[4] = "Assets/MV"
-VarNames[5] = "BV(EQ)/MV"
-VarNames[6] = "D / E"
+
+# variable.names(data[,4:6]) = c("Assets/MV", "BV(EQ)/MV", "D / E")
 # jpeg(filename = paste("Company_", i, "_Specific_and_Common_Factors.jpg"), width = 2100, height = 300)
 
 i = 1
 while(i < 10){
+  # pdf(file = paste(levels(data$Company)[i], "_Specific_and_Common_Factors.pdf", sep = ""), height = 2.35, width =11)
   pdf(file = paste("Company_", i, "_Specific_and_Common_Factors.pdf", sep = ""), height = 2.35, width =11)
   # Adjust mfrow(nrow, ncol) for getting plot in different arragement
   par(mfrow = c(1,9), cex = 0.8, cex.main = 0.85, cex.axis = 0.7)
-  Sub1 = subset(data, data$Company == i)
+  Sub1 = subset(data, data$Company == levels(data$Company)[i])
   j = 3
   while(j < 12){
     if(j < 11){
@@ -183,7 +185,7 @@ while(i < 10){
       par(mar = c(2,2,2,0.7))
     }
     YMinMax = c(min(Sub1[,j])*0.9, max(Sub1[,j])*1.1)
-    plot(Sub1$Date, Sub1[,j], type = "l", ylim = YMinMax, main = paste("C_", i, "_", VarNames[j], sep = ""), xlab = "", ylab = "")
+    plot(Sub1$Date, Sub1[,j], type = "l", ylim = YMinMax, main = paste(levels(data$Company)[i], "\n", VarNames[j], sep = ""), xlab = "", ylab = "")
     j = j + 1
   }
   dev.off()  
