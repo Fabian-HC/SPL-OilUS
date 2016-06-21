@@ -1,15 +1,15 @@
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Sun Jun 19 22:41:35 2016
+% Tue Jun 21 15:38:53 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{rrrrrrrr}
   \hline
  & mean & median & sd & min & max & skew & kurtosis \\ 
   \hline
-Oil & 0.01 & 0.04 & 0.19 & -0.81 & 0.34 & -1.29 & 3.88 \\ 
-  Gas & -0.00 & 0.01 & 0.25 & -0.67 & 0.69 & -0.11 & 0.39 \\ 
-  Market & 0.01 & 0.02 & 0.08 & -0.21 & 0.16 & -0.65 & 0.11 \\ 
-  EURUSD & -0.00 & -0.00 & 0.05 & -0.12 & 0.13 & 0.00 & -0.33 \\ 
+Oil & 0.01 & 0.04 & 0.19 & -0.81 & 0.34 & -1.32 & 4.05 \\ 
+  Gas & -0.00 & 0.01 & 0.25 & -0.67 & 0.69 & -0.12 & 0.48 \\ 
+  Market & 0.01 & 0.02 & 0.08 & -0.21 & 0.16 & -0.66 & 0.19 \\ 
+  EURUSD & -0.00 & -0.00 & 0.05 & -0.12 & 0.13 & 0.00 & -0.26 \\ 
    \hline
 \end{tabular}
 \end{table}
