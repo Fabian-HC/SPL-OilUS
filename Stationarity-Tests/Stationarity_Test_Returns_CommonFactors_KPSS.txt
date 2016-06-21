@@ -1,0 +1,15 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Tue Jun 21 18:33:26 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{ll}
+  \hline
+ & testresult2 \\ 
+  \hline
+Oil & (trend) stationary \\ 
+  Gas & (trend) stationary \\ 
+  Market & (trend) stationary \\ 
+  EURUSD & non (trend) stationary \\ 
+   \hline
+\end{tabular}
+\end{table}
