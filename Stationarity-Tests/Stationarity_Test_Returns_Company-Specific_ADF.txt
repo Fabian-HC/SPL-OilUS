@@ -1,18 +1,18 @@
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Tue Jun 21 18:33:26 2016
+% Wed Jun 22 15:36:55 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{llllll}
   \hline
- & Stock & Assets.to.Market.Cap & BV.Equity.to.Market.Cap & Debt.to.Equity & Net.Income \\ 
+ & Stock & Assets.to.Market.Cap & BV.Equity.to.Market.Cap & Debt.to.Equity & NI\_by\_Assets \\ 
   \hline
 Exxon\_Mobil & stationary & stationary & stationary & stationary & stationary \\ 
   Apache & stationary & stationary & Critical a[0.1,0.2] & not\_stationary & not\_stationary \\ 
   CPEnergy & stationary & stationary & stationary & stationary & stationary \\ 
   Chevron & stationary & stationary & stationary & stationary & stationary \\ 
-  Hess\_Corp & stationary & stationary & stationary & stationary & not\_stationary \\ 
-  Murphy\_Oil & stationary & stationary & stationary & stationary & Critical a[0.1,0.2] \\ 
-  Occidental\_Petroleum & stationary & stationary & stationary & stationary & Critical a[0.1,0.2] \\ 
+  Hess\_Corp & stationary & stationary & stationary & stationary & stationary \\ 
+  Murphy\_Oil & stationary & stationary & stationary & stationary & stationary \\ 
+  Occidental\_Petroleum & stationary & stationary & stationary & stationary & stationary \\ 
   PG\&E\_Corp & stationary & stationary & stationary & stationary & stationary \\ 
   Williams & stationary & stationary & stationary & stationary & stationary \\ 
    \hline
