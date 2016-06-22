@@ -87,6 +87,10 @@ data <- pdata.frame(data, index = c("Company", "Date"), drop.index = FALSE, row.
 data$Date <- as.Date(data$Date, format = "%Y-%m-%d")
 class(data$Date)
 
+
+CompAssets = read.csv2("~/GitHub/R_Project/SPL-OilUS/Data-Set/Company_TotAssets.csv", stringsAsFactors = FALSE)
+class(CompAssets[,3])
+
 save(data, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK.RData")
 
 levels(data$Company) = c("Exxon_Mobil", "Apache", "CPEnergy", "Chevron", "Hess_Corp", "Murphy_Oil", "Occidental_Petroleum", "PG&E_Corp", "Williams")
@@ -98,6 +102,27 @@ rm(data)
 load(file="~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames.RData")
 class(data$Date) # The date variable is indeed read in as date
 
+CompAssets = read.csv2("~/GitHub/R_Project/SPL-OilUS/Data-Set/Company_TotAssets.csv", stringsAsFactors = FALSE)
+CompAssets$Company = factor(CompAssets$Company)
+levels(CompAssets$Company) = c("Exxon_Mobil", "Apache", "CPEnergy", "Chevron", "Hess_Corp", "Murphy_Oil", "Occidental_Petroleum", "PG&E_Corp", "Williams")
+CompAssets$Date <- as.Date(CompAssets$Date, format = "%d.%m.%Y")
+class(CompAssets$Date)
+
+data = merge(data, CompAssets)
+data$Net.Income = data$Net.Income / data$Assets
+data$Assets = NULL
+
+names(data) = gsub("Net.Income", "NI_by_Assets", names(data))
+rm(CompAssets)
+
+colnames(data)
+
+# Sort the dataframe before applying transformation
+data = data[order(data$Company, data$Date),]
+
+save(data, file = "~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
+rm(data)
+load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
 
 # Stationarity Test for common factors - ADF Test
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
@@ -147,6 +172,9 @@ sink()
 
 rm(object, testresult ,testresult2, PanelUnitRootTest)
 
+
+
+
 # All test results point to that our variables exhibit non-stationarity!
 # Let's apply transformations in the hope to get stationary variables
 #logreturn#
@@ -184,6 +212,8 @@ save(dataFinal, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RDat
 rm(data, dataFinal, Datatrans2, Datatrans, LogR, Datatrans, FirstDiff)
 load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TRUE)
 #write.csv2(dataFinal, file = "Z_Transformed_variables_Quarterly_returns_as_Marcus.csv")
+
+# aggregate(dataFinal$NI_by_Assets, by = list(dataFinal$Company), FUN = quantile)
 
 # First apply the unit root panel data test to see whether the overall panel
 # is stationary
@@ -239,8 +269,9 @@ print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-Oil
 
 
 
-
-
+# -----------------------------------------------------------------
+# -----------------------------------------------------------------
+# OLD CODE WILL NOT BE USED
 # Set a cutoff at 2012
 
 # Watch out - this only works if data Final is a data frame and not a pdata frame
