@@ -202,7 +202,8 @@ dev.off()
 # all the stuff we stored so far
 rm(i, j, VarNames, YMinMax, data)
 
-load("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData")
+load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TRUE)
+class(dataFinal$Date)
 data = dataFinal
 rm(dataFinal)
 MainText = variable.names(data)
