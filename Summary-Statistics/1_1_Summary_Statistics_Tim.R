@@ -19,10 +19,10 @@ rm(libraries)
 # Set it equal to where your directory is
 setwd("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Summary-Statistics")
 # setwd("C:/Users/Trimme/Documents/Studium Master/Kurse/2016 SoSe/Statistical Programming Languages/Dataset", st)
-load(file="~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Date_OK.RData", verbose = TRUE)
+load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
 
 # Summary statistics for common factors
-Sub1 = subset(data, data$Company == 1)
+Sub1 = subset(data, data$Company == levels(data$Company)[1])
 SumCommonF = describe(Sub1[,8:11], skew = TRUE, trim = 0, type = 1)
 SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
 # Export as CSV
@@ -49,7 +49,7 @@ rm(data, Sub1, SumCommonF, SumSpecF)
 load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TRUE)
 
 # Summary statistics for common factors
-Sub1 = subset(dataFinal, dataFinal$Company == 1)
+Sub1 = subset(dataFinal, dataFinal$Company == levels(dataFinal$Company)[1])
 SumCommonF = describe(Sub1[,8:11], trim = 0, type = 1)
 SumCommonF = SumCommonF[,-c(1,2,6,7,10,13)]
 SumCommonF = SumCommonF[,c(1,3,2,4:7)]
@@ -66,8 +66,6 @@ SumSpecF = SumSpecF[-c(1:9),-c(4,8,9,12,15)]
 SumSpecF = SumSpecF[order(SumSpecF$group1, SumSpecF$vars),]
 SumSpecF = SumSpecF[,-(1:3)]
 SumSpecF = SumSpecF[,c(1,3,2,4:7)]
-SumSpecF[,4:7] = round(SumSpecF[,4:7], digits = 2)
-SumSpecF[seq(5,45,5),1:5] = round(SumSpecF[seq(5,45,5),1:5], digits = 0) # R does not get that
 write.csv2(SumSpecF, file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Specific_Factors_returns.csv")
 # Export as TexFile
 print.xtable(xtable(SumSpecF), file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Specific_Factors_returns.txt")
