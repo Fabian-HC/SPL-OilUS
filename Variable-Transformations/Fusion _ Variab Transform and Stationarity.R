@@ -110,8 +110,8 @@ print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-Oil
 # KPSS-Test
 testresult2 = apply(Sub1, MARGIN = 2, FUN = stattestFUN2)
 testresult2 = data.frame(testresult2)
-write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_CommonFactors_Absolute_KPSS.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_CommonFactors_Absolute_KPSS.txt")
+write.csv2(testresult2, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_CommonFactors_Absolute_KPSS.csv") # csv table export
+print.xtable(xtable(testresult2, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_CommonFactors_Absolute_KPSS.txt")
 rm(Sub1, testresult, testresult2)
 
 
