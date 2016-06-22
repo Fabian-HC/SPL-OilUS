@@ -120,9 +120,13 @@ colnames(data)
 # Sort the dataframe before applying transformation
 data = data[order(data$Company, data$Date),]
 
+class(data$Date)
+
 save(data, file = "~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
 rm(data)
 load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
+
+class(data$Date)
 
 # Stationarity Test for common factors - ADF Test
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
@@ -201,19 +205,19 @@ dataFinal = Datatrans2[,c(1:4,10,5,11,6:9)]
 
 dataFinal <- pdata.frame(dataFinal, index = c("Company", "Date"), drop.index = FALSE, row.names = TRUE)
 class(dataFinal$Date)
-data$Date <- as.Date(data$Date, format = "%Y-%m-%d")
-class(data$Date)
+dataFinal$Date <- as.Date(dataFinal$Date, format = "%Y-%m-%d")
+class(dataFinal$Date)
 
 # Save the transformed dataset (if you save it as follow Date remanes Date)
 # Antton's save place
 # Note that panel data transformation has not been applied to this data set so far
 # save(dataFinal, file="TransformedData.RData")
+class(dataFinal$Date)
 save(dataFinal, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData")
 rm(data, dataFinal, Datatrans2, Datatrans, LogR, Datatrans, FirstDiff)
 load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TRUE)
-#write.csv2(dataFinal, file = "Z_Transformed_variables_Quarterly_returns_as_Marcus.csv")
+class(dataFinal$Date)
 
-# aggregate(dataFinal$NI_by_Assets, by = list(dataFinal$Company), FUN = quantile)
 
 # First apply the unit root panel data test to see whether the overall panel
 # is stationary
