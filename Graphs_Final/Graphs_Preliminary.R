@@ -50,12 +50,15 @@ indexFUN = function(x){
 setwd("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Graphs_Final")
 
 # Load the RData Set
-load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames.RData")
+# load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames.RData")
+load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
 
 
 # Obtain all stock performances and Index them
 # Base: 1996-06-28 = 100%
-StockSet = data.frame(t(as.matrix(aggregate(data$Stock, by = list(data$Company), FUN = indexFUN, simplify = TRUE))))
+StockSet = data.frame(t(as.matrix(
+           aggregate(data$Stock, by = list(data$Company), 
+           FUN = indexFUN, simplify = TRUE))))
 # Unfortunately, R spits out the transformed variables as factors
 # and not numbers [and as a matrix in the wrong format]
 # So I applied
@@ -165,11 +168,11 @@ dev.off()
 
 # Version with loops, but more presentable output
 # If necessary, load data set with comapany numbers, instead of names
-VarNames = colnames(data)
+
 
 # variable.names(data[,4:6]) = c("Assets/MV", "BV(EQ)/MV", "D / E")
 # jpeg(filename = paste("Company_", i, "_Specific_and_Common_Factors.jpg"), width = 2100, height = 300)
-
+VarNames = colnames(data)
 i = 1
 while(i < 10){
   # pdf(file = paste(levels(data$Company)[i], "_Specific_and_Common_Factors.pdf", sep = ""), height = 2.35, width =11)
@@ -197,7 +200,7 @@ dev.off()
 
 # since we switch to another dataset, remove 
 # all the stuff we stored so far
-rm(i, j, VarNames, YMinMax)
+rm(i, j, VarNames, YMinMax, data)
 
 load("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData")
 data = dataFinal
@@ -207,7 +210,7 @@ MainText = variable.names(data)
 
 # Generate Histograms for Specific Factors by enterprise
 # Now without any loop!!!
-# jpeg(filename = "Companies_Specific_and_common_factors_Histograms.jpg", width = 3000, height = 1800)
+# jpeg(filename = "Companies_Specific_factors_Histograms.jpg", width = 3000, height = 1800)
 pdf(file = "Companies_Specific_factors_returns_Histograms.pdf", height = 6.1, width = 11)
 par(mfcol = c(9,5))
 par(mar = c(1,1,1,1))
@@ -218,7 +221,7 @@ dev.off()
 
 # Generate histograms for common factors
 pdf(file = "Common_factors_returns_Histograms.pdf", height = 3, width = 7)
-Sub1 = subset(data, data$Company == 1)
+Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,8:11]
 par(mfrow = c(1,4), mar = c(1,1,1,1), cex = 1, lwd = 2)
 apply(Sub1, MARGIN = 2, FUN = histfun)
