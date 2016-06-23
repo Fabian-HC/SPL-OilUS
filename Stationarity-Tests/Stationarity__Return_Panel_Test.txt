@@ -1,8 +1,0 @@
-
-	Levin-Lin-Chu Unit-Root Test (ex. var.: Individual Intercepts and
-	Trend)
-
-data:  object
-z.x1 = -64.271, p-value < 2.2e-16
-alternative hypothesis: stationarity
-
