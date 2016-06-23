@@ -50,12 +50,17 @@ indexFUN = function(x){
 }
 
 # Set output working directory for the graphs
-setwd("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Graphs_Final")
+getwd()
+# setwd("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Graphs_Final")
 
 # Load the RData Set
 # load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames.RData")
-load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
+data = read.csv2("Dataset-FINALupdated_returns.csv", stringsAsFactors = FALSE)
+data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute.csv", stringsAsFactors = FALSE)
 
+data = data[,1:2]
+
+write.csv2(data, file = "./Test_by_Trimme.csv")
 
 # Obtain all stock performances and Index them
 # Base: 1996-06-28 = 100%
