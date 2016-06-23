@@ -14,7 +14,7 @@ lapply(libraries, function(x) if (!(x %in% installed.packages())) {
 lapply(libraries, library, quietly = TRUE, character.only = TRUE)
 
 # exclude electr. companies(3&8)
-data = subset(data, data$Company!=3 & data$Company!=8)
+data = subset(data, data$Company!="CPEnergy" & data$Company!="PG&E_Corp")
 
 # panel data now
 
