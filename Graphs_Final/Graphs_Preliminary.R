@@ -1,6 +1,4 @@
-# Let's see if I can make changes and upload them!!!
-#ASDFASDFASDF
-# Now I removed my dumb comments
+# bla bla
 
 # remove variables
 rm(list = ls())
