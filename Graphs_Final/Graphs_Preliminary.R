@@ -58,9 +58,11 @@ getwd()
 data = read.csv2("Dataset-FINALupdated_returns.csv", stringsAsFactors = FALSE)
 data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute.csv", stringsAsFactors = FALSE)
 
-data = data[,1:2]
+data = data[,1:9]
 
-write.csv2(data, file = "./Test_by_Trimme.csv")
+write.csv2(data, file = "./Data-Set/Test_by_Trimme22.csv")
+
+
 
 # Obtain all stock performances and Index them
 # Base: 1996-06-28 = 100%
