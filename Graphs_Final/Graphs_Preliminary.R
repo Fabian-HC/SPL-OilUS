@@ -4,8 +4,6 @@ rm(list = ls())
 # reset graphics
 graphics.off()
 
-
-
 libraries = c("stats", "graphics", "timeSeries", "reshape2", "ggplot2", "ggplot")
 
 # libraries = c("plyr","dplyr","data.table", "tseries", "xtable")
