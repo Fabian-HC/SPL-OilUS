@@ -58,13 +58,9 @@ stattestFUN2 = function(x){
   }
 }
 
-# Antton's Working directory
-# setwd("/Users/antton/Desktop/Statistique programming")
-# data = read.csv2("Dataset-FINALupdated_absolute.csv", stringsAsFactors=FALSE)
-
+getwd()
 # Tim's working directory
-setwd("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS")
-data = read.csv2("~/GitHub/R_Project/SPL-OilUS/Data-Set/Dataset-FINALupdated_absolute.csv", stringsAsFactors = FALSE)
+data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute.csv", stringsAsFactors = FALSE)
 
 # Convert Date such that R recognizes it as date
 class(data$Date)
@@ -73,7 +69,7 @@ class(data$Date)
 
 # Add the variable Assets to our dataset in order to obtain
 # Net Income over Assets: NI / A 
-CompAssets = read.csv2("~/GitHub/R_Project/SPL-OilUS/Data-Set/Company_TotAssets.csv", stringsAsFactors = FALSE)
+CompAssets = read.csv2("./Data-Set/Company_TotAssets.csv", stringsAsFactors = FALSE)
 CompAssets$Date <- as.Date(CompAssets$Date, format = "%d.%m.%Y")
 class(CompAssets$Date)
 class(data$Company)
