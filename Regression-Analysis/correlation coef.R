@@ -1,19 +1,19 @@
 library(xtable)
 
-corstarsl = function(x){ 
+corrma = function(x){ 
   require(Hmisc) 
   x = as.matrix(x) 
   R = rcorr(x)$r 
   p = rcorr(x)$P 
   
   ## define notions for significance levels; spacing is important.
-  mystars = ifelse(p < .001, "***", ifelse(p < .01, "** ", ifelse(p < .05, "* ", " ")))
+  stars = ifelse(p < .001, "***", ifelse(p < .01, "** ", ifelse(p < .05, "* ", " ")))
   
   ## trunctuate the matrix that holds the correlations to two decimal
   R = format(round(cbind(rep(-1.11, ncol(x)), R), 2))[,-1] 
   
   ## build a new matrix that includes the correlations with their apropriate stars 
-  Rnew = matrix(paste(R, mystars, sep=""), ncol=ncol(x)) 
+  Rnew = matrix(paste(R, stars, sep=""), ncol=ncol(x)) 
   diag(Rnew) = paste(diag(R), " ", sep="") 
   rownames(Rnew) = colnames(x) 
   colnames(Rnew) = paste(colnames(x), "", sep="") 
@@ -27,6 +27,6 @@ corstarsl = function(x){
   Rnew = cbind(Rnew[1:length(Rnew)-1])
   return(Rnew) 
 }
-corstarsl(data2)
+corrma(data2)
 xtable(corstarsl(data2))
 
