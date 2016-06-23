@@ -46,8 +46,6 @@ indexFUN = function(x){
 
 # Set output working directory for the graphs
 getwd()
-# setwd("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Graphs_Final")
-
 load("./Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData", verbose = FALSE)
 
 # Obtain all stock performances and Index them
@@ -76,19 +74,10 @@ VarSetMelt <- melt(StockSet, id = "Date")
 # Save the stock set data
 save(StockSet, file="./Data-Set/Stock_Set_Indexed.RData")
 
-DateVec = subset(data$Date, data$Company == levels(data$Company)[1])
-# The same story with ggplot
-# DateVec = sort(DateVec)
-StockSet = cbind(DateVec, StockSet)
-# Set the variable Names
-# StockNames = c("Exxon", "Apache", "C. Point", "Chevron", "Hess", "Murphy Oil", "Occidental", "PG&E", "Williams")
-colnames(StockSet) = c("Date", colnames(StockSet[,-1]))
 # Preparing Plot - Using GGPLOT
 VarSetMelt <- melt(StockSet, id = "Date")
-# VarSetMelt[VarSetMelt$variable == "X1"] = "Exxon"
 # Plot the Indexed Stock Prices Together
 dev.off() # necessary before plotting again
-# jpeg(filename = "All_Stocks_Plot.jpg")
 # Plot the indexed stock prices
 pdf(file = "./Graphs_Final/All_Stocks_plot.pdf", height = 3, width = 5.25)
 p <- ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, colour=variable)) + geom_line(size = 0.75)
@@ -126,11 +115,7 @@ par(mar = c(1,2,1.5,1), lwd = 2)
 apply(Sub1[,2:5], MARGIN = 2, FUN = plotfun)
 dev.off()
 
-# Yet I hold that with Titles explaining what is what, 
-# This looks way better
-# jpeg(filename = "Common_Factors_Development_better.jpg", height = 400, width = 1000)
-# pdf(file = "./Graphs_Final/All_Stocks_plot.pdf", height = 3, width = 5.25)
-
+# But it looks better resoring to a loop
 pdf(file = "./Graphs_Final/Common_Factors_Development_better.pdf", height = 4, width = 10)
 VarNames = colnames(Sub1)
 par(mfrow = c(1,4))
@@ -196,7 +181,7 @@ dev.off()
 # all the stuff we stored so far
 rm(i, j, VarNames, YMinMax, data, Sub1)
 
-load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TRUE)
+load("./Data-Set/TransformedDate.RData", verbose = TRUE)
 class(dataFinal$Date)
 data = dataFinal
 rm(dataFinal)
