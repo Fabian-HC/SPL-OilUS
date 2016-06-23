@@ -17,58 +17,66 @@ rm(libraries)
 
 # Set working directory
 # Set it equal to where your directory is
-setwd("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Summary-Statistics")
+getwd()
 # setwd("C:/Users/Trimme/Documents/Studium Master/Kurse/2016 SoSe/Statistical Programming Languages/Dataset", st)
-load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
+load("./Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData", verbose = FALSE)
 
 # Summary statistics for common factors
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
-SumCommonF = describe(Sub1[,8:11], skew = TRUE, trim = 0, type = 1)
+SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
 SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
 # Export as CSV
-write.csv2(SumCommonF, file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Common_Factors_Absolute.csv")
+write.csv2(SumCommonF, file = "./Summary-Statistics/1 _ Summary_Common_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Common_Factors_Absolute.txt")
+print.xtable(xtable(SumCommonF), file = "./Summary-Statistics/1 _ Summary_Common_Factors_Absolute.txt")
 
+colnames(data[,3:17])
+class(SumSpecF$vars)
 
 # Summary statistics of company-specific variables
 SumSpecF = describeBy(data[,2:7], group = "Company", mat = TRUE, digits = 2, trim = 0, type = 1)
-SumSpecF = SumSpecF[-c(1:9),-c(4,8,9,12,15)]
+SumSpecF = SumSpecF[-c(1:9),]
+SumSpecF = SumSpecF[,-c(4,8,9,12,15)]
 SumSpecF = SumSpecF[order(SumSpecF$group1, SumSpecF$vars),]
-SumSpecF = SumSpecF[,-(1:3)]
-SumSpecF = SumSpecF[,c(1,3,2,4:7)]
-write.csv2(SumSpecF, file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.csv")
+SumSpecF$vars = factor(SumSpecF$vars)
+class(SumSpecF$vars)
+levels(SumSpecF$vars) = colnames(data[,3:7])
+SumSpecF = SumSpecF[,-1]
+rownames(SumSpecF) = NULL
+write.csv2(SumSpecF, file = "./Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.txt")
+print.xtable(xtable(SumSpecF), file = "./Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.txt")
 
 
 rm(data, Sub1, SumCommonF, SumSpecF)
 #-------------------------------------------------------------
 #-------------------------------------------------------------
 # Summary statistics for return verion of variables
-load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TRUE)
-
+load("./Data-Set/For_Marcus_OK_2.RData", verbose = TRUE)
+data = dataFinal
+rm(dataFinal)
 # Summary statistics for common factors
-Sub1 = subset(dataFinal, dataFinal$Company == levels(dataFinal$Company)[1])
-SumCommonF = describe(Sub1[,8:11], trim = 0, type = 1)
-SumCommonF = SumCommonF[,-c(1,2,6,7,10,13)]
-SumCommonF = SumCommonF[,c(1,3,2,4:7)]
-SumCommonF[,c(1,2)] = round(SumCommonF[,c(1,2)], digits = 4)
-SumCommonF[,-c(1,2)] = round(SumCommonF[,-c(1,2)], digits = 2)
+Sub1 = subset(data, data$Company == levels(data$Company)[1])
+SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
+SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
 # Export as CSV
-write.csv2(SumCommonF, file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Common_Factors_returns.csv")
+write.csv2(SumCommonF, file = "./Summary-Statistics/1 _ Summary_Common_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Common_Factors_returns.txt")
+print.xtable(xtable(SumCommonF), file = "./Summary-Statistics/1 _ Summary_Common_Factors_returns.txt")
 
 # Summary statistics of company-specific variables
-SumSpecF = describeBy(dataFinal[,2:7], group = "Company", mat = TRUE, digits = 4, trim = 0, type = 1)
-SumSpecF = SumSpecF[-c(1:9),-c(4,8,9,12,15)]
+SumSpecF = describeBy(data[,2:7], group = "Company", mat = TRUE, digits = 2, trim = 0, type = 1)
+SumSpecF = SumSpecF[-c(1:9),]
+SumSpecF = SumSpecF[,-c(4,8,9,12,15)]
 SumSpecF = SumSpecF[order(SumSpecF$group1, SumSpecF$vars),]
-SumSpecF = SumSpecF[,-(1:3)]
-SumSpecF = SumSpecF[,c(1,3,2,4:7)]
-write.csv2(SumSpecF, file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Specific_Factors_returns.csv")
+SumSpecF$vars = factor(SumSpecF$vars)
+class(SumSpecF$vars)
+levels(SumSpecF$vars) = colnames(data[,3:7])
+SumSpecF = SumSpecF[,-1]
+rownames(SumSpecF) = NULL
+write.csv2(SumSpecF, file = "./Summary-Statistics/1 _ Summary_Specific_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "~/GitHub/R_Project/SPL-OilUS/Summary-Statistics/1 _ Summary_Specific_Factors_returns.txt")
+print.xtable(xtable(SumSpecF), file = "./Summary-Statistics/1 _ Summary_Specific_Factors_returns.txt")
 
 # remove the remaining variables
-rm(dataFinal, Sub1, SumCommonF, SumSpecF)
+rm(data, Sub1, SumCommonF, SumSpecF)
