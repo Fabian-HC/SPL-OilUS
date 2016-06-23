@@ -1,6 +1,3 @@
-# bla bla
-# end of bla bla
-
 # remove variables
 rm(list = ls())
 
@@ -53,46 +50,33 @@ indexFUN = function(x){
 getwd()
 # setwd("C:/Users/Trimme/Documents/GitHub/R_Project/SPL-OilUS/Graphs_Final")
 
-# Load the RData Set
-# load("~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames.RData")
-data = read.csv2("Dataset-FINALupdated_returns.csv", stringsAsFactors = FALSE)
-data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute.csv", stringsAsFactors = FALSE)
-
-data = data[,1:9]
-
-write.csv2(data, file = "./Data-Set/Test_by_Trimme22.csv")
-
-
+load("./Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData", verbose = FALSE)
 
 # Obtain all stock performances and Index them
 # Base: 1996-06-28 = 100%
 StockSet = data.frame(t(as.matrix(
            aggregate(data$Stock, by = list(data$Company), 
            FUN = indexFUN, simplify = TRUE))))
-# Unfortunately, R spits out the transformed variables as factors
-# and not numbers [and as a matrix in the wrong format]
-# So I applied
-# (1) transforming the unordered output into a matrix - as.matrix
-# (2) The matrix is given in a (Company(row), Time(column)) dimension
-#     But I would like to get it in a (Time(row), Comany(column)) dimention
-#     So, transform the matrix
-# (3) for plotting multiple lines, we probably need to use a data frame
-# (4) The elements in the data frame are factors, however, we know that 
-#     they are numbers, so convert each element via apply and as.numeric
+colnames(StockSet) = levels(data$Company)
 StockSet = StockSet[-1,]
-
-# On some occasions, the previous transformations yielded the correct values
-# , but provided them as character variables. Just in case that this still happens
+# Check whether stock Index values are numeric
 if(class(StockSet[,1]) != "numeric"){
   StockSet = data.frame(apply(StockSet, MARGIN = 2, FUN = as.numeric))
+  print("StockSet converted to numeric")
 }else{
   print("Indexed stock performance data is already numeric")
 }
 
-colnames(StockSet) = levels(data$Company)
+DateVec = subset(data$Date, data$Company == levels(data$Company)[1])
+StockSet = cbind(DateVec, StockSet)
+colnames(StockSet) = c("Date", colnames(StockSet[,-1]))
+save(StockSet, file="./Data-Set/Stock_Set_Indexed.RData")
+
+
+VarSetMelt <- melt(StockSet, id = "Date")
 
 # Save the stock set data
-save(data, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/Stock_Set_Indexed.RData")
+save(StockSet, file="./Data-Set/Stock_Set_Indexed.RData")
 
 DateVec = subset(data$Date, data$Company == levels(data$Company)[1])
 # The same story with ggplot
@@ -108,7 +92,7 @@ VarSetMelt <- melt(StockSet, id = "Date")
 dev.off() # necessary before plotting again
 # jpeg(filename = "All_Stocks_Plot.jpg")
 # Plot the indexed stock prices
-pdf(file = "All_Stocks_plot.pdf", height = 3, width = 5.25)
+pdf(file = "./Graphs_Final/All_Stocks_plot.pdf", height = 3, width = 5.25)
 p <- ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, colour=variable)) + geom_line(size = 0.75)
 # add legend configurations
 p = p + theme(legend.position="bottom", legend.title=element_text(size = 0, colour = "white"))
@@ -137,7 +121,7 @@ Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,c(1,8:11)]
 #  Plot Oil, Gas and Market beside one and another
 # jpeg(filename = "Common_Factors_Development.jpg", height = 400, width = 1000)
-pdf(file = "Common_Factors_Development.pdf", height = 4, width = 10)
+pdf(file = "./Graphs_Final/Common_Factors_Development.pdf", height = 4, width = 10)
 par(mfrow = c(1,4))
 par(cex = 0.95)
 par(mar = c(1,2,1.5,1), lwd = 2)
@@ -147,7 +131,9 @@ dev.off()
 # Yet I hold that with Titles explaining what is what, 
 # This looks way better
 # jpeg(filename = "Common_Factors_Development_better.jpg", height = 400, width = 1000)
-pdf(file = "Common_Factors_Development_better.pdf", height = 4, width = 10)
+# pdf(file = "./Graphs_Final/All_Stocks_plot.pdf", height = 3, width = 5.25)
+
+pdf(file = "./Graphs_Final/Common_Factors_Development_better.pdf", height = 4, width = 10)
 VarNames = colnames(Sub1)
 par(mfrow = c(1,4))
 par(cex = 0.95)
@@ -169,7 +155,7 @@ rm(VarNames, i, Sub1, YMinMax)
 # jpeg(filename = "Companies_Specific and common factors.jpg", width = 3000, height = 1800)
 # In PDF, this looks really baaaad! 
 # try the company-wise loop
-pdf(file = "Companies_Specific_and_common_factors.pdf", height = 8, width =11,5)
+pdf(file = "./Graphs_Final/Companies_Specific_and_common_factors.pdf", height = 8, width =11,5)
 par(mfcol = c(9,9))
 par(mar = c(1,1,1,1))
 par(cex = 1.3)
@@ -186,7 +172,7 @@ VarNames = colnames(data)
 i = 1
 while(i < 10){
   # pdf(file = paste(levels(data$Company)[i], "_Specific_and_Common_Factors.pdf", sep = ""), height = 2.35, width =11)
-  pdf(file = paste("Company_", i, "_Specific_and_Common_Factors.pdf", sep = ""), height = 2.35, width =11)
+  pdf(file = paste("./Graphs_Final/Company_", i, "_Specific_and_Common_Factors.pdf", sep = ""), height = 2.35, width =11)
   # Adjust mfrow(nrow, ncol) for getting plot in different arragement
   par(mfrow = c(1,9), cex = 0.8, cex.main = 0.85, cex.axis = 0.7)
   Sub1 = subset(data, data$Company == levels(data$Company)[i])
@@ -210,7 +196,7 @@ dev.off()
 
 # since we switch to another dataset, remove 
 # all the stuff we stored so far
-rm(i, j, VarNames, YMinMax, data)
+rm(i, j, VarNames, YMinMax, data, Sub1)
 
 load("~/GitHub/R_Project/SPL-OilUS/Data-Set/TransformedDate.RData", verbose = TRUE)
 class(dataFinal$Date)
@@ -222,7 +208,7 @@ MainText = variable.names(data)
 # Generate Histograms for Specific Factors by enterprise
 # Now without any loop!!!
 # jpeg(filename = "Companies_Specific_factors_Histograms.jpg", width = 3000, height = 1800)
-pdf(file = "Companies_Specific_factors_returns_Histograms.pdf", height = 6.1, width = 11)
+pdf(file = "./Graphs_Final/Companies_Specific_factors_returns_Histograms.pdf", height = 6.1, width = 11)
 par(mfcol = c(9,5))
 par(mar = c(1,1,1,1))
 par(cex = 1)
@@ -231,7 +217,7 @@ aggregate(data[,3:7], by = list(data$Company), FUN = histfun, simplify = FALSE)
 dev.off()
 
 # Generate histograms for common factors
-pdf(file = "Common_factors_returns_Histograms.pdf", height = 3, width = 7)
+pdf(file = "./Graphs_Final/Common_factors_returns_Histograms.pdf", height = 3, width = 7)
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,8:11]
 par(mfrow = c(1,4), mar = c(1,1,1,1), cex = 1, lwd = 2)
