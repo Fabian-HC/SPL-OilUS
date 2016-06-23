@@ -1,5 +1,7 @@
 library(xtable)
 
+data2<-data[,c(3:11)]
+
 corrma = function(x){ 
   require(Hmisc) 
   x = as.matrix(x) 
