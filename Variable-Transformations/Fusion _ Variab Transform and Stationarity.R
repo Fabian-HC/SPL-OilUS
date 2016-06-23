@@ -72,8 +72,9 @@ class(data$Date)
 CompAssets = read.csv2("./Data-Set/Company_TotAssets.csv", stringsAsFactors = FALSE)
 CompAssets$Date <- as.Date(CompAssets$Date, format = "%d.%m.%Y")
 class(CompAssets$Date)
-class(data$Company)
-class(CompAssets$Company)
+# If the classes of the Company indicator match - we can continue
+class(data$Company) == class(CompAssets$Company)
+
 # merge the two datasets
 data = merge(data, CompAssets)
 data$Net.Income = data$Net.Income / data$Assets
@@ -81,24 +82,19 @@ data$Assets = NULL
 names(data) = gsub("Net.Income", "NI_by_Assets", names(data))
 # remove the dataset "CompAssets" - not necessary anymore
 rm(CompAssets)
-# Are all variables there that we need?
-colnames(data)
+# Are all variables there that we need (17 variables)?
+length(colnames(data)) == 17
+
 
 # Sort the dataframe before applying transformation
 data = data[order(data$Company, data$Date),]
-
-# Save the transformed and adequately formatted dataset for graphical purposes
-# Note that panel data transformation has not been applied on this data set so far
-save(data, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Date_OK.RData")
 
 # Attach companyNames to the data set
 data$Company = as.factor(data$Company)
 levels(data$Company) = c("Exxon_Mobil", "Apache", "CPEnergy", "Chevron", "Hess_Corp", "Murphy_Oil", "Occidental_Petroleum", "PG&E_Corp", "Williams")
 levels(data$Company)
 
-colnames(data)
-
-save(data, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
+save(data, file="./Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData")
 
 # ----------------------------------------------------------------
 # Stationarity Tests for absolute Variables
@@ -109,14 +105,14 @@ Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,8:11]
 testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
 testresult = data.frame(testresult)
-write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_CommonFactors_Absolute_ADF.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_CommonFactors_Absolute_ADF.txt")
+write.csv2(testresult, file = "./Stationarity-Tests/Stationarity_CommonFactors_Absolute_ADF.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_CommonFactors_Absolute_ADF.txt")
 
 # KPSS-Test
 testresult2 = apply(Sub1, MARGIN = 2, FUN = stattestFUN2)
 testresult2 = data.frame(testresult2)
-write.csv2(testresult2, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_CommonFactors_Absolute_KPSS.csv") # csv table export
-print.xtable(xtable(testresult2, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_CommonFactors_Absolute_KPSS.txt")
+write.csv2(testresult2, file = "./Stationarity-Tests/Stationarity_CommonFactors_Absolute_KPSS.csv") # csv table export
+print.xtable(xtable(testresult2, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_CommonFactors_Absolute_KPSS.txt")
 rm(Sub1, testresult, testresult2)
 
 
@@ -128,8 +124,8 @@ testresult <- do.call("rbind", lapply(testresult, as.data.frame))
 colnames(testresult) = levels(data$Company) 
 testresult = as.data.frame(t(testresult))
 class(testresult)
-write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity__Absolute_Company_Specific_ADF.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_Absolute_Company-Specific_ADF.txt")
+write.csv2(testresult, file = "./Stationarity-Tests/Stationarity__Absolute_Company_Specific_ADF.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Absolute_Company-Specific_ADF.txt")
 
 
 # Statioinarity Test for company-specific factors - KPSS Test
@@ -138,14 +134,14 @@ testresult2 = testresult2[,-1]
 testresult2 <- do.call("rbind", lapply(testresult2, as.data.frame)) 
 colnames(testresult2) = levels(data$Company)
 testresult2 = as.data.frame(t(testresult2))
-write.csv2(testresult2, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity__Absolute_Company_Specific_KPSS.csv") # csv table export
-print.xtable(xtable(testresult2, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_Absolute_Company-Specific_KPSS.txt")
+write.csv2(testresult2, file = "./Stationarity-Tests/Stationarity__Absolute_Company_Specific_KPSS.csv") # csv table export
+print.xtable(xtable(testresult2, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Absolute_Company-Specific_KPSS.txt")
 
 # Perform a panel unit root test
 object <- as.data.frame(split(data[,3:11], data$Company))
 class(object)
 PanelUnitRootTest = purtest(object = object, test = "levinlin", exo = "trend", lags = "AIC", pmax = 5)
-sink(file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity__Absolute_Panel_Test.txt")
+sink(file = "./Stationarity-Tests/Stationarity__Absolute_Panel_Test.txt")
 PanelUnitRootTest$statistic
 sink()
 
@@ -177,20 +173,23 @@ dataFinal = Datatrans2[,c(1:4 ,16 ,5 ,17 , 6:15)]
 class(dataFinal)
 class(dataFinal$Date)
 
+# Remove auxiliary storage variables
+rm(Datatrans2, Datatrans, LogR, Datatrans, FirstDiff)
 # Note that our data is still not a pdata frame. 
 # This will be done RIGHT BEFORE THE REGRESSIONS
+save(dataFinal, file="./Data-Set/For_Marcus_OK_2.RData")
+data = dataFinal
+rm(dataFinal)
 
-save(dataFinal, file="~/GitHub/R_Project/SPL-OilUS/Data-Set/For_Marcus_OK_2.RData")
-
-rm(dataFinal, Datatrans2, Datatrans, LogR, Datatrans, FirstDiff)
 
 # First apply the unit root panel data test to see whether the overall panel
 # is stationary
 object <- as.data.frame(split(data[,3:11], data$Company))
 PanelUnitRootTest = purtest(object = object, test = "levinlin", exo = "trend", lags = "AIC", pmax = 5)
-sink(file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity__Return_Panel_Test.txt")
+sink(file = "./Stationarity-Tests/Stationarity__Return_Panel_Test.txt")
 PanelUnitRootTest$statistic
 sink()
+rm(object)
 # result: According to this test, the variables in our panel are stationary
 
 # Stationarity Test for common factors- ADF
@@ -199,16 +198,15 @@ Sub1 = Sub1[,8:11]
 testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
 testresult = data.frame(testresult)
 # all values ok - all stationary
-write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_CommonFactors_Returns_ADF.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_Returns_CommonFactors_ADF.txt")
-# Dataset Sub1 not needed now - discard it
+write.csv2(testresult, file = "./Stationarity-Tests/Stationarity_CommonFactors_Returns_ADF.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_CommonFactors_ADF.txt")
 
 testresult2 = apply(Sub1, MARGIN = 2, FUN = stattestFUN2)
 testresult2 = data.frame(testresult2)
 # Note that H1: non-trend-stationarity of EUR/USD is accepted for EUR/USD at 10%,
 # but not at the 5% level
-write.csv2(testresult2, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_CommonFactors_Returns_KPSS.csv") # csv table export
-print.xtable(xtable(testresult2, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_Returns_CommonFactors_KPSS.txt")
+write.csv2(testresult2, file = "./Stationarity-Tests/Stationarity_CommonFactors_Returns_KPSS.csv") # csv table export
+print.xtable(xtable(testresult2, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_CommonFactors_KPSS.txt")
 # Dataset Sub1 not needed now - discard it
 rm(Sub1, testresult, testresult2)
 
@@ -218,8 +216,8 @@ testresult = testresult[,-1]
 testresult <- do.call("rbind", lapply(testresult, as.data.frame)) 
 colnames(testresult) = levels(data$Company) 
 testresult = as.data.frame(t(testresult))
-write.csv2(testresult, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity__Returns_Company_Specific_ADF.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_Returns_Company-Specific_ADF.txt")
+write.csv2(testresult, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_ADF.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_Company-Specific_ADF.txt")
 
 
 # Stationarity Test for company-specific factors as returns - KPSS Test
@@ -228,5 +226,7 @@ testresult2 = testresult2[,-1]
 testresult2 <- do.call("rbind", lapply(testresult2, as.data.frame)) 
 colnames(testresult2) = levels(data$Company) 
 testresult2 = as.data.frame(t(testresult2))
-write.csv2(testresult2, file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity__Returns_Company_Specific_KPSS.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "~/GitHub/R_Project/SPL-OilUS/Variable-Transformations_Tim/Stationarity_Test_Returns_Company-Specific_KPSS.txt")
+write.csv2(testresult2, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_KPSS.csv") # csv table export
+print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_Company-Specific_KPSS.txt")
+
+rm(list = ls())
