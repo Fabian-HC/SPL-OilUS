@@ -1,9 +1,6 @@
 # Let's see if I can make changes and upload them!!!
 #ASDFASDFASDF
-# Now I make some new changes - let's see how that goes!!!
-# And now some more talking over here!
-# Let's see if I can host this!
-# hahahah
+# Now I removed my dumb comments
 
 # remove variables
 rm(list = ls())
