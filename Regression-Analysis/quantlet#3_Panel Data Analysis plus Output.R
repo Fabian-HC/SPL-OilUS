@@ -1,5 +1,100 @@
 setwd("C:/Users/marcu/Downloads")
 
+load("C:/Users/marcu/Downloads/For_Marcus_OK(1).RData")
+data = dataFinal
+rm(dataFinal)
+
+# Install packages if not installed
+libraries = c("sandwich","lmtest","foreign","plm","car","stargazer","xtable")
+lapply(libraries, function(x) if (!(x %in% installed.packages())) {
+  install.packages(x)
+})
+
+# Load packages
+lapply(libraries, library, quietly = TRUE, character.only = TRUE)
+
+# exclude electr. companies(3&8)
+data = subset(data, data$Company!=3 & data$Company!=8)
+
+# panel data now
+
+data = pdata.frame(data, index = c("Company", "Date"), drop.index = FALSE, row.names = TRUE) 
+data$Date = as.Date(data$Date, "%Y-%m-%d")
+
+# fixed effects model
+fe = plm(Stock ~ Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+         model = "within", data=data)
+summary(fe)
+stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),
+          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+          "Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.LATEX")
+
+# random effects model
+re = plm(Stock ~ Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+         model = "random", data=data)
+summary(re)
+stargazer(fe,title="Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)",
+          dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income",
+          "Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), 
+          out="remodel.LATEX")
+
+# Hausman test comparing RE and FE
+phtest(fe, re)
+
+# test for serial correlation
+pbgtest(re)
+pdwtest(re)
+
+# test for heteroskedasticity
+bptest(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+
+       factor(Company), data=data, studentize=F)
+
+# heterosk. and serial corr. consistent coefficient
+arellano = coeftest(re, vcovHC(re,method="arellano"))
+
+# output
+stargazer(arellano,title="Arellano model",dep.var.labels=c("Stock return"),
+          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+          "Debt over equity","Oil price","Gas price","DJI premium"), out="arellanomodel.LATEX")
+
+# cross-sectional dependence
+pcdtest(fe, test = c("lm"))
+
+# cross-sectional robust (Driscoll and Kraay)
+DriscollandKray = coeftest(re, vcov=vcovSCC)
+
+# output
+stargazer(DriscollandKray,title="cross-sectional robust",dep.var.labels=c("Stock return"),
+          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
+          "Debt over equity","Oil price","Gas price","DJI premium"), out="DriscollandKray.LATEX")
+
+# GLS
+repggls = pggls(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas, 
+                model = "pooling", data=data)
+summary(repggls)
+
+#pooltest
+
+pooltest(Stock~Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data,
+        model="within")
+
+#two-ways test
+
+pFtest(Stock~Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data,
+       effect="twoways")
+
+#unobserved effects test
+
+pwtest(Stock~Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data)
+
+
+
+
+
+########### old code with csv file ###########
+
+setwd("C:/Users/marcu/Downloads")
+
 data <- read.csv2("~/Dataset FINAL(paperstyle).csv", stringsAsFactors=FALSE)
 
 # Install packages if not installed
