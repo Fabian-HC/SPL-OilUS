@@ -29,7 +29,7 @@ SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
 # Export as CSV
 write.csv2(SumCommonF, file = "./Summary-Statistics/1 _ Summary_Common_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "./Summary-Statistics/1 _ Summary_Common_Factors_Absolute.txt")
+print.xtable(xtable(SumCommonF), file = "./Summary-Statistics/1 _ Summary_Common_Factors_Absolute.txt", size = "tiny")
 rm(SumCommonF, Sub1)
 
 # Summary statistics of company-specific variables
@@ -44,7 +44,7 @@ SumSpecF = SumSpecF[,-1]
 rownames(SumSpecF) = NULL
 write.csv2(SumSpecF, file = "./Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "./Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.txt")
+print.xtable(xtable(SumSpecF), file = "./Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.txt", size = "tiny")
 rm(data, SumSpecF)
 
 # === Summary Statistics of variables after transformations ===
@@ -58,7 +58,7 @@ SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
 # Export as CSV
 write.csv2(SumCommonF, file = "./Summary-Statistics/1 _ Summary_Common_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "./Summary-Statistics/1 _ Summary_Common_Factors_returns.txt")
+print.xtable(xtable(SumCommonF), file = "./Summary-Statistics/1 _ Summary_Common_Factors_returns.txt", size = "tiny")
 rm(Sub1, SumCommonF)
 
 # Summary statistics of company-specific variables
@@ -74,7 +74,7 @@ SumSpecF = SumSpecF[,-1]
 rownames(SumSpecF) = NULL
 write.csv2(SumSpecF, file = "./Summary-Statistics/1 _ Summary_Specific_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "./Summary-Statistics/1 _ Summary_Specific_Factors_returns.txt")
+print.xtable(xtable(SumSpecF), file = "./Summary-Statistics/1 _ Summary_Specific_Factors_returns.txt", size = "tiny")
 
 # remove the remaining variables
 rm(data, SumSpecF)
