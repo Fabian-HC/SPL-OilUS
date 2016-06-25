@@ -77,7 +77,7 @@ data = data[order(data$Company, data$Date),]
 
 colnames(data)
 # Set shorter ColumnNames for subsequent analysis
-colnames(data) = c("Date", "Company", "Stock", "A/MCAP", "BV(EQ)/MCAP", "D/MCAP", "NI", colnames(data[8:ncol(data)])) 
+colnames(data) = c("Date", "Company", "Stock", "A-MCAP", "BVE-MCAP", "D-MCAP", "NI", colnames(data[8:ncol(data)])) 
 colnames(data)
 # Add the variable Assets to our dataset in order to obtain
 # Net Income over Assets: NI / A 
@@ -177,7 +177,7 @@ LogR = apply (
 
 ScaleD = aggregate(data[,c(5,7)], by = list(data$Company), simplify = FALSE, FUN = scale)
 A = unlist(ScaleD$NI)
-A = as.matrix(cbind(A,unlist(ScaleD$`BV(EQ)/MCAP`)))
+A = as.matrix(cbind(A,unlist(ScaleD$`BVE-MCAP`)))
 colnames(A) = colnames(data[,c(5,7)])
 
 #first difference
@@ -200,7 +200,7 @@ colnames(dataFinal) = colnames(data)
 data = dataFinal
 rm(dataFinal)
 # Remove auxiliary storage variables
-rm(Datatrans2, Datatrans, LogR, Datatrans, FirstDiff, ScaleD, dataHelp)
+rm(Datatrans2, Datatrans, LogR, Datatrans, FirstDiff, ScaleD, dataHelp, A)
 # Note that our data is still not a pdata frame. 
 # This will be done RIGHT BEFORE THE REGRESSIONS
 save(data, file="./Data-Set/For_Marcus_OK_Old_Version.RData")
@@ -255,3 +255,4 @@ write.csv2(testresult2, file = "./Stationarity-Tests/Stationarity__Returns_Compa
 print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_Company-Specific_KPSS.txt")
 
 rm(list = ls())
+
