@@ -180,3 +180,5 @@ Sub1 = Sub1[,8:11]
 par(mfrow = c(1,4), mar = c(1,1,1,1), cex = 1, lwd = 2)
 apply(Sub1, MARGIN = 2, FUN = histfun)
 dev.off()
+
+rm(data, Sub1)
