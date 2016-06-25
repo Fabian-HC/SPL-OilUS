@@ -1,6 +1,6 @@
 
 
-load("C:/Users/marcu/Downloads/For_Marcus_OK(1).RData")
+load("./Data-Set/For_Marcus_OK_Old_Version.RData")
 data = dataFinal
 rm(dataFinal)
 
@@ -22,7 +22,7 @@ data = pdata.frame(data, index = c("Company", "Date"), drop.index = FALSE, row.n
 data$Date = as.Date(data$Date, "%Y-%m-%d")
 
 # fixed effects model
-fe = plm(Stock ~ Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+fe = plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
          model = "within", data=data)
 summary(fe)
 stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),
@@ -30,7 +30,7 @@ stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("S
           "Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.LATEX")
 
 # random effects model
-re = plm(Stock ~ Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+re = plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
          model = "random", data=data)
 summary(re)
 stargazer(fe,title="Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)",
@@ -75,17 +75,17 @@ summary(repggls)
 
 #pooltest
 
-pooltest(Stock~Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data,
+pooltest(Stock~Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data,
         model="within")
 
 #two-ways test
 
-pFtest(Stock~Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data,
+pFtest(Stock~Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data,
        effect="twoways")
 
 #unobserved effects test
 
-pwtest(Stock~Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data)
+pwtest(Stock~Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data)
 
 
 
