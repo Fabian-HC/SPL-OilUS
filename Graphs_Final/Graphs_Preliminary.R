@@ -1,24 +1,26 @@
+# === Clearing the Environment ===
 # remove variables
 rm(list = ls())
 
 # reset graphics
 graphics.off()
 
+# === Packages ===
+# Install packages if not installed
 libraries = c("stats", "graphics", "timeSeries", "reshape2", "ggplot2", "ggplot")
-
 # libraries = c("plyr","dplyr","data.table", "tseries", "xtable")
 lapply(libraries, function(x) if (!(x %in% installed.packages())) {
   install.packages(x)
 })
-
 # Load packages
 lapply(libraries, library, quietly = TRUE, character.only = TRUE)
 # Package loading done - variable can be deleted
 rm(libraries)
 
 
+# === Define required functions ===
+# Function for histograms of transformed variables
 histfun = function(x){
-  # bw = diff(range(x)) / (2 * IQR(x) / length(x)^(1/3))
   g1 = seq(min(x), max(x), length = 100)
   dens1 = dnorm(g1, mean(x), sd(x))
   maxHist = c(max(x), max(dens1))
@@ -26,16 +28,7 @@ histfun = function(x){
   lines(g1, dens1, col = "red", lwd = 2)
 }
 
-plotfun = function(x){
-
-  Name = colnames(x) # we cannot extract the column name in aggregate and neither
-  # in apply - that is why we decided to still resort to the loop
-  YMinMax = c(min(x)*0.9, max(x)*1.1)
-  p = plot(x, type = "l", xaxt = 'n', xlab = "", ylab = "", ylim = YMinMax)
-  # yaxp = c(YMinMax, 5) helps regarding the ticks, but the numbers are not round
-  # , main = paste("Company", i, sep = "")
-}
-
+# Indexation function to compare stock performances
 indexFUN = function(x){
   NObs = length(x)
   Index = x/x[1]*100
@@ -44,11 +37,11 @@ indexFUN = function(x){
   # Index = as.numeric(Index)
 }
 
-# Set output working directory for the graphs
-getwd()
-load("./Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData", verbose = FALSE)
+# === Explorative Graphical Analyses of pre-transformed data ===
+load("./Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData", 
+     verbose = FALSE)
 
-# Obtain all stock performances and Index them
+# === Obtain all stock performances and Index them ===
 # Base: 1996-06-28 = 100%
 StockSet = data.frame(t(as.matrix(
            aggregate(data$Stock, by = list(data$Company), 
@@ -63,103 +56,82 @@ if(class(StockSet[,1]) != "numeric"){
   print("Indexed stock performance data is already numeric")
 }
 
-DateVec = subset(data$Date, data$Company == levels(data$Company)[1])
-StockSet = cbind(DateVec, StockSet)
+# Attach a date Vector to the Stock set
+StockSet = cbind(data$Date[1:79], StockSet)
 colnames(StockSet) = c("Date", colnames(StockSet[,-1]))
-save(StockSet, file="./Data-Set/Stock_Set_Indexed.RData")
 
+# Preparing plot data
+VarSetMelt <- melt(StockSet, id = "Date") # bring data into right format
 
-VarSetMelt <- melt(StockSet, id = "Date")
+# Plot the Stock set data
+dev.off() # get rid of previous plot configurations
 
-# Save the stock set data
-save(StockSet, file="./Data-Set/Stock_Set_Indexed.RData")
-
-# Preparing Plot - Using GGPLOT
-VarSetMelt <- melt(StockSet, id = "Date")
-# Plot the Indexed Stock Prices Together
-dev.off() # necessary before plotting again
-# Plot the indexed stock prices
 pdf(file = "./Graphs_Final/All_Stocks_plot.pdf", height = 3, width = 5.25)
-p <- ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, colour=variable)) + geom_line(size = 0.75)
+p <- ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, 
+                                 colour=variable)) + geom_line(size = 0.75)
 # add legend configurations
-p = p + theme(legend.position="bottom", legend.title=element_text(size = 0, colour = "white"))
-# p = p + theme(legend.title=element_text(size = 0, colour = "white"))
-p = p + theme(panel.background = element_rect(fill="white"), axis.line = element_line(colour = "black"))
+p = p + theme(legend.position="bottom", 
+              legend.title=element_text(size = 0, colour = "white"))
+# adjust panel background
+p = p + theme(panel.background = element_rect(fill="white"), 
+              axis.line = element_line(colour = "black"))
 p = p + xlab("Year") + ylab("Index 1996 = 100")
-# Adjust appearence of axis titles (x-axis)
-p = p + theme(axis.title.x = element_text(size = rel(0.8)))
-# Adjust appearence of axis titles (y-axis)
-p = p + theme(axis.title.y = element_text(size = rel(0.8))) # Adjust appearence of axis titles (x-axis))))
-# Adjust appearence of axis tick labels
-p = p + theme(axis.text = element_text(colour = "black", size = rel(0.7)))
-p = p + theme(text = element_text(size=9))
-p = p + theme(plot.margin = unit(c(0.1, 0.1, 0.1, 0.1),"cm"))
+# Change appearence of x and y axes
+p = p + theme(axis.title.y = element_text(size = rel(0.8)), 
+              axis.title.x = element_text(size = rel(0.8)), 
+              axis.text = element_text(colour = "black", size = rel(0.7))) 
+p = p + theme(text = element_text(size=9)) # Adjust text size
+p = p + theme(plot.margin = unit(c(0.1, 0.1, 0.1, 0.1),"cm")) # set plot margins
 # Adjust the colors
-p = p + scale_color_manual(values=c("deeppink", "black", "darkgreen", "darkblue", "darkred", "darkgrey", "burlywood4", "darkmagenta", "darkgoldenrod1"  ))
+p = p + scale_color_manual(values=c("deeppink", "black", "darkgreen", 
+                                    "darkblue", "darkred", "darkgrey", 
+                                    "burlywood4", "darkmagenta", "darkgoldenrod1"))
 p
 dev.off()
 # remove help variables used
-rm(StockSet, VarSetMelt, StockNames, p, DateVec)
+rm(StockSet, VarSetMelt, p) # remove auxiliary variables
 dev.off()
 
 
-#  Plot Oil, Gas and Market beside one and another
+# === Plot common factors beside each other ===
+#  prepare the data
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,c(1,8:11)]
-#  Plot Oil, Gas and Market beside one and another
-# jpeg(filename = "Common_Factors_Development.jpg", height = 400, width = 1000)
-pdf(file = "./Graphs_Final/Common_Factors_Development.pdf", height = 4, width = 10)
-par(mfrow = c(1,4))
-par(cex = 0.95)
-par(mar = c(1,2,1.5,1), lwd = 2)
-apply(Sub1[,2:5], MARGIN = 2, FUN = plotfun)
-dev.off()
 
-# But it looks better resoring to a loop
-pdf(file = "./Graphs_Final/Common_Factors_Development_better.pdf", height = 4, width = 10)
+# Set PDF recording and configurations
+pdf(file = "./Graphs_Final/Common_Factors_Development_better.pdf", 
+    height = 4,     width = 10)
 VarNames = colnames(Sub1)
 par(mfrow = c(1,4))
 par(cex = 0.95)
 par(mar = c(2,2,1.5,1), lwd = 2)
+
+# Execute the loop for plotting the variables of interes
 i = 2
 while(i < (ncol(Sub1) + 1)){
   YMinMax = c(min(Sub1[,i])*0.9, max(Sub1[,i])*1.1)
-  plot(Sub1$Date, Sub1[,i], type = "l", ylim = YMinMax, main = VarNames[i], xlab = "", ylab = "")
+  plot(Sub1$Date, Sub1[,i], type = "l", ylim = YMinMax, main = VarNames[i], 
+       xlab = "", ylab = "")
   i = i + 1
 }
 dev.off()
 # remove auxiliary variables used
 rm(VarNames, i, Sub1, YMinMax)
 
-# Plot each company with specific and common factors
+# === Plot of development of specific and common factors by enterprise ===
+VarNames = colnames(data) # Store variable names for later purposes
 
-# Note that I would have to alter this conficurations when setting up other plots later
-#dev.off()
-# jpeg(filename = "Companies_Specific and common factors.jpg", width = 3000, height = 1800)
-# In PDF, this looks really baaaad! 
-# try the company-wise loop
-pdf(file = "./Graphs_Final/Companies_Specific_and_common_factors.pdf", height = 8, width =11,5)
-par(mfcol = c(9,9))
-par(mar = c(1,1,1,1))
-par(cex = 1.3)
-aggregate(data[,3:11], by = list(data$Company), FUN = plotfun, simplify = FALSE)
-dev.off()
-
-# Version with loops, but more presentable output
-# If necessary, load data set with comapany numbers, instead of names
-
-
-# variable.names(data[,4:6]) = c("Assets/MV", "BV(EQ)/MV", "D / E")
-# jpeg(filename = paste("Company_", i, "_Specific_and_Common_Factors.jpg"), width = 2100, height = 300)
-VarNames = colnames(data)
+# Execute the loop to generate the graphs
 i = 1
 while(i < 10){
-  # pdf(file = paste(levels(data$Company)[i], "_Specific_and_Common_Factors.pdf", sep = ""), height = 2.35, width =11)
-  pdf(file = paste("./Graphs_Final/Company_", i, "_Specific_and_Common_Factors.pdf", sep = ""), height = 2.35, width =11)
-  # Adjust mfrow(nrow, ncol) for getting plot in different arragement
+  # generate the PDF containing the plots for company 'i'
+  pdf(file = paste("./Graphs_Final/Company_", 
+      i, "_Specific_and_Common_Factors.pdf", sep = ""), 
+      height = 2.35, width =11)
+  # Plot conficurations
   par(mfrow = c(1,9), cex = 0.8, cex.main = 0.85, cex.axis = 0.7)
   Sub1 = subset(data, data$Company == levels(data$Company)[i])
-  j = 3
+  j = 3 # Execute the loop over the variables of interest
   while(j < 12){
     if(j < 11){
       par(mar = c(2,2,2,0))
@@ -167,40 +139,42 @@ while(i < 10){
       par(mar = c(2,2,2,0.7))
     }
     YMinMax = c(min(Sub1[,j])*0.9, max(Sub1[,j])*1.1)
-    plot(Sub1$Date, Sub1[,j], type = "l", ylim = YMinMax, main = paste(levels(data$Company)[i], "\n", VarNames[j], sep = ""), xlab = "", ylab = "")
+    plot(Sub1$Date, Sub1[,j], type = "l", ylim = YMinMax, 
+         main = paste(levels(data$Company)[i], "\n", VarNames[j], sep = ""), 
+         xlab = "", ylab = "")
     j = j + 1
   }
-  dev.off()  
+  dev.off()  # end recording of the PDF
   i = i + 1 
 }
-dev.off()
+dev.off() 
 
-
-
-# since we switch to another dataset, remove 
-# all the stuff we stored so far
+# Remove auxiliary variables
 rm(i, j, VarNames, YMinMax, data, Sub1)
 
-load("./Data-Set/TransformedDate.RData", verbose = TRUE)
-class(dataFinal$Date)
-data = dataFinal
-rm(dataFinal)
-MainText = variable.names(data)
 
+# === Histograms of transformed variables ===
+# Load data
+load(file="./Data-Set/For_Marcus_OK_Old_Version.RData", verbose = TRUE)
 
-# Generate Histograms for Specific Factors by enterprise
-# Now without any loop!!!
-# jpeg(filename = "Companies_Specific_factors_Histograms.jpg", width = 3000, height = 1800)
-pdf(file = "./Graphs_Final/Companies_Specific_factors_returns_Histograms.pdf", height = 6.1, width = 11)
+# === Generate Histograms for Specific Factors by enterprise ===
+# Set PDF rcording and configurations
+pdf(file = "./Graphs_Final/Companies_Specific_factors_returns_Histograms.pdf", 
+    height = 6.1, width = 11)
 par(mfcol = c(9,5))
 par(mar = c(1,1,1,1))
 par(cex = 1)
 par(lwd = 2)
+
+# Launch the aggregate function to perform histfun variables of interest
+# by enterprise
 aggregate(data[,3:7], by = list(data$Company), FUN = histfun, simplify = FALSE)
 dev.off()
 
-# Generate histograms for common factors
-pdf(file = "./Graphs_Final/Common_factors_returns_Histograms.pdf", height = 3, width = 7)
+
+# === Generate histograms for common factors ===
+pdf(file = "./Graphs_Final/Common_factors_returns_Histograms.pdf", 
+    height = 3, width = 7)
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,8:11]
 par(mfrow = c(1,4), mar = c(1,1,1,1), cex = 1, lwd = 2)
