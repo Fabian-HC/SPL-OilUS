@@ -1,20 +1,20 @@
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Thu Jun 23 20:56:05 2016
+% Fri Jun 24 13:33:01 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{llllll}
   \hline
  & Stock & Assets.to.Market.Cap & BV.Equity.to.Market.Cap & Debt.to.Equity & Net.Income \\ 
   \hline
-Exxon\_Mobil & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
-  Apache & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
-  CPEnergy & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & (trend) stationary \\ 
-  Chevron & non (trend) stationary & (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
-  Hess\_Corp & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & (trend) stationary \\ 
-  Murphy\_Oil & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
-  Occidental\_Petroleum & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
-  PG\&E\_Corp & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & (trend) stationary \\ 
-  Williams & non (trend) stationary & non (trend) stationary & (trend) stationary & non (trend) stationary & (trend) stationary \\ 
+1 & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
+  2 & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
+  3 & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & (trend) stationary \\ 
+  4 & non (trend) stationary & (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
+  5 & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & (trend) stationary \\ 
+  6 & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
+  7 & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
+  8 & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & (trend) stationary \\ 
+  9 & non (trend) stationary & non (trend) stationary & (trend) stationary & non (trend) stationary & (trend) stationary \\ 
    \hline
 \end{tabular}
 \end{table}
