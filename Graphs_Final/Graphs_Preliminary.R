@@ -38,7 +38,7 @@ indexFUN = function(x){
 }
 
 # === Explorative Graphical Analyses of pre-transformed data ===
-load("./Data-Set/InitialData_Panel_Date_OK_Companynames_NI_A.RData", 
+load("./Data-Set/InitialData_Panel_Date_OK_OLD_ZScore.RData", 
      verbose = FALSE)
 
 # === Obtain all stock performances and Index them ===
