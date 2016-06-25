@@ -7,8 +7,7 @@ graphics.off()
 
 # === Packages ===
 # Install packages if not installed
-libraries = c("stats", "graphics", "timeSeries", "reshape2", "ggplot2", 
-              "ggplot", "psych", "xtable")
+libraries = c("stats", "graphics", "timeSeries", "reshape2", "ggplot2", "psych", "xtable")
 # libraries = c("plyr","dplyr","data.table", "tseries", "xtable")
 lapply(libraries, function(x) if (!(x %in% installed.packages())) {
   install.packages(x)
@@ -52,9 +51,9 @@ Sub1 = subset(data, data$Company == levels(data$Company)[1])
 SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
 SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
 # Export as CSV
-write.csv2(SumCommonF, file = "./Summary-Statistics/1 _ Summary_Common_Factors_Absolute.csv")
+write.csv2(SumCommonF, file = "./EDA/Common_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "./Summary-Statistics/1 _ Summary_Common_Factors_Absolute.txt", size = "tiny")
+print.xtable(xtable(SumCommonF), file = "./EDA/Common_Factors_Absolute.txt", size = "tiny")
 rm(SumCommonF, Sub1)
 
 # Summary statistics of company-specific variables
@@ -67,9 +66,9 @@ SumSpecF$vars = factor(SumSpecF$vars)
 levels(SumSpecF$vars) = colnames(data[,3:7])
 SumSpecF = SumSpecF[,-1]
 rownames(SumSpecF) = NULL
-write.csv2(SumSpecF, file = "./Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.csv")
+write.csv2(SumSpecF, file = "./EDA/Specific_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "./Summary-Statistics/1 _ Summary_Specific_Factors_Absolute.txt", size = "tiny")
+print.xtable(xtable(SumSpecF), file = "./EDA/Specific_Factors_Absolute.txt", size = "tiny")
 rm(data, SumSpecF)
 
 # === Summary Statistics of variables after transformations ===
@@ -81,9 +80,9 @@ Sub1 = subset(data, data$Company == levels(data$Company)[1])
 SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
 SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
 # Export as CSV
-write.csv2(SumCommonF, file = "./Summary-Statistics/1 _ Summary_Common_Factors_returns.csv")
+write.csv2(SumCommonF, file = "./EDA/Common_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "./Summary-Statistics/1 _ Summary_Common_Factors_returns.txt", size = "tiny")
+print.xtable(xtable(SumCommonF), file = "./EDA/Common_Factors_returns.txt", size = "tiny")
 rm(Sub1, SumCommonF)
 
 # Summary statistics of company-specific variables
@@ -97,9 +96,9 @@ class(SumSpecF$vars)
 levels(SumSpecF$vars) = colnames(data[,3:7])
 SumSpecF = SumSpecF[,-1]
 rownames(SumSpecF) = NULL
-write.csv2(SumSpecF, file = "./Summary-Statistics/1 _ Summary_Specific_Factors_returns.csv")
+write.csv2(SumSpecF, file = "./EDA/Specific_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "./Summary-Statistics/1 _ Summary_Specific_Factors_returns.txt", size = "tiny")
+print.xtable(xtable(SumSpecF), file = "./EDA/Specific_Factors_returns.txt", size = "tiny")
 
 # remove the remaining variables
 rm(data, SumSpecF)
