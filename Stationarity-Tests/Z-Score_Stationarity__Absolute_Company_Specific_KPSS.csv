@@ -1,2 +1,10 @@
-"";"Stock";"Assets.to.Market.Cap";"BV.Equity.to.Market.Cap";"Debt.to.Equity";"Net.Income"
-"1";
+"";"Stock";"A/MCAP";"BV(EQ)/MCAP";"D/MCAP";"NI"
+"Exxon_Mobil";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary"
+"Apache";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary"
+"CPEnergy";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"(trend) stationary"
+"Chevron";"non (trend) stationary";"(trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary"
+"Hess_Corp";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"(trend) stationary"
+"Murphy_Oil";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary"
+"Occidental_Petroleum";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary"
+"PG&E_Corp";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"non (trend) stationary";"(trend) stationary"
+"Williams";"non (trend) stationary";"non (trend) stationary";"(trend) stationary";"non (trend) stationary";"(trend) stationary"

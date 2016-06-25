@@ -1,6 +1,5 @@
 
-	Levin-Lin-Chu Unit-Root Test (ex. var.: Individual Intercepts
-	and Trend)
+	Levin-Lin-Chu Unit-Root Test (ex. var.: Individual Intercepts and Trend)
 
 data:  object
 z.x1 = 0.44616, p-value = 0.6555
