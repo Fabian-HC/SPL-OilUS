@@ -1,17 +1,20 @@
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Sat Jun 25 15:33:25 2016
+% Sat Jun 25 18:10:55 2016
 \begin{table}[ht]
 \centering
-\begin{tabular}{llllllllll}
+\begin{tabular}{llllll}
   \hline
- & V1 & V2 & V3 & V4 & V5 & V6 & V7 & V8 & V9 \\ 
+ & Stock & A-MCAP & BVE-MCAP & D-MCAP & NI \\ 
   \hline
-Group.1 & Exxon\_Mobil & Apache & CPEnergy & Chevron & Hess\_Corp & Murphy\_Oil & Occidental\_Petroleum & PG\&E\_Corp & Williams \\ 
-  Stock & stationary & stationary & stationary & stationary & stationary & stationary & stationary & stationary & stationary \\ 
-  A-MCAP & not\_stationary & not\_stationary & not\_stationary & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
-  BVE-MCAP & not\_stationary & not\_stationary & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & stationary & Critical a[0.1,0.2] \\ 
-  D-MCAP & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
-  NI & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary & stationary & Critical a[0.1,0.2] \\ 
+Exxon\_Mobil & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Apache & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  CPEnergy & stationary & not\_stationary & stationary & not\_stationary & not\_stationary \\ 
+  Chevron & stationary & stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Hess\_Corp & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Murphy\_Oil & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Occidental\_Petroleum & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  PG\&E\_Corp & stationary & not\_stationary & stationary & not\_stationary & stationary \\ 
+  Williams & stationary & not\_stationary & Critical a[0.1,0.2] & not\_stationary & Critical a[0.1,0.2] \\ 
    \hline
 \end{tabular}
 \end{table}

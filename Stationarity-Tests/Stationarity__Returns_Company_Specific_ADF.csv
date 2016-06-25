@@ -1,2 +1,10 @@
-"";"V1";"V2";"V3";"V4";"V5";"V6";"V7";"V8";"V9"
-"Group.1";
+"";"Stock";"A-MCAP";"BVE-MCAP";"D-MCAP";"NI"
+"Exxon_Mobil";"stationary";"not_stationary";"not_stationary";"not_stationary";"not_stationary"
+"Apache";"stationary";"not_stationary";"not_stationary";"not_stationary";"not_stationary"
+"CPEnergy";"stationary";"not_stationary";"stationary";"not_stationary";"not_stationary"
+"Chevron";"stationary";"stationary";"not_stationary";"not_stationary";"not_stationary"
+"Hess_Corp";"stationary";"not_stationary";"not_stationary";"not_stationary";"not_stationary"
+"Murphy_Oil";"stationary";"not_stationary";"not_stationary";"not_stationary";"not_stationary"
+"Occidental_Petroleum";"stationary";"not_stationary";"not_stationary";"not_stationary";"not_stationary"
+"PG&E_Corp";"stationary";"not_stationary";"stationary";"not_stationary";"stationary"
+"Williams";"stationary";"not_stationary";"Critical a[0.1,0.2]";"not_stationary";"Critical a[0.1,0.2]"

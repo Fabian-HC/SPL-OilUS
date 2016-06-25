@@ -1,8 +1,6 @@
 
 
 load("./Data-Set/For_Marcus_OK_Old_Version.RData")
-data = dataFinal
-rm(dataFinal)
 
 # Install packages if not installed
 libraries = c("sandwich","lmtest","foreign","plm","car","stargazer","xtable")
@@ -22,7 +20,7 @@ data = pdata.frame(data, index = c("Company", "Date"), drop.index = FALSE, row.n
 data$Date = as.Date(data$Date, "%Y-%m-%d")
 
 # fixed effects model
-fe = plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+fe = plm(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP+Oil+Gas+Market, 
          model = "within", data=data)
 summary(fe)
 stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),
@@ -30,7 +28,7 @@ stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("S
           "Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.LATEX")
 
 # random effects model
-re = plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+re = plm(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP+Oil+Gas+Market, 
          model = "random", data=data)
 summary(re)
 stargazer(fe,title="Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)",
@@ -46,7 +44,7 @@ pbgtest(re)
 pdwtest(re)
 
 # test for heteroskedasticity
-bptest(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+
+bptest(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP+Oil+Gas+Market+
        factor(Company), data=data, studentize=F)
 
 # heterosk. and serial corr. consistent coefficient
@@ -68,24 +66,25 @@ stargazer(DriscollandKray,title="cross-sectional robust",dep.var.labels=c("Stock
           covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
           "Debt over equity","Oil price","Gas price","DJI premium"), out="DriscollandKray.LATEX")
 
+
 # GLS
-repggls = pggls(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas, 
+repggls = pggls(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP +Market+ Oil+Gas, 
                 model = "pooling", data=data)
 summary(repggls)
 
 #pooltest
 
-pooltest(Stock~Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data,
+pooltest(Stock~A/MCAP +NI + BV(EQ)/MCAP + D/MCAP +Market+ Oil+Gas,data=data,
         model="within")
 
 #two-ways test
 
-pFtest(Stock~Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data,
+pFtest(Stock~A/MCAP +NI + BV(EQ)/MCAP + D/MCAP +Market+ Oil+Gas,data=data,
        effect="twoways")
 
 #unobserved effects test
 
-pwtest(Stock~Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas,data=data)
+pwtest(Stock~A/MCAP +NI + BV(EQ)/MCAP + D/MCAP +Market+ Oil+Gas,data=data)
 
 
 
@@ -115,7 +114,7 @@ data$Date<-as.Date(as.character(data$Date), "%d.%m.%Y")
 data <- pdata.frame(data, index = c("Company", "Date"), drop.index = F, row.names = T) 
 
 # fixed effects model
-fe <- plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+fe <- plm(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP+Oil+Gas+Market, 
           model = "within", data=data)
 summary(fe)
 stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),
@@ -123,7 +122,7 @@ stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("S
           "Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.LATEX")
 
 # random effects model
-re <- plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+re <- plm(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP+Oil+Gas+Market, 
           model = "random", data=data)
 summary(re)
 res.2 <- re$residuals
@@ -140,7 +139,7 @@ pbgtest(re)
 pdwtest(re)
 
 # test for heteroskedasticity
-bptest(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+
+bptest(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP+Oil+Gas+Market+
       factor(Company), data=data, studentize=F)
 
 # heterosk. and serial corr. consistent coefficient
@@ -163,6 +162,6 @@ stargazer(DriscollandKray,title="cross-sectional robust",dep.var.labels=c("Stock
           "Debt over equity","Oil price","Gas price","DJI premium"), out="DriscollandKray.LATEX")
 
 # GLS
-repggls <- pggls(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity +Market+ Oil+Gas, 
+repggls <- pggls(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP +Market+ Oil+Gas, 
                 model = "pooling", data=data)
 summary(repggls)
