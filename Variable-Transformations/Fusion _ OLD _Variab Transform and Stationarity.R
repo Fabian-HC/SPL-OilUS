@@ -25,10 +25,10 @@ logreturnsfun = function(x){
   # AS numeric part added
 }
 
-firstdiffun = function(x){
-  n = length(x)
-  firstdif = diff(x, lag=1)
-}
+#firstdiffun = function(x){
+#  n = length(x)
+#  firstdif = diff(x, lag=1)
+# }
 
 scalefun = function(x){
   ScaleVar = scale(x)
@@ -66,11 +66,19 @@ getwd()
 # Tim's working directory
 data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute.csv", stringsAsFactors = FALSE)
 
+
 # Convert Date such that R recognizes it as date
 class(data$Date)
 data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
 class(data$Date)
 
+data = data[order(data$Company, data$Date),]
+
+
+colnames(data)
+# Set shorter ColumnNames for subsequent analysis
+colnames(data) = c("Date", "Company", "Stock", "A/MCAP", "BV(EQ)/MCAP", "D/MCAP", "NI", colnames(data[8:ncol(data)])) 
+colnames(data)
 # Add the variable Assets to our dataset in order to obtain
 # Net Income over Assets: NI / A 
 #CompAssets = read.csv2("./Data-Set/Company_TotAssets.csv", stringsAsFactors = FALSE)
@@ -90,8 +98,7 @@ class(data$Date)
 #length(colnames(data)) == 17
 
 
-# Sort the dataframe before applying transformation
-data = data[order(data$Company, data$Date),]
+
 
 # Attach companyNames to the data set
 data$Company = as.factor(data$Company)
@@ -129,8 +136,9 @@ colnames(testresult) = levels(data$Company)
 testresult = as.data.frame(t(testresult))
 class(testresult)
 write.csv2(testresult, file = "./Stationarity-Tests/Z-Score_Stationarity__Absolute_Company_Specific_ADF.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "./Z-Score_Stationarity-Tests/Stationarity_Test_Absolute_Company-Specific_ADF.txt")
+print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Z-Score_Stationarity_Test_Absolute_Company-Specific_ADF.txt")
 
+rm(testresult)
 
 # Statioinarity Test for company-specific factors - KPSS Test
 testresult2 = aggregate(data[,3:7], by = list(data$Company), FUN = stattestFUN2, simplify = FALSE)
@@ -140,6 +148,7 @@ colnames(testresult2) = levels(data$Company)
 testresult2 = as.data.frame(t(testresult2))
 write.csv2(testresult2, file = "./Stationarity-Tests/Z-Score_Stationarity__Absolute_Company_Specific_KPSS.csv") # csv table export
 print.xtable(xtable(testresult2, auto = TRUE), file = "./Stationarity-Tests/Z-Score_Stationarity_Test_Absolute_Company-Specific_KPSS.txt")
+rm(testresult2)
 
 # Perform a panel unit root test
 object <- as.data.frame(split(data[,3:11], data$Company))
@@ -149,7 +158,7 @@ sink(file = "./Stationarity-Tests/Z-Score_Stationarity__Absolute_Panel_Test.txt"
 PanelUnitRootTest$statistic
 sink()
 
-rm(object, testresult ,testresult2, PanelUnitRootTest)
+rm(object, PanelUnitRootTest)
 
 # -----------------------------------------------------------------
 # Apply stationarity Transformations in form of log returns and first differences
@@ -167,9 +176,9 @@ LogR = apply (
 
 
 ScaleD = aggregate(data[,c(5,7)], by = list(data$Company), simplify = FALSE, FUN = scale)
-A = unlist(ScaleD$Net.Income)
-A = as.matrix(cbind(A,unlist(ScaleD$BV.Equity.to.Market.Cap)))
-colnames(A) = c("Net.Income", "BV.Equity.to.Market.Cap")
+A = unlist(ScaleD$NI)
+A = as.matrix(cbind(A,unlist(ScaleD$`BV(EQ)/MCAP`)))
+colnames(A) = colnames(data[,c(5,7)])
 
 #first difference
 #FirstDiff = apply (
@@ -179,23 +188,23 @@ colnames(A) = c("Net.Income", "BV.Equity.to.Market.Cap")
 #)
 
 
-
-data[1,1:2]
 #deleting false log return#
 Datatrans = data.frame(cbind(dataHelp[-1,],LogR, A[-1,]))
 Datatrans2 = subset(Datatrans, as.Date("1996-06-30")<Datatrans$Date)
 #checking wich row have been deleted
 anti_join(Datatrans,Datatrans2)
 #final changes#
-dataFinal = Datatrans2[,c(colnames(data))]
 
+dataFinal = Datatrans2[,c(1,2,5, 3, 16, 4, 17, 6:15)]
+colnames(dataFinal) = colnames(data)
+data = dataFinal
+rm(dataFinal)
 # Remove auxiliary storage variables
 rm(Datatrans2, Datatrans, LogR, Datatrans, FirstDiff, ScaleD, dataHelp)
 # Note that our data is still not a pdata frame. 
 # This will be done RIGHT BEFORE THE REGRESSIONS
-save(dataFinal, file="./Data-Set/For_Marcus_OK_Old_Version.RData")
-data = dataFinal
-rm(dataFinal)
+save(data, file="./Data-Set/For_Marcus_OK_Old_Version.RData")
+
 
 
 # First apply the unit root panel data test to see whether the overall panel
