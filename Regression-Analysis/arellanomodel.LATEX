@@ -1,0 +1,43 @@
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Do, Jun 23, 2016 - 21:55:40
+\begin{table}[!htbp] \centering 
+  \caption{Arellano model} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{1}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-2} 
+\\[-1.8ex] & Stock return \\ 
+\hline \\[-1.8ex] 
+ Assets over market cap. & $-$0.062$^{***}$ \\ 
+  & (0.021) \\ 
+  & \\ 
+ Net income & 0.016$^{***}$ \\ 
+  & (0.004) \\ 
+  & \\ 
+ Book value equity over market cap. & $-$0.024$^{*}$ \\ 
+  & (0.014) \\ 
+  & \\ 
+ Debt over equity & 0.026$^{***}$ \\ 
+  & (0.010) \\ 
+  & \\ 
+ Oil price & 0.260$^{***}$ \\ 
+  & (0.052) \\ 
+  & \\ 
+ Gas price & 0.065$^{**}$ \\ 
+  & (0.029) \\ 
+  & \\ 
+ DJI premium & 0.710$^{***}$ \\ 
+  & (0.122) \\ 
+  & \\ 
+ Constant & $-$0.064$^{**}$ \\ 
+  & (0.032) \\ 
+  & \\ 
+\hline \\[-1.8ex] 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{1}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
