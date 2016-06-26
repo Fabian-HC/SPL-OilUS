@@ -169,7 +169,7 @@ ScaleD = aggregate(data[,c(5,7)], by = list(data$Company),
                    simplify = FALSE, FUN = scale)
 A = unlist(ScaleD$NI)
 A = as.matrix(cbind(A,unlist(ScaleD$`BVE-MCAP`)))
-colnames(A) = colnames(data[,c(5,7)])
+colnames(A) = colnames(data[,c(7,5)])
 
 
 #deleting false log return#
@@ -182,8 +182,8 @@ rm(H)
 # The correct date, for which no log return can be obtained was deleted
 
 # Final adjustments
-dataFinal = Datatrans2[,c(1,2,6,3,17, 4, 18, 7,8,9:16,5)] # order data as before
-colnames(dataFinal) = colnames(data) # assign previous column names
+dataFinal = Datatrans2[,c(1,2,6,4,17, 3, 18, 7,8,9:16,5)] # order data as before
+# colnames(dataFinal) = colnames(data) # assign previous column names
 data = dataFinal 
 # remove auxiliary variables / data frames
 rm(Datatrans2, Datatrans, LogR, ScaleD, 
