@@ -73,9 +73,8 @@ stattestFUN2 = function(x){
 
 # ======= Initial data modifications =====
 # loading data
-data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute.csv", 
+data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute_2.csv", 
                  stringsAsFactors = FALSE)
-
 
 # Convert Date such that R recognizes it as date
 class(data$Date)
@@ -141,7 +140,7 @@ print.xtable(xtable(testresult2, auto = TRUE), file = "./Stationarity-Tests/Z-Sc
 rm(testresult2)
 
 # Perform a panel unit root test
-object <- as.data.frame(split(data[,3:11], data$Company))
+object <- as.data.frame(split(data[,3:18], data$Company))
 class(object)
 PanelUnitRootTest = purtest(object = object, test = "levinlin", 
                             exo = "trend", lags = "AIC", pmax = 5)
@@ -153,7 +152,8 @@ rm(object, PanelUnitRootTest)
 
 # === Apply (Stationarity) Transformations ==
 # Apply log - transformation to variable
-dataHelp = cbind(data[,1:2], log(data[, c(4,6)]))
+dataHelp = cbind(data[,1:2], log(data[, c(4,6)]), data[,c(18)])
+colnames(dataHelp) = colnames(data[,c(1:2, 4,6, 18)])
 # else:  "A-MCAP","D-MCAP"
 
 # Apply log-return transformation to predefinded variable set
@@ -182,12 +182,18 @@ rm(H)
 # The correct date, for which no log return can be obtained was deleted
 
 # Final adjustments
-dataFinal = Datatrans2[,c(1,2,5, 3, 16, 4, 17, 6:15)] # order data as before
+dataFinal = Datatrans2[,c(1,2,6,3,17, 4, 18, 7,8,9:16,5)] # order data as before
 colnames(dataFinal) = colnames(data) # assign previous column names
 data = dataFinal 
 # remove auxiliary variables / data frames
-rm(Datatrans2, Datatrans, LogR, Datatrans, ScaleD, 
+rm(Datatrans2, Datatrans, LogR, ScaleD, 
    dataHelp, A, dataFinal)
+
+# Generate Market excess return
+data$Market = data$Market - data$T.Bill3M
+# Remove 3 Month T-Bill Rate
+data$T.Bill3M = NULL
+
 # Store transformed dataset for regression analysis and graphical analysis
 save(data, file="./Data-Set/For_Marcus_OK_Old_Version.RData")
 
