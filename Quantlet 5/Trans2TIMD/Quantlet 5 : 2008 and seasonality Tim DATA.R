@@ -138,9 +138,14 @@ reOilC = plm(Stock ~ A.MCAP+ NI+ BVE.MCAP
              data=OilC)
 summary(reOilC)
 
-#OtherC  
-reOtherC = plm(Stock ~ A.MCAP+ NI+ BVE.MCAP
-               + D.MCAP+ Oil + Gas + Market + EURUSD, 
+#OtherC 
+reOtherC = plm(Stock ~ A.MCAP+ NI+ BVE.MCAP + D.MCAP
+               + Oil + Gas + Market + EURUSD,
+               model = "random", 
+               data=OtherC)
+summary(reOtherC)
+
+reOtherC = plm(Stock ~ A.MCAP,
                model = "random", 
                data=OtherC)
 summary(reOtherC)
