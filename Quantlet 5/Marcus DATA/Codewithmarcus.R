@@ -86,7 +86,7 @@ summary(DumyReg)
 
 DumyReg = plm(Stock ~ A.MCAP+ NI + BVE.MCAP
               + D.MCAP + Oil + Gas + Market + EURUSD + DumP + DumP*D.MCAP + DumP*(A.MCAP) + DumP*NI + DumP*EURUSD 
-              + DumP*Oil + DumP*Gas,
+              + DumP*Oil + DumP*Gas + DumP*(BVE.MCAP),
               model = "random", 
               data=dataP)
 summary(DumyReg)

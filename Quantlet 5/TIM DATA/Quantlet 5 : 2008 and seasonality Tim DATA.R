@@ -77,25 +77,17 @@ dataP = cbind(data0, "After2008(=1)" = DumP)
 dataP = pdata.frame(dataP, index = c("Company", "Date"), drop.index = F, 
                     row.names = T) 
 
-#Random Effect with Dummy
+#Random Effect with Dummy => DumP*D.MCAP
 
-any(is.na(dataP))
 
 DumyReg = plm(Stock ~ A.MCAP+ NI + BVE.MCAP
               + D.MCAP + Oil + Gas + Market + EURUSD 
-              + DumP*(A.MCAP) + DumP*NI + DumP*(BVE.MCAP)  + DumP*D.MCAP
+              + DumP*(A.MCAP) + DumP*NI + DumP*(BVE.MCAP)  + #DumP*D.MCAP#
               + DumP*Oil + DumP*Gas + DumP*Market + DumP*EURUSD, 
               model = "random", 
               data=dataP)
 summary(DumyReg)
 
-
-DumyReg = plm(Stock ~ A.MCAP+ NI + BVE.MCAP
-              + D.MCAP + Oil + Gas + Market + EURUSD + DumP + DumP*(A.MCAP) + DumP*NI + DumP*EURUSD 
-              + DumP*Oil + DumP*Gas + DumP*(BVE.MCAP) + ,
-              model = "random", 
-              data=dataP)
-summary(DumyReg)
 
 stargazer(DumyReg,type="text",
           title="Random Effect Model with Dummy after 2008 (= 1)",
