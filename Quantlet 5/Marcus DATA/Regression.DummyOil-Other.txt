@@ -1,0 +1,65 @@
+
+Random Effect Model with Dummy for Type of firm
+===================================================
+                            Dependent variable:    
+                        ---------------------------
+                               Stock return        
+---------------------------------------------------
+Assets/market cap.               -0.061***         
+                                  (0.023)          
+                                                   
+Net income                       0.016***          
+                                  (0.006)          
+                                                   
+BVE/market cap.                  -0.024**          
+                                  (0.009)          
+                                                   
+Debt/equity                       0.026**          
+                                  (0.012)          
+                                                   
+Oil price                        0.258***          
+                                  (0.032)          
+                                                   
+Gas price                        0.063***          
+                                  (0.023)          
+                                                   
+EUR/Dollar                       0.709***          
+                                  (0.066)          
+                                                   
+Dummy                              0.045           
+                                  (0.106)          
+                                                   
+Assets/market cap*Dummy           -0.017           
+                                  (0.116)          
+                                                   
+Net income*Dummy                  0.030**          
+                                  (0.012)          
+                                                   
+BVE/market cap*Dummy              -0.015           
+                                  (0.012)          
+                                                   
+Debt/equity*Dummy                  0.005           
+                                  (0.023)          
+                                                   
+Oil price*Dummy                  -0.371***         
+                                  (0.066)          
+                                                   
+Gas price*Dummy                    0.068           
+                                  (0.049)          
+                                                   
+EUR/Dollar*Dummy                  -0.257*          
+                                  (0.143)          
+                                                   
+EURUSD:DumFirmT                   -0.033           
+                                  (0.227)          
+                                                   
+Constant                          -0.063           
+                                  (0.040)          
+                                                   
+---------------------------------------------------
+Observations                        702            
+R2                                 0.404           
+Adjusted R2                        0.394           
+F Statistic              28.990*** (df = 16; 685)  
+===================================================
+Note:                   *p<0.1; **p<0.05; ***p<0.01
