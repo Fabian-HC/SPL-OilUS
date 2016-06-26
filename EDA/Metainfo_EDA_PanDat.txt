@@ -1,7 +1,5 @@
-﻿[Quantlet Symbol] - EDA for Panel Data
+﻿Name of Quantlet: EDA_PanDat 
 
-Name of Quantlet: EDA_PanDat
- 
 Published in: Statistical Programming Languages Seminar 2016; Ladislaus von Bortkiewicz Chair of Statistics, Humboldt University of Berlin
 
 Description: 
@@ -26,6 +24,3 @@ Plots
 (4) Histograms of the distribution of the transformed specific variables by company. 
 (5) Histograms of the common variables after the transformation has been applied. 
 
-
-
-    CODE SECTION: WILL BE INSERTED WHEN FULLY READY
