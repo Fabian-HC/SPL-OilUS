@@ -12,7 +12,7 @@ lapply(libraries, function(x) if (!(x %in% installed.packages())) {
 lapply(libraries, library, quietly = TRUE, character.only = TRUE)
 
 # exclude electr. companies(3&8)
-data = subset(data, data$Company!="CPEnergy" & data$Company!="PG&E_Corp")
+data = subset(Datatrans, Datatrans$Company!="CPEnergy" & Datatrans$Company!="PG&E_Corp")
 
 # panel data now
 
@@ -20,7 +20,7 @@ data = pdata.frame(data, index = c("Company", "Date"), drop.index = FALSE, row.n
 data$Date = as.Date(data$Date, "%Y-%m-%d")
 
 # fixed effects model
-fe = plm(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP+Oil+Gas+Market, 
+fe = plm(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
          model = "within", data=data)
 summary(fe)
 sink(file="./Regression-Analysis/femodel.LATEX")
