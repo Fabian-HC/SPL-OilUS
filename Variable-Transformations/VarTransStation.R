@@ -86,8 +86,8 @@ data = data[order(data$Company, data$Date),]
 
 
 # Set shorter ColumnNames for subsequent analysis
-colnames(data) = c("Date", "Company", "Stock", "A-MCAP", 
-                   "BVE-MCAP", "D-MCAP", "NI", colnames(data[8:ncol(data)])) 
+colnames(data) = c("Date", "Company", "Stock", "A.MCAP", 
+                   "BVE.MCAP", "D.MCAP", "NI", colnames(data[8:ncol(data)])) 
 
 # Attach companyNames to the data set
 data$Company = as.factor(data$Company) # Company variable from integer to factor
@@ -97,6 +97,65 @@ levels(data$Company) = c("Exxon_Mobil", "Apache",
 
 # Save the dataset - used by graphics quantlet
 save(data, file="./Data-Set/InitialData_Panel_Date_OK_OLD_ZScore.RData")
+
+
+# === Apply (Stationarity) Transformations ==
+# Apply log - transformation to variable
+dataHelp = cbind(data[,1:2], log(data[, c(4,6)]), data[,c(18)])
+colnames(dataHelp) = colnames(data[,c(1:2, 4,6, 18)])
+# else:  "A-MCAP","D-MCAP"
+
+# Apply log-return transformation to predefinded variable set
+#LogR = apply (
+#  X = data[,c(3, 8:17)], 
+#  MARGIN = 2 , 
+#  logreturnsfun
+#)
+# Apply z-score transformation to company-specific variables
+# NI and A-MCAP
+LogR = aggregate(data[,c(3, 8:17)], by = list(data$Company), 
+                   simplify = FALSE, FUN = logreturnsfun)
+A = unlist(LogR$Stock)
+A = as.matrix(cbind(A,unlist(LogR$Oil)))
+A = as.matrix(cbind(A,unlist(LogR$Gas)))
+A = as.matrix(cbind(A,unlist(LogR$Market)))
+A = as.matrix(cbind(A,unlist(LogR$EURUSD)))
+A = as.matrix(cbind(A,unlist(LogR$GBPUSD)))
+A = as.matrix(cbind(A,unlist(LogR$CNYUSD)))
+A = as.matrix(cbind(A,unlist(LogR$JPYUSD)))
+A = as.matrix(cbind(A,unlist(LogR$RUBUSD)))
+A = as.matrix(cbind(A,unlist(LogR$INRUSD)))
+A = as.matrix(cbind(A,unlist(LogR$BRLUSD)))
+colnames(A) = colnames(data[,c(3, 8:17)])
+
+
+
+
+# Apply z-score transformation to company-specific variables
+# NI and A-MCAP
+ScaleD = aggregate(data[,c(5,7)], by = list(data$Company), 
+                   simplify = FALSE, FUN = scale)
+B = unlist(ScaleD$BVE.MCAP)
+C = unlist(ScaleD$NI)
+D = as.matrix(cbind(B,C))
+colnames(D) = colnames(data[,c(7,5)])
+
+
+#deleting false log return#
+Datatrans = data.frame(cbind(dataHelp[-1,],D[-1,]))
+Datatrans = subset(Datatrans, as.Date("1996-06-30")<Datatrans$Date)
+Datatrans = data.frame(cbind(Datatrans, A))
+Datatrans = Datatrans[,colnames(data)]
+
+# Generate Market excess return
+Datatrans$Market = Datatrans$Market - Datatrans$T.Bill3M
+# Remove 3 Month T-Bill Rate
+Datatrans$T.Bill3M = NULL
+Datatrans$Market = Datatrans$Market[1:78]
+
+
+# Store transformed dataset for regression analysis and graphical analysis
+save(Datatrans, file="./Data-Set/For_Marcus_OK_Old_Version.RData")
 
 # === Stationarity Tests for absolute Variables ===
 
@@ -150,52 +209,6 @@ sink()
 
 rm(object, PanelUnitRootTest)
 
-# === Apply (Stationarity) Transformations ==
-# Apply log - transformation to variable
-dataHelp = cbind(data[,1:2], log(data[, c(4,6)]), data[,c(18)])
-colnames(dataHelp) = colnames(data[,c(1:2, 4,6, 18)])
-# else:  "A-MCAP","D-MCAP"
-
-# Apply log-return transformation to predefinded variable set
-LogR = apply (
-  X = data[,c(3, 8:17)], 
-  MARGIN = 2 , 
-  logreturnsfun
-)
-
-# Apply z-score transformation to company-specific variables
-# NI and A-MCAP
-ScaleD = aggregate(data[,c(5,7)], by = list(data$Company), 
-                   simplify = FALSE, FUN = scale)
-A = unlist(ScaleD$NI)
-A = as.matrix(cbind(A,unlist(ScaleD$`BVE-MCAP`)))
-colnames(A) = colnames(data[,c(7,5)])
-
-
-#deleting false log return#
-Datatrans = data.frame(cbind(dataHelp[-1,],LogR, A[-1,]))
-Datatrans2 = subset(Datatrans, as.Date("1996-06-30")<Datatrans$Date)
-#checking wich row have been deleted
-H = anti_join(Datatrans,Datatrans2)
-H$Date == "1996-06-28"
-rm(H)
-# The correct date, for which no log return can be obtained was deleted
-
-# Final adjustments
-dataFinal = Datatrans2[,c(1,2,6,4,17, 3, 18, 7,8,9:16,5)] # order data as before
-# colnames(dataFinal) = colnames(data) # assign previous column names
-data = dataFinal 
-# remove auxiliary variables / data frames
-rm(Datatrans2, Datatrans, LogR, ScaleD, 
-   dataHelp, A, dataFinal)
-
-# Generate Market excess return
-data$Market = data$Market - data$T.Bill3M
-# Remove 3 Month T-Bill Rate
-data$T.Bill3M = NULL
-
-# Store transformed dataset for regression analysis and graphical analysis
-save(data, file="./Data-Set/For_Marcus_OK_Old_Version.RData")
 
 
 # === Stationarity Tests for transformed data ===
