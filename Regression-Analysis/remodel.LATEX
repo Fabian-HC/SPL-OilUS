@@ -1,9 +1,10 @@
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Do, Jun 23, 2016 - 21:55:50
+% Date and time: Mo, Jun 27, 2016 - 13:08:13
 \begin{table}[!htbp] \centering 
   \caption{Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)} 
   \label{} 
+\tiny 
 \begin{tabular}{@{\extracolsep{5pt}}lc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
@@ -11,25 +12,25 @@
 \cline{2-2} 
 \\[-1.8ex] & Stock return \\ 
 \hline \\[-1.8ex] 
- Assets over market cap. & $-$0.062$^{***}$ \\ 
+ A.MCAP & $-$0.062$^{***}$ \\ 
   & (0.023) \\ 
   & \\ 
- Net income & 0.016$^{***}$ \\ 
+ NI & 0.016$^{***}$ \\ 
   & (0.006) \\ 
   & \\ 
- Book value equity over market cap. & $-$0.024$^{**}$ \\ 
+ BVE.MCAP & $-$0.024$^{**}$ \\ 
   & (0.009) \\ 
   & \\ 
- Debt over equity & 0.026$^{**}$ \\ 
+ D.MCAP & 0.026$^{**}$ \\ 
   & (0.011) \\ 
   & \\ 
- Oil price & 0.260$^{***}$ \\ 
+ Oil & 0.260$^{***}$ \\ 
   & (0.032) \\ 
   & \\ 
- Gas price & 0.065$^{***}$ \\ 
+ Gas & 0.065$^{***}$ \\ 
   & (0.023) \\ 
   & \\ 
- DJI premium & 0.710$^{***}$ \\ 
+ Market & 0.710$^{***}$ \\ 
   & (0.067) \\ 
   & \\ 
  Constant & $-$0.064$^{*}$ \\ 
