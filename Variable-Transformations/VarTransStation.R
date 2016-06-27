@@ -160,7 +160,7 @@ save(data, file="./Data-Set/RegressionBase.RData")
 
 # === Stationarity Tests for absolute Variables ===
 
-load(file = ".")
+load(file = "./Data-Set/InitialData_Panel.RData")
 
 # Stationarity Test for common factors - ADF Test
 Sub1 = ComFSep(data)
