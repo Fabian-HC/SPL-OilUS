@@ -1,4 +1,162 @@
-# asdf
+# === Clearing the Environment ===
+# remove variables
+rm(list = ls())
+
+# reset graphics
+graphics.off()
+
+
+# === Packages ===
+# Install packages if not installed
+libraries = c("plyr","dplyr","data.table", "tseries", "xtable", 
+              "plm", "CADFtest")
+lapply(libraries, function(x) if (!(x %in% installed.packages())) {
+  install.packages(x)
+})
+#  Load packages 
+lapply(libraries, library, quietly = TRUE, character.only = TRUE)
+rm(libraries) # package loading done - not needed anymore
+
+# === Define required functions ===
+# Functions for variable transformatin later on
+logreturnsfun = function(x){
+  n = length(x)
+  logreturn = diff(log(x), lag=1)
+  # AS numeric part added
+}
+
+scalefun = function(x){
+  ScaleVar = scale(x)
+}
+
+
+# Function for seperating the common factor developments apart from the others
+ComFSep = function(x){
+  if(class(x) == "data.frame"){
+    Sub1 = subset(x, x$Company == levels(x$Company)[1])
+    Sub1 = Sub1[,c("Oil", "Gas", "Market", "EURUSD")]
+    # print("continue programming")
+    return(Sub1)
+  }else{
+    print("Data must be passed as data frame or a subsection of it")
+  }
+}
+
+
+# Stationarity Test - ADF TEst
+stattestFUN = function(x){
+  test = adf.test(x, alternative = "stationary")
+  testresult = test$p.value
+  testresult = round(testresult, digits = 2)
+  ReturnResult = if(testresult < 0.1){
+    ReturnResult = "stationary"
+  }else if(testresult > 0.1 & testresult < 0.2){
+    ReturnResult = "Critical a[0.1,0.2]" 
+  }else{
+    ReturnResult ="not_stationary"
+  }
+}
+
+# Stationarity Test: KPSS Test
+stattestFUN2 = function(x){
+  test = kpss.test(x, null = "Trend")
+  test = test$p.value
+  test = as.numeric(test)
+  test = round(test, digits = 2)
+  ReturnResult = if(test < 0.099){
+    ReturnResult = "non (trend) stationary"
+  }else{
+    ReturnResult ="(trend) stationary"
+  }
+}
+
+
+# ======= Initial data modifications =====
+# loading data
+data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute_2.csv", 
+                 stringsAsFactors = FALSE)
+
+# Convert Date such that R recognizes it as date
+class(data$Date)
+data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
+class(data$Date)
+
+# Order data adequately for subsequent transformations
+data = data[order(data$Company, data$Date),]
+
+
+# Set shorter ColumnNames for subsequent analysis
+colnames(data) = c("Date", "Company", "Stock", "A.MCAP", 
+                   "BVE.MCAP", "D.MCAP", "NI", colnames(data[8:ncol(data)])) 
+
+# Attach companyNames to the data set
+data$Company = as.factor(data$Company) # Company variable from integer to factor
+levels(data$Company) = c("Exxon_Mobil", "Apache", 
+                         "CPEnergy", "Chevron", "Hess_Corp", "Murphy_Oil", 
+                         "Occidental_Petroleum", "PG&E_Corp", "Williams")
+
+# Save the dataset - used by graphics quantlet
+save(data, file="./Data-Set/InitialData_Panel_Date_OK_OLD_ZScore.RData") 
+
+
+# === Apply (Stationarity) Transformations ==
+# Apply log - transformation to variable
+dataHelp = cbind(data[,1:2], log(data[, c(4,6)]), data[,c(18)])
+colnames(dataHelp) = colnames(data[,c(1:2, 4,6, 18)])
+# else:  "A-MCAP","D-MCAP"
+
+# Apply log-return transformation to predefinded variable set
+#LogR = apply (
+#  X = data[,c(3, 8:17)], 
+#  MARGIN = 2 , 
+#  logreturnsfun
+#)
+# Apply z-score transformation to company-specific variables
+# NI and A-MCAP
+LogR = aggregate(data[,c(3, 8:17)], by = list(data$Company), 
+                   simplify = FALSE, FUN = logreturnsfun)
+A = unlist(LogR$Stock)
+A = as.matrix(cbind(A,unlist(LogR$Oil)))
+A = as.matrix(cbind(A,unlist(LogR$Gas)))
+A = as.matrix(cbind(A,unlist(LogR$Market)))
+A = as.matrix(cbind(A,unlist(LogR$EURUSD)))
+A = as.matrix(cbind(A,unlist(LogR$GBPUSD)))
+A = as.matrix(cbind(A,unlist(LogR$CNYUSD)))
+A = as.matrix(cbind(A,unlist(LogR$JPYUSD)))
+A = as.matrix(cbind(A,unlist(LogR$RUBUSD)))
+A = as.matrix(cbind(A,unlist(LogR$INRUSD)))
+A = as.matrix(cbind(A,unlist(LogR$BRLUSD)))
+colnames(A) = colnames(data[,c(3, 8:17)])
+
+
+
+
+# Apply z-score transformation to company-specific variables
+# NI and A-MCAP
+ScaleD = aggregate(data[,c(5,7)], by = list(data$Company), 
+                   simplify = FALSE, FUN = scale)
+B = unlist(ScaleD$BVE.MCAP)
+C = unlist(ScaleD$NI)
+D = as.matrix(cbind(B,C))
+colnames(D) = colnames(data[,c(5,7)])
+
+
+#deleting false log return#
+Datatrans = data.frame(cbind(dataHelp[-1,],D[-1,]))
+Datatrans = subset(Datatrans, as.Date("1996-06-30")<Datatrans$Date)
+Datatrans = data.frame(cbind(Datatrans, A))
+Datatrans = Datatrans[,colnames(data)]
+
+# Generate Market excess return
+Datatrans$Market = Datatrans$Market - Datatrans$T.Bill3M
+# Remove 3 Month T-Bill Rate
+Datatrans$T.Bill3M = NULL
+Datatrans$Market = Datatrans$Market[1:78]
+
+
+# Store transformed dataset for regression analysis and graphical analysis
+save(Datatrans, file="./Data-Set/For_Marcus_OK_Old_Version.RData")
+
 # === Stationarity Tests for absolute Variables ===
 
 # Stationarity Test for common factors - ADF Test
