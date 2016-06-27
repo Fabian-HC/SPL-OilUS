@@ -73,16 +73,16 @@ rm(data, SumSpecF)
 
 # === Summary Statistics of variables after transformations ===
 # load the respective dataset
-load("./Data-Set/For_Marcus_OK_Old_Version.RData", verbose = TRUE)
+load("./Data-Set/RegressionBase.RData", verbose = TRUE)
 
 # Summary statistics for common factors
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
 SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
 # Export as CSV
-write.csv2(SumCommonF, file = "./EDA/Common_Factors_returns.csv")
+write.csv2(SumCommonF, file = "./Quantlet2 _ EDA/Common_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "./EDA/Common_Factors_returns.txt", size = "tiny")
+print.xtable(xtable(SumCommonF), file = "./Quantlet2 _ EDA/Common_Factors_returns.txt", size = "tiny")
 rm(Sub1, SumCommonF)
 
 # Summary statistics of company-specific variables
@@ -96,14 +96,12 @@ class(SumSpecF$vars)
 levels(SumSpecF$vars) = colnames(data[,3:7])
 SumSpecF = SumSpecF[,-1]
 rownames(SumSpecF) = NULL
-write.csv2(SumSpecF, file = "./EDA/Specific_Factors_returns.csv")
+write.csv2(SumSpecF, file = "./Quantlet2 _ EDA/Specific_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "./EDA/Specific_Factors_returns.txt", size = "tiny")
+print.xtable(xtable(SumSpecF), file = "./Quantlet2 _ EDA/Specific_Factors_returns.txt", size = "tiny")
 
 # remove the remaining variables
 rm(data, SumSpecF)
-
-
 
 
 
@@ -113,8 +111,37 @@ rm(data, SumSpecF)
 # GRAPHICAL ANALYSIS SECTION
 # ==============================================================
 # === Explorative Graphical Analyses of pre-transformed data ===
-load("./Data-Set/InitialData_Panel_Date_OK_OLD_ZScore.RData", 
+load("./Data-Set/InitialData_Panel.RData", 
      verbose = FALSE)
+
+
+# =============================================================
+# Generation of plots for presentation
+# ============================================================
+class(data$Company)
+levels(data$Company)
+Sub1 = subset(data, data$Company == "Williams")
+
+# Set PDF recording and configurations
+pdf(file = "./Quantlet2 _ EDA/C9_WilliamsPresentation.pdf", 
+    height = 4, width = 10)
+VarNames = colnames(Sub1)
+par(mfcol = c(1,2))
+par(cex = 0.95)
+par(mar = c(2,2,1.5,1), lwd = 2)
+plot(Sub1$Date, Sub1$Stock, type = "l", main = "Stock", xlab = "", ylab = "")
+plot(Sub1$Date, Sub1$A.MCAP, type = "l", main = "A.Mcap", xlab = "", ylab = "")
+dev.off()
+
+# Execute the loop for plotting the variables of interes
+i = 2
+while(i < (ncol(Sub1) + 1)){
+  YMinMax = c(min(Sub1[,i])*0.9, max(Sub1[,i])*1.1)
+  plot(Sub1$Date, Sub1[,i], type = "l", ylim = YMinMax, main = VarNames[i], 
+       xlab = "", ylab = "")
+  i = i + 1
+}
+
 
 # === Obtain all stock performances and Index them ===
 # Base: 1996-06-28 = 100%
@@ -141,7 +168,7 @@ VarSetMelt <- melt(StockSet, id = "Date") # bring data into right format
 # Plot the Stock set data
 dev.off() # get rid of previous plot configurations
 
-pdf(file = "./EDA/All_Stocks_plot.pdf", height = 3, width = 5.25)
+pdf(file = "./Quantlet2 _ EDA/All_Stocks_plot.pdf", height = 3, width = 5.25)
 p <- ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, 
                                  colour=variable)) + geom_line(size = 0.75)
 # add legend configurations
@@ -174,7 +201,7 @@ Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,c(1,8:11)]
 
 # Set PDF recording and configurations
-pdf(file = "./EDA/Common_Factors_Development_better.pdf", 
+pdf(file = "./Quantlet2 _ EDA/Common_Factors_Development_better.pdf", 
     height = 4,     width = 10)
 VarNames = colnames(Sub1)
 par(mfrow = c(1,4))
@@ -200,7 +227,7 @@ VarNames = colnames(data) # Store variable names for later purposes
 i = 1
 while(i < 10){
   # generate the PDF containing the plots for company 'i'
-  pdf(file = paste("./EDA/Company_", 
+  pdf(file = paste("./Quantlet2 _ EDA/Company_", 
       i, "_Specific_and_Common_Factors.pdf", sep = ""), 
       height = 2.35, width =11)
   # Plot conficurations
@@ -230,11 +257,11 @@ rm(i, j, VarNames, YMinMax, data, Sub1)
 
 # === Histograms of transformed variables ===
 # Load data
-load(file="./Data-Set/For_Marcus_OK_Old_Version.RData", verbose = TRUE)
+load(file="./Data-Set/RegressionBase.RData", verbose = TRUE)
 
 # === Generate Histograms for Specific Factors by enterprise ===
 # Set PDF rcording and configurations
-pdf(file = "./EDA/Companies_Specific_factors_returns_Histograms.pdf", 
+pdf(file = "./Quantlet2 _ EDA/Companies_Specific_factors_returns_Histograms.pdf", 
     height = 6.1, width = 11)
 par(mfcol = c(9,5))
 par(mar = c(1,1,1,1))
@@ -248,7 +275,7 @@ dev.off()
 
 
 # === Generate histograms for common factors ===
-pdf(file = "./EDA/Common_factors_returns_Histograms.pdf", 
+pdf(file = "./Quantlet2 _ EDA/Common_factors_returns_Histograms.pdf", 
     height = 3, width = 7)
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,8:11]
