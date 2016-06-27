@@ -44,31 +44,31 @@ indexFUN = function(x){
 
 # === Summary Statistics of variables before transformation ===
 # Load respective dataset
-load("./Data-Set/InitialData_Panel_Date_OK_OLD_ZScore.RData", verbose = FALSE)
+load("./Data-Set/InitialData_Panel.RData", verbose = FALSE)
 
 # Summary statistics for common factors
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
-SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
+SumCommonF = round(SumCommonF[,-c(1,2,5:7,10:13)], digits = 2)
 # Export as CSV
-write.csv2(SumCommonF, file = "./EDA/Common_Factors_Absolute.csv")
+write.csv2(SumCommonF, file = "./Quantlet2 _ EDA/Common_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "./EDA/Common_Factors_Absolute.txt", size = "tiny")
+print.xtable(xtable(SumCommonF), file = "./Quantlet2 _ EDA/Common_Factors_Absolute.txt", size = "tiny")
 rm(SumCommonF, Sub1)
 
 # Summary statistics of company-specific variables
 SumSpecF = describeBy(data[,2:7], group = "Company", mat = TRUE, digits = 2, 
                       trim = 0, type = 1)
 SumSpecF = SumSpecF[-c(1:9),]
-SumSpecF = SumSpecF[,-c(4,8,9,12,15)]
+SumSpecF = SumSpecF[,-c(4,7:9,12:15)]
 SumSpecF = SumSpecF[order(SumSpecF$group1, SumSpecF$vars),]
 SumSpecF$vars = factor(SumSpecF$vars)
 levels(SumSpecF$vars) = colnames(data[,3:7])
 SumSpecF = SumSpecF[,-1]
 rownames(SumSpecF) = NULL
-write.csv2(SumSpecF, file = "./EDA/Specific_Factors_Absolute.csv")
+write.csv2(SumSpecF, file = "./Quantlet2 _ EDA/Specific_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "./EDA/Specific_Factors_Absolute.txt", size = "tiny")
+print.xtable(xtable(SumSpecF), file = "./Quantlet2 _ EDA/Specific_Factors_Absolute.txt", size = "tiny")
 rm(data, SumSpecF)
 
 # === Summary Statistics of variables after transformations ===
