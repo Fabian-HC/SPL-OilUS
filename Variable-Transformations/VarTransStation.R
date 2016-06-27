@@ -96,7 +96,7 @@ levels(data$Company) = c("Exxon_Mobil", "Apache",
                          "Occidental_Petroleum", "PG&E_Corp", "Williams")
 
 # Save the dataset - used by graphics quantlet
-save(data, file="./Data-Set/InitialData_Panel_Date_OK_OLD_ZScore.RData")
+save(data, file="./Data-Set/InitialData_Panel_Date_OK_OLD_ZScore.RData") 
 
 
 # === Apply (Stationarity) Transformations ==
@@ -138,7 +138,7 @@ ScaleD = aggregate(data[,c(5,7)], by = list(data$Company),
 B = unlist(ScaleD$BVE.MCAP)
 C = unlist(ScaleD$NI)
 D = as.matrix(cbind(B,C))
-colnames(D) = colnames(data[,c(7,5)])
+colnames(D) = colnames(data[,c(5,7)])
 
 
 #deleting false log return#
