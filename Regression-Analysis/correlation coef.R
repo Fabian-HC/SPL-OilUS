@@ -30,6 +30,6 @@ corrma = function(x){
   return(Rnew) 
 }
 corrma(data2)
-sink(file="./Data-Set/corrma.txt")
+sink(file="./Regression-Analysis/corrma.txt")
 xtable(corrma(data2))
-sink()
+
