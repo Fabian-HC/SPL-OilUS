@@ -96,7 +96,7 @@ levels(data$Company) = c("Exxon_Mobil", "Apache",
                          "Occidental_Petroleum", "PG&E_Corp", "Williams")
 
 # Save the dataset - used by graphics quantlet
-save(data, file="./Data-Set/InitialData_Panel_Date_OK_OLD_ZScore.RData") 
+save(data, file="./Data-Set/InitialData_Panel.RData") 
 
 
 # === Apply (Stationarity) Transformations ==
@@ -153,11 +153,14 @@ Datatrans$Market = Datatrans$Market - Datatrans$T.Bill3M
 Datatrans$T.Bill3M = NULL
 Datatrans$Market = Datatrans$Market[1:78]
 
+data = Datatrans
 
 # Store transformed dataset for regression analysis and graphical analysis
-save(Datatrans, file="./Data-Set/For_Marcus_OK_Old_Version.RData")
+save(data, file="./Data-Set/RegressionBase.RData")
 
 # === Stationarity Tests for absolute Variables ===
+
+load(file = ".")
 
 # Stationarity Test for common factors - ADF Test
 Sub1 = ComFSep(data)
