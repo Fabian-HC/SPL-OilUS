@@ -25,10 +25,11 @@ data$Date = as.Date(data$Date, "%Y-%m-%d")
 fe = plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
          model = "within", data=data)
 summary(fe)
+sink(file="./Regression-Analysis/femodel.LATEX")
 stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),
           covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
           "Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.LATEX")
-
+sink()
 # random effects model
 re = plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
          model = "random", data=data)
@@ -95,7 +96,7 @@ pwtest(Stock~Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.t
 
 setwd("C:/Users/marcu/Downloads")
 
-data <- read.csv2("~/Dataset FINAL(paperstyle).csv", stringsAsFactors=FALSE)
+data <- read.csv2("C:/Users/marcu/Desktop/R/Dataset FINALFORPRESENTATION.csv", stringsAsFactors=FALSE)
 
 # Install packages if not installed
 libraries = c("sandwich","lmtest","foreign","plm","car","stargazer")
@@ -113,6 +114,7 @@ data <- subset(data, data$Company!=3 & data$Company!=8)
 data$Date<-as.Date(as.character(data$Date), "%d.%m.%Y")
 
 data <- pdata.frame(data, index = c("Company", "Date"), drop.index = F, row.names = T) 
+data$Date<-as.Date(as.character(data$Date), "%Y-%m-%d")
 
 # fixed effects model
 fe <- plm(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
@@ -145,7 +147,7 @@ bptest(Stock ~ Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt
 
 # heterosk. and serial corr. consistent coefficient
 arellano<-coeftest(re, vcovHC(re,method="arellano"))
-
+arellano
 # output
 stargazer(arellano,title="Arellano model",dep.var.labels=c("Stock return"),
           covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
@@ -156,7 +158,7 @@ pcdtest(fe, test = c("lm"))
 
 # cross-sectional robust (Driscoll and Kraay)
 DriscollandKray<-coeftest(re, vcov=vcovSCC)
-
+DriscollandKray
 # output
 stargazer(DriscollandKray,title="cross-sectional robust",dep.var.labels=c("Stock return"),
           covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
