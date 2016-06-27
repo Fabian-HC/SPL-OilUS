@@ -1,20 +1,20 @@
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Thu Jun 23 19:14:58 2016
+% Sun Jun 26 09:34:44 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{llllll}
   \hline
- & Stock & Assets.to.Market.Cap & BV.Equity.to.Market.Cap & Debt.to.Equity & NI\_by\_Assets \\ 
+ & Stock & A-MCAP & BVE-MCAP & D-MCAP & NI \\ 
   \hline
-Exxon\_Mobil & stationary & stationary & stationary & stationary & stationary \\ 
-  Apache & stationary & stationary & Critical a[0.1,0.2] & not\_stationary & not\_stationary \\ 
-  CPEnergy & stationary & stationary & stationary & stationary & stationary \\ 
-  Chevron & stationary & stationary & stationary & stationary & stationary \\ 
-  Hess\_Corp & stationary & stationary & stationary & stationary & stationary \\ 
-  Murphy\_Oil & stationary & stationary & stationary & stationary & stationary \\ 
-  Occidental\_Petroleum & stationary & stationary & stationary & stationary & stationary \\ 
-  PG\&E\_Corp & stationary & stationary & stationary & stationary & stationary \\ 
-  Williams & stationary & stationary & stationary & stationary & stationary \\ 
+Exxon\_Mobil & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Apache & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  CPEnergy & stationary & not\_stationary & stationary & not\_stationary & not\_stationary \\ 
+  Chevron & stationary & stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Hess\_Corp & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Murphy\_Oil & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Occidental\_Petroleum & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  PG\&E\_Corp & stationary & not\_stationary & stationary & not\_stationary & stationary \\ 
+  Williams & stationary & not\_stationary & Critical a[0.1,0.2] & not\_stationary & Critical a[0.1,0.2] \\ 
    \hline
 \end{tabular}
 \end{table}

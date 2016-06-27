@@ -1,0 +1,68 @@
+
+Random Effect Model with Dummy after 2008 (= 1)
+===================================================
+                            Dependent variable:    
+                        ---------------------------
+                               Stock return        
+---------------------------------------------------
+Assets/market cap.               -0.073**          
+                                  (0.029)          
+                                                   
+Net income                        0.012*           
+                                  (0.007)          
+                                                   
+BVE/market cap.                   -0.021*          
+                                  (0.011)          
+                                                   
+Debt/equity                       0.032**          
+                                  (0.015)          
+                                                   
+Oil price                        0.223***          
+                                  (0.035)          
+                                                   
+Gas price                        0.081***          
+                                  (0.029)          
+                                                   
+DJI premium                      0.604***          
+                                  (0.092)          
+                                                   
+EUR/Dollar                         0.158           
+                                  (0.131)          
+                                                   
+Dummy                              0.111           
+                                  (0.094)          
+                                                   
+Assets/market cap*Dummy            0.064           
+                                  (0.042)          
+                                                   
+Net income*Dummy                 0.046***          
+                                  (0.012)          
+                                                   
+BVE/market cap*Dummy              -0.031*          
+                                  (0.017)          
+                                                   
+Debt/equity*Dummy                 -0.029           
+                                  (0.026)          
+                                                   
+Oil price*Dummy                  -0.249***         
+                                  (0.067)          
+                                                   
+Gas price*Dummy                    0.031           
+                                  (0.042)          
+                                                   
+DJI premium*Dummy                 -0.078           
+                                  (0.127)          
+                                                   
+EUR/Dollar*Dummy                 -0.443**          
+                                  (0.202)          
+                                                   
+Constant                          -0.083*          
+                                  (0.050)          
+                                                   
+---------------------------------------------------
+Observations                        702            
+R2                                 0.397           
+Adjusted R2                        0.387           
+F Statistic              26.505*** (df = 17; 684)  
+===================================================
+Note:                   *p<0.1; **p<0.05; ***p<0.01
