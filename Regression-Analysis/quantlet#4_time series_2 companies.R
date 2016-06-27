@@ -1,7 +1,6 @@
-setwd("C:/Users/marcu/Desktop/R")
-load("C:/Users/marcu/Desktop/R/For_Marcus_OK.RData")
+load("./Data-Set/For_Marcus_OK_Old_Version.RData")
 
-data = dataFinal
+data = Datatrans
 rm(dataFinal)
 # Install packages if not installed
 libraries = c("lmtest","sandwich","dyn","forecast","tseries","aod","foreign","plm","car","stargazer")
@@ -21,30 +20,27 @@ PGECorp = PGECorp[,-(1:2)]
 PGECorp = ts(PGECorp,start=c(1996,3), end=c(2015,4),frequency=4)
 
 #linear model
-lin.model.PGE = lm(Stock ~ Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+lin.model.PGE = lm(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
                    data=PGECorp)
 summary(lin.model.PGE)                   
 plot(lin.model.PGE)
 
 # output
-stargazer(lin.model.PGE,title="lin.model.PGE",dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.",
-          "Net income over assets","Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI"), 
-          out="linmodelPGE.LATEX")
+stargazer(lin.model.PGE,title="lin.model.PGE",dep.var.labels=c("Stock return"),font.size="tiny",
+          out="./Regression-Analysis/linmodelPGE.LATEX")
 
 #test for autocorrelation
 dwtest(lin.model.PGE)
 
 #Breusch-Pagan Test: Null is homosk.
-bptest(Stock~Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, data=PGECorp)
+bptest(Stock~A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, data=PGECorp)
 
 #adjusting for heterosk.
 coeftest1 = coeftest(lin.model.PGE, vcovHC)
 summary(coeftest1)
 
 # output
-stargazer(coeftest1,title="lin.model.PGE adj. for heterosk.",dep.var.labels=c("Stock return"),
-          covariate.labels=c("Assets over market cap.","Net income over assets","Book value equity over market cap.",
-          "Debt over equity","Oil price","Gas price","DJI"), out="coeftest1.LATEX")
+stargazer(coeftest1,title="lin.model.PGE adj. for heterosk.",dep.var.labels=c("Stock return"), font.size="tiny",out="./Regression-Analysis/coeftest1.LATEX")
 
 # different company from oil sector
 ApacheCorp = subset(data, data$Company=="Apache") 
@@ -54,21 +50,19 @@ ApacheCorp<-ApacheCorp[,-(1:2)]
 ApacheCorp = ts(ApacheCorp,start=c(1996,3), end=c(2015,4),frequency=4)
 
 # linear model
-lin.model.Apache = lm(Stock ~ Assets.to.Market.Cap +NI_by_Assets + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market, 
+lin.model.Apache = lm(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
                       data=ApacheCorp)
 summary(lin.model.Apache)                   
 plot(lin.model.Apache)
 
 # output
-stargazer(lin.model.Apache,title="lin.model.Apache",dep.var.labels=c("Stock return"),
-          covariate.labels=c("Assets over market cap.","Net income over assets","Book value equity over market cap.",
-          "Debt over equity","Oil price","Gas price","DJI"), out="linmodelApache.LATEX")
+stargazer(lin.model.Apache,title="lin.model.Apache",dep.var.labels=c("Stock return"), out="./Regression-Analysis/linmodelApache.LATEX")
 
 # test for autocorrelation
 dwtest(lin.model.Apache)
 
 # Breusch-Pagan Test: Null is homosk.(which is the result)
-bptest(Stock~Assets.to.Market.Cap +Net.Income + BV.Equity.to.Market.Cap + Debt.to.Equity+Oil+Gas+Market+EURUSD, data=ApacheCorp)
+bptest(Stock~A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, data=ApacheCorp)
 
 ########## old with CSV ############
 

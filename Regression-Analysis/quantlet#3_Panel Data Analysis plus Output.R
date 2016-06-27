@@ -13,6 +13,7 @@ lapply(libraries, library, quietly = TRUE, character.only = TRUE)
 
 # exclude electr. companies(3&8)
 data = subset(Datatrans, Datatrans$Company!="CPEnergy" & Datatrans$Company!="PG&E_Corp")
+remove(Datatrans)
 
 # panel data now
 
@@ -23,19 +24,14 @@ data$Date = as.Date(data$Date, "%Y-%m-%d")
 fe = plm(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
          model = "within", data=data)
 summary(fe)
-sink(file="./Regression-Analysis/femodel.LATEX")
-stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),
-          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
-          "Debt over equity","Oil price","Gas price","DJI premium"), out="femodel.LATEX")
-sink()
+stargazer(fe,title="Oneway (individual) effect Within Model",dep.var.labels=c("Stock return"),font.size = "tiny", out="./Regression-Analysis/femodel.LATEX")
+
 # random effects model
-re = plm(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP+Oil+Gas+Market, 
+re = plm(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
          model = "random", data=data)
 summary(re)
-stargazer(fe,title="Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)",
-          dep.var.labels=c("Stock return"),covariate.labels=c("Assets over market cap.","Net income",
-          "Book value equity over market cap.","Debt over equity","Oil price","Gas price","DJI premium"), 
-          out="remodel.LATEX")
+stargazer(re,title="Oneway (individual) effect Random Effect Model (Swamy-Arora's transformation)",
+          dep.var.labels=c("Stock return"),font.size = "tiny",out="./Regression-Analysis/remodel.LATEX")
 
 # Hausman test comparing RE and FE
 phtest(fe, re)
@@ -45,47 +41,43 @@ pbgtest(re)
 pdwtest(re)
 
 # test for heteroskedasticity
-bptest(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP+Oil+Gas+Market+
+bptest(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+
        factor(Company), data=data, studentize=F)
 
 # heterosk. and serial corr. consistent coefficient
 arellano = coeftest(re, vcovHC(re,method="arellano"))
-
+arellano
 # output
-stargazer(arellano,title="Arellano model",dep.var.labels=c("Stock return"),
-          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
-          "Debt over equity","Oil price","Gas price","DJI premium"), out="arellanomodel.LATEX")
+stargazer(arellano,title="Arellano model",dep.var.labels=c("Stock return"), font.size = "tiny", out="./Regression-Analysis/arellanomodel.LATEX")
 
 # cross-sectional dependence
 pcdtest(fe, test = c("lm"))
 
 # cross-sectional robust (Driscoll and Kraay)
 DriscollandKray = coeftest(re, vcov=vcovSCC)
-
+DriscollandKray
 # output
-stargazer(DriscollandKray,title="cross-sectional robust",dep.var.labels=c("Stock return"),
-          covariate.labels=c("Assets over market cap.","Net income","Book value equity over market cap.",
-          "Debt over equity","Oil price","Gas price","DJI premium"), out="DriscollandKray.LATEX")
+stargazer(DriscollandKray,title="cross-sectional robust",dep.var.labels=c("Stock return"), font.size="tiny",out="./Regression-Analysis/DriscollandKray.LATEX")
 
 
 # GLS
-repggls = pggls(Stock ~ A/MCAP +NI + BV(EQ)/MCAP + D/MCAP +Market+ Oil+Gas, 
+repggls = pggls(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas, 
                 model = "pooling", data=data)
 summary(repggls)
 
 #pooltest
 
-pooltest(Stock~A/MCAP +NI + BV(EQ)/MCAP + D/MCAP +Market+ Oil+Gas,data=data,
+pooltest(Stock~A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data,
         model="within")
 
 #two-ways test
 
-pFtest(Stock~A/MCAP +NI + BV(EQ)/MCAP + D/MCAP +Market+ Oil+Gas,data=data,
+pFtest(Stock~A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data,
        effect="twoways")
 
 #unobserved effects test
 
-pwtest(Stock~A/MCAP +NI + BV(EQ)/MCAP + D/MCAP +Market+ Oil+Gas,data=data)
+pwtest(A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data)
 
 
 

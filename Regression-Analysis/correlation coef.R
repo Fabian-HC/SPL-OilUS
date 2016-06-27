@@ -1,6 +1,6 @@
 library(xtable)
-
-data2<-data[,c(3:11)]
+load("./Data-Set/For_Marcus_OK_Old_Version.RData")
+data2<-Datatrans[,c(3:10)]
 
 corrma = function(x){ 
   require(Hmisc) 
@@ -30,5 +30,6 @@ corrma = function(x){
   return(Rnew) 
 }
 corrma(data2)
-xtable(corstarsl(data2))
+sink(file="./Regression-Analysis/corrma.txt")
+xtable(corrma(data2))
 
