@@ -99,6 +99,12 @@ repggls = pggls(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,
                 model = "pooling", data=data)
 summary(repggls)
 
+# Extract information manually and copy into report / slides
+SumGLS$call
+SumTabGLS = as.data.frame(SumGLS$CoefTable)
+SumTabGLS2 = as.data.frame(cbind("Multiple R Square", SumGLS$rsqr, "Residual Sum SQ", SumGLS$ssr))
+print(xtable(SumTabGLS), type = "latex", size = "tiny", file = "./Regression-Analysis/PPGLS-Result.txt")
+
 #pooltest
 
 pooltest(Stock~A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data,
