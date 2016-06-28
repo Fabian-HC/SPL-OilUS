@@ -1,0 +1,20 @@
+% latex table generated in R 3.2.5 by xtable 1.8-2 package
+% Tue Jun 28 22:02:09 2016
+\begin{table}[ht]
+\centering
+\begingroup\tiny
+\begin{tabular}{rrl}
+  \hline
+ & Estimate & Var.2 \\ 
+  \hline
+A.MCAP & -0.07 & *** \\ 
+  NI & 0.02 & *** \\ 
+  BVE.MCAP & -0.02 & ** \\ 
+  D.MCAP & 0.03 & ** \\ 
+  Oil & 0.26 & *** \\ 
+  Gas & 0.06 & *** \\ 
+  Market & 0.71 & *** \\ 
+   \hline
+\end{tabular}
+\endgroup
+\end{table}
