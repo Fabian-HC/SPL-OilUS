@@ -192,3 +192,12 @@ stargazer(vif(VIFReg),type="latex",
 #In this example we could not compute the Random effect regression including the D.MCAP*DumP regressor due to Multicollinearity#
 
 
+
+
+
+
+
+
+
+
+
