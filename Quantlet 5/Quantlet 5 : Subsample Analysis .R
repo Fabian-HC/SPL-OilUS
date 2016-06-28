@@ -37,22 +37,24 @@ Post2008 = pdata.frame(subset(data0, Date > '2008-08-31'),
 
 #two regressions
 #pre 2008
-repre2008 = plm(Stock ~ Oil + Gas + Market + EURUSD, 
+repre2008 = plm(Stock ~  Oil + Gas + Market + EURUSD, 
                 model = "random", 
                 data=Pre2008)
 summary(repre2008)
 
 #post 2008  
-rePost2008 = plm(Stock ~ Oil + Gas + Market + EURUSD, 
+rePost2008 = plm(Stock ~  Oil + Gas + Market + EURUSD, 
                  model = "random", 
                  data=Post2008)
 summary(rePost2008)
 
 #results
-stargazer(repre2008, rePost2008, type="text", 
+stargazer(repre2008, rePost2008, type="latex", 
           title="Oneway (individual) Random Effect Pre 2008 and post 2008",
           dep.var.labels=c("Stock return"), 
-          out="./Quantlet 5/Regression-2008.txt")
+          font.size="tiny",
+          no.space=TRUE,
+          out="./Quantlet 5/Regression-2008.LATEX")
 
 #using dummy varibales
 
@@ -74,10 +76,12 @@ DumyReg = plm(Stock ~  Oil + Gas + Market + EURUSD + DumP
 summary(DumyReg)
 
 
-stargazer(DumyReg,type="text",
+stargazer(DumyReg,type="latex",
           title="Random Effect Model with Dummy after 2008 (= 1)",
           dep.var.labels=c("Stock return"), 
-out="./Quantlet 5/Regression-Dummy2008.txt")
+          font.size="tiny",
+          no.space=TRUE,
+out="./Quantlet 5/Regression-Dummy2008.LATEX")
 
 ###############  SEASONALITY  #############
 
@@ -98,10 +102,12 @@ dataQ = pdata.frame(dataQ, index = c("Company", "Date"),
 Quarter = plm(Stock ~ Oil + Gas + Market + EURUSD + Quarter, 
               model = "random",
               data=dataQ)
-stargazer(Quarter,type="text",
+stargazer(Quarter,type="latex",
           title="Random Effect Model with Quarter Demmy",
           dep.var.labels=c("Stock return"),
-          out="./Quantlet 5/QuarterDummy.txt")
+          font.size="tiny",
+          no.space=TRUE,
+          out="./Quantlet 5/QuarterDummy.LATEX")
 
 
 ###############  Type of Firm  #############
@@ -134,10 +140,12 @@ reOtherC = plm(Stock ~ Oil + Gas + Market + EURUSD,
 summary(reOtherC)
 
 #results
-stargazer(reOilC, reOtherC, type="text", 
+stargazer(reOilC, reOtherC, type="latex", 
           title="Random Effect Model depending on Company type",
           dep.var.labels=c("Stock return"),
-          out="./Quantlet 5/Regression.Oil-Other.txt")
+          font.size="tiny",
+          no.space=TRUE,
+          out="./Quantlet 5/Regression.Oil-Other.LATEX")
 
 ############### Regression with a Dummy ################
 
@@ -152,10 +160,12 @@ TypeFirm = plm(Stock ~  Oil + Gas + Market + EURUSD + DumFirmT +
                  DumFirmT*Oil + DumFirmT*Gas + DumFirmT*Market + DumFirmT*EURUSD, 
                model = "random",
                data=DataT)
-stargazer(TypeFirm,type="text",
+stargazer(TypeFirm,type="latex",
           title="Random Effect Model with Dummy for Type of firm",
           dep.var.labels=c("Stock return"), 
-          out="./Quantlet 5/Regression.DummyOil-Other.txt")
+          font.size="tiny",
+          no.space=TRUE,
+          out="./Quantlet 5/Regression.DummyOil-Other.LATEX")
 
 
 
@@ -173,9 +183,11 @@ VIFReg = plm(Stock ~ A.MCAP+ NI + BVE.MCAP
               data=dataP)
 vif(VIFReg)
 
-stargazer(vif(VIFReg),type="text",
+stargazer(vif(VIFReg),type="latex",
           title="Variance Inflation Factor in the structural break regression with Specific and Common Factors", 
-          out="./Quantlet 5/VIFComputation.txt")
+          font.size="tiny",
+          no.space=TRUE,
+          out="./Quantlet 5/VIFComputation.LATEX")
 
 #In this example we could not compute the Random effect regression including the D.MCAP*DumP regressor due to Multicollinearity#
 
