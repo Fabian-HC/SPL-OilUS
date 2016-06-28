@@ -8,8 +8,6 @@ Reads in the previously compiled dataset with transformed variables and first of
 
 Keywords: regression, empirical, test
 
-See also: NAMES OF THE RELATED QUANTLETS
-
 Author: Marcus Goossens 
 
 Output:
