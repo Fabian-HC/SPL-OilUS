@@ -57,8 +57,8 @@ print.xtable(xtable(SumCommonF), file = "./Quantlet2 _ EDA/Common_Factors_Absolu
 rm(SumCommonF, Sub1)
 
 # Summary statistics of company-specific variables
-SumSpecF = describeBy(data[,2:7], group = "Company", mat = TRUE, digits = 2, 
-                      trim = 0, type = 1)
+SumSpecF = describeBy(data[,2:7], group = "Company", 
+                      mat = TRUE, digits = 2, trim = 0, type = 1)
 SumSpecF = SumSpecF[-c(1:9),]
 SumSpecF = SumSpecF[,-c(4,7:9,12:15)]
 SumSpecF = SumSpecF[order(SumSpecF$group1, SumSpecF$vars),]
