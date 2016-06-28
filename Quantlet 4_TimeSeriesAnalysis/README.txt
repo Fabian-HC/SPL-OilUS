@@ -4,7 +4,7 @@ Published in: Statistical Programming Languages Seminar 2016; Ladislaus von Bort
 
 Description: 
 
-Subsets the dataset to compare one oil company with one electricity company by time series analysis. Testing for heteroskedasticity and autocorrelation and adjusting fot it if necessary.
+Subsets the dataset to compare one oil company with one electricity company by time series analysis. Testing for heteroskedasticity and autocorrelation and adjusting for it if necessary.
 
 Keywords: regression, empirical, test, time series
 
