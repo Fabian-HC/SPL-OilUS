@@ -51,9 +51,7 @@ summary(rePost2008)
 #results
 stargazer(repre2008, rePost2008, type="text", 
           title="Oneway (individual) Random Effect Pre 2008 and post 2008",
-          dep.var.labels=c("Stock return"),
-          covariate.labels=c("Assets/market cap.","Net income","BVE/market cap.",
-                             "Debt/equity","Oil price","Gas price", "DJI premium","EUR/Dollar"), 
+          dep.var.labels=c("Stock return"), 
           out="./Quantlet 5/Regression-2008.txt")
 
 #using dummy varibales
