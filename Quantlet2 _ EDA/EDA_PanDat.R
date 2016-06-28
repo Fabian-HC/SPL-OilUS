@@ -127,10 +127,14 @@ pdf(file = "./Quantlet2 _ EDA/C9_WilliamsPresentation.pdf",
     height = 4, width = 10)
 VarNames = colnames(Sub1)
 par(mfcol = c(1,2))
-par(cex = 0.95)
+par(cex = 1.5)
 par(mar = c(2,2,1.5,1), lwd = 2)
-plot(Sub1$Date, Sub1$Stock, type = "l", main = "Stock", xlab = "", ylab = "")
-plot(Sub1$Date, Sub1$A.MCAP, type = "l", main = "A.Mcap", xlab = "", ylab = "")
+plot(Sub1$Date, Sub1$Stock, type = "l", main = "Stock", 
+     xlab = "", ylab = "", yaxt = "n")
+axis(2, at=c(seq(0,60,20)) ,labels= TRUE , col.axis="black", las=2)
+plot(Sub1$Date, Sub1$A.MCAP, type = "l", main = "A.Mcap", yaxt = "n")
+axis(2, at=c(seq(0,30,10)) ,labels= TRUE, col.axis="black", las=2)
+
 dev.off()
 
 # Execute the loop for plotting the variables of interes
@@ -179,9 +183,9 @@ p = p + theme(panel.background = element_rect(fill="white"),
               axis.line = element_line(colour = "black"))
 p = p + xlab("Year") + ylab("Index 1996 = 100")
 # Change appearence of x and y axes
-p = p + theme(axis.title.y = element_text(size = rel(0.8)), 
-              axis.title.x = element_text(size = rel(0.8)), 
-              axis.text = element_text(colour = "black", size = rel(0.7))) 
+p = p + theme(axis.title.y = element_text(size = rel(1.1)), 
+              axis.title.x = element_text(size = rel(1.1)), 
+              axis.text = element_text(colour = "black", size = rel(1.2))) 
 p = p + theme(text = element_text(size=9)) # Adjust text size
 p = p + theme(plot.margin = unit(c(0.1, 0.1, 0.1, 0.1),"cm")) # set plot margins
 # Adjust the colors
@@ -197,8 +201,13 @@ dev.off()
 
 # === Plot common factors beside each other ===
 #  prepare the data
+
+
+
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,c(1,8:11)]
+
+
 
 # Set PDF recording and configurations
 pdf(file = "./Quantlet2 _ EDA/Common_Factors_Development_better.pdf", 
