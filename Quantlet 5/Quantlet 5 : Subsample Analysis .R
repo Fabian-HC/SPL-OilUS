@@ -15,7 +15,7 @@ data0 = data[!(data$Company=="CPEnergy" | data$Company=="PG&E_Corp"),]
 class(data$Company)
 
 # Install packages if not installed
-libraries = c("stargazer","tseries","plm")
+libraries = c("stargazer","tseries","plm","car")
 lapply(libraries, function(x) if (!(x %in% installed.packages())) {
   install.packages(x)
 })
@@ -159,8 +159,24 @@ stargazer(TypeFirm,type="text",
 
 
 
+###### Very strong multicolinearity as result of subsampling ######
+#We initially ambitioned to anaylis the structural break due to the crisis of 2008 including the specific factors. 
+#However, subsampling increased strongly multicolonearity and some regression could not be run#
+# In the Following section we compute the Variance Inflation Factor (VIF)  to quantifie the severity of mutlicollinearity
+# It provide an index than measures how much the variance of an estimated regression coefficient is increased because of collinearity
 
+VIFReg = plm(Stock ~ A.MCAP+ NI + BVE.MCAP
+              + D.MCAP + Oil + Gas + Market + EURUSD 
+              + DumP*A.MCAP + DumP*NI + DumP*BVE.MCAP  + DumP*D.MCAP
+              + DumP*Oil + DumP*Gas + DumP*Market + DumP*EURUSD,
+              model ="pooling", 
+              data=dataP)
+vif(VIFReg)
 
+stargazer(vif(VIFReg),type="text",
+          title="Variance Inflation Factor in the structural break regression with Specific and Common Factors", 
+          out="./Quantlet 5/VIFComputation.txt")
 
+#In this example we could not compute the Random effect regression including the D.MCAP*DumP regressor due to Multicollinearity#
 
 
