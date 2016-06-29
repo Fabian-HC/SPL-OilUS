@@ -269,7 +269,7 @@ load(file="./Data-Set/RegressionBase.RData", verbose = TRUE)
 pdf(file = "./Quantlet2 _ EDA/Companies_Specific_factors_returns_Histograms.pdf", 
     height = 6.1, width = 11)
 par(mfcol = c(9,5))
-par(mar = c(1,1,1,1))
+par(mar = c(0.5,0.5,0.5,0.5))
 par(cex = 1)
 par(lwd = 2)
 
