@@ -126,17 +126,32 @@ A = as.matrix(cbind(A,unlist(LogR$INRUSD)))
 A = as.matrix(cbind(A,unlist(LogR$BRLUSD)))
 colnames(A) = colnames(data[,c(3, 8:17)])
 
+# A more compact way to compile matrix A would be
+A1 = do.call("cbind", lapply(LogR, unlist))
+A1 = A1[,-1] # remove irrelevant variable 'group 1'
+
+# check whether the two yield the identical output
+any(A != A1)
+# Yes: argumentum e contrario
 
 
-# Apply z-score transformation to company-specific variables
-# NI and A-MCAP
+# Apply z-score transformation to predefinded variable set 
+# by variable and company
 ScaleD = aggregate(data[,c(5,7)], by = list(data$Company), 
                    simplify = FALSE, FUN = scale)
 B = unlist(ScaleD$BVE.MCAP)
 C = unlist(ScaleD$NI)
 D = as.matrix(cbind(B,C))
+rm(B, C)
 colnames(D) = colnames(data[,c(5,7)])
 
+# Again, this could be dome more compactly via
+D1 = do.call("cbind", lapply(ScaleD, unlist))
+D1 = D1[,-1] # remove irrelevant variable 'group 1'
+
+# Verify whether D and D1 are identical
+any(D != D1)
+# Yes, they are! (argumentum e contrario)
 
 # Merge transformations applied to a new data set
 Datatrans = data.frame(cbind(dataHelp[-1,],D[-1,]))
