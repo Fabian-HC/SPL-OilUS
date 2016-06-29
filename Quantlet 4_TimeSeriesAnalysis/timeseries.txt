@@ -1,5 +1,5 @@
 % latex table generated in R 3.2.5 by xtable 1.8-2 package
-% Tue Jun 28 22:28:49 2016
+% Wed Jun 29 12:24:30 2016
 \begin{table}[ht]
 \centering
 \begingroup\tiny
@@ -7,14 +7,13 @@
   \hline
  & Estimate & Var.2 & Estimate & Var.4 \\ 
   \hline
-(Intercept) & -0.26 &  & -0.01 &  \\ 
-  A.MCAP & -0.45 &  & -0.01 &  \\ 
-  NI & 0.00 &  & 0.04 &  \\ 
-  BVE.MCAP & 0.08 &  & -0.05 &  \\ 
-  D.MCAP & 0.09 &  & 0.01 &  \\ 
+(Intercept) & 0.02 &  & 0.02 &  \\ 
+  NI & 0.01 &  & 0.04 &  \\ 
+  BVE.MCAP & -0.04 & *** & -0.05 & ** \\ 
+  D.MCAP & 0.00 &  & -0.00 &  \\ 
   Oil & 0.29 & *** & -0.18 & ** \\ 
-  Gas & 0.20 & *** & 0.11 &  \\ 
-  Market & 0.64 & *** & 0.47 & * \\ 
+  Gas & 0.24 & *** & 0.12 &  \\ 
+  Market & 0.61 & *** & 0.47 & * \\ 
    \hline
 \end{tabular}
 \endgroup

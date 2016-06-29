@@ -19,7 +19,7 @@ PGECorp = PGECorp[,-(1:2)]
 PGECorp = ts(PGECorp,start=c(1996,3), end=c(2015,4),frequency=4)
 
 # Linear model
-lin.model.PGE = lm(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
+lin.model.PGE = lm(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
                    data=PGECorp)
 summary(lin.model.PGE)                   
 plot(lin.model.PGE)
@@ -28,11 +28,11 @@ plot(lin.model.PGE)
 dwtest(lin.model.PGE)
 
 # Breusch-Pagan Test: Null is homosk.
-bptest(Stock~A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, data=PGECorp)
+bptest(Stock~NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, data=PGECorp)
 
 # Adjusting for heterosk.
 coeftest1 = coeftest(lin.model.PGE, vcovHC)
-summary(coeftest1)
+coeftest1
 
 # Different company from oil sector
 ApacheCorp = subset(data, data$Company=="Apache") 
@@ -42,7 +42,7 @@ ApacheCorp<-ApacheCorp[,-(1:2)]
 ApacheCorp = ts(ApacheCorp,start=c(1996,3), end=c(2015,4),frequency=4)
 
 # Linear model
-lin.model.Apache = lm(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
+lin.model.Apache = lm(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
                       data=ApacheCorp)
 summary(lin.model.Apache)                   
 plot(lin.model.Apache)
@@ -51,7 +51,7 @@ plot(lin.model.Apache)
 dwtest(lin.model.Apache)
 
 # Breusch-Pagan Test: Null is homosk.(which is the result)
-bptest(Stock~A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, data=ApacheCorp)
+bptest(Stock~NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, data=ApacheCorp)
 
 # Output for LATEX
 mat1                    = summary(lin.model.Apache)$coefficients

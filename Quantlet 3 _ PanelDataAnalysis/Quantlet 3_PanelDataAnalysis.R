@@ -59,8 +59,8 @@ data = pdata.frame(data, index = c("Company", "Date"),
 data$Date = as.Date(data$Date, "%Y-%m-%d")
 
 # Do regression with fixed effects model
-fe = plm(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
-         model = "within", data=data)
+fe = plm(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
+         model = "within" ,data=data)
 summary(fe)
 
 # Output for LATEX
@@ -87,8 +87,8 @@ xtable(mat)
 print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/femodel.txt")
 
 # Do regression with random effects model
-re = plm(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
-         model = "random", data=data)
+re = plm(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
+         model = "random",data=data)
 summary(re)
 
 # Output for LATEX
@@ -123,7 +123,7 @@ pbgtest(re)
 pdwtest(re)
 
 # Test for heteroskedasticity
-bptest(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+
+bptest(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+
        factor(Company), data=data, studentize=F)
 
 # Heteroskedasticity and serial correlation consistent coefficient
@@ -181,7 +181,7 @@ mat = cbind(mat)
 xtable(mat)
 print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/DriscollandKraymodel.txt")
 # GLS regression
-repggls = pggls(Stock ~ A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas, 
+repggls = pggls(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas, 
                 model = "pooling", data=data)
 summary(repggls)
 
@@ -208,12 +208,8 @@ xtable(mat)
 print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/repggls.txt")
 
 # Pooltest
-pooltest(Stock~A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data,
+pooltest(Stock~NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data,
         model="within")
 
-# Two-ways test
-pFtest(Stock~A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data,
-       effect="twoways")
-
 # Unobserved effects test
-pwtest(A.MCAP +NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data)
+pwtest(Stock~NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data)
