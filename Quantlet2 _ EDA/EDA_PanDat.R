@@ -7,14 +7,14 @@ graphics.off()
 
 # === Packages ===
 # Install packages if not installed
-libraries = c("stats", "graphics", "timeSeries", "reshape2", "ggplot2", "psych", "xtable")
-# libraries = c("plyr","dplyr","data.table", "tseries", "xtable")
+libraries = c("stats", "graphics", "timeSeries", "reshape2", "ggplot2", 
+              "psych", "xtable", "plyr","dplyr","data.table")
 lapply(libraries, function(x) if (!(x %in% installed.packages())) {
   install.packages(x)
 })
+
 # Load packages
 lapply(libraries, library, quietly = TRUE, character.only = TRUE)
-# Package loading done - variable can be deleted
 rm(libraries)
 
 
@@ -33,8 +33,6 @@ indexFUN = function(x){
   NObs = length(x)
   Index = x/x[1]*100
   Index = round(Index, digits = 2)
-  # perform indexation - base: 1996-06-28
-  # Index = as.numeric(Index)
 }
 
 
@@ -49,16 +47,20 @@ load("./Data-Set/InitialData_Panel.RData", verbose = FALSE)
 # Summary statistics for common factors
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
+
+# Extract summary statistics of interest
 SumCommonF = round(SumCommonF[,-c(1,2,5:7,10:13)], digits = 2)
+
 # Export as CSV
 write.csv2(SumCommonF, file = "./Quantlet2 _ EDA/Common_Factors_Absolute.csv")
 # Export as TexFile
 print.xtable(xtable(SumCommonF), file = "./Quantlet2 _ EDA/Common_Factors_Absolute.txt", size = "tiny")
-rm(SumCommonF, Sub1)
+rm(SumCommonF, Sub1) # remove auxiliary variables
 
 # Summary statistics of company-specific variables
 SumSpecF = describeBy(data[,2:7], group = "Company", 
                       mat = TRUE, digits = 2, trim = 0, type = 1)
+# Extracting summary statistics of interest and cosmetic adjustments
 SumSpecF = SumSpecF[-c(1:9),]
 SumSpecF = SumSpecF[,-c(4,7:9,12:15)]
 SumSpecF = SumSpecF[order(SumSpecF$group1, SumSpecF$vars),]
@@ -66,6 +68,8 @@ SumSpecF$vars = factor(SumSpecF$vars)
 levels(SumSpecF$vars) = colnames(data[,3:7])
 SumSpecF = SumSpecF[,-1]
 rownames(SumSpecF) = NULL
+
+# Export as CSV
 write.csv2(SumSpecF, file = "./Quantlet2 _ EDA/Specific_Factors_Absolute.csv")
 # Export as TexFile
 print.xtable(xtable(SumSpecF), file = "./Quantlet2 _ EDA/Specific_Factors_Absolute.txt", size = "tiny")
@@ -115,14 +119,12 @@ load("./Data-Set/InitialData_Panel.RData",
      verbose = FALSE)
 
 
-# =============================================================
-# Generation of plots for presentation
-# ============================================================
+# === Generation of plots for presentation ===
 class(data$Company)
 levels(data$Company)
 Sub1 = subset(data, data$Company == "Williams")
 
-# Set PDF recording and configurations
+# Generate PDF recording and configurations
 pdf(file = "./Quantlet2 _ EDA/C9_WilliamsPresentation.pdf", 
     height = 4, width = 10)
 VarNames = colnames(Sub1)
@@ -134,21 +136,13 @@ plot(Sub1$Date, Sub1$Stock, type = "l", main = "Stock",
 axis(2, at=c(seq(0,60,20)) ,labels= TRUE , col.axis="black", las=2)
 plot(Sub1$Date, Sub1$A.MCAP, type = "l", main = "A.Mcap", yaxt = "n")
 axis(2, at=c(seq(0,30,10)) ,labels= TRUE, col.axis="black", las=2)
-
 dev.off()
 
-# Execute the loop for plotting the variables of interes
-i = 2
-while(i < (ncol(Sub1) + 1)){
-  YMinMax = c(min(Sub1[,i])*0.9, max(Sub1[,i])*1.1)
-  plot(Sub1$Date, Sub1[,i], type = "l", ylim = YMinMax, main = VarNames[i], 
-       xlab = "", ylab = "")
-  i = i + 1
-}
 
-
-# === Obtain all stock performances and Index them ===
+# === Generation of plot comparing stock performances ===
 # Base: 1996-06-28 = 100%
+# === Obtain all stock performances and Index them ===
+
 StockSet = data.frame(t(as.matrix(
            aggregate(data$Stock, by = list(data$Company), 
            FUN = indexFUN, simplify = TRUE))))
@@ -162,25 +156,28 @@ if(class(StockSet[,1]) != "numeric"){
   print("Indexed stock performance data is already numeric")
 }
 
+
 # Attach a date Vector to the Stock set
 StockSet = cbind(data$Date[1:79], StockSet)
 colnames(StockSet) = c("Date", colnames(StockSet[,-1]))
 
-# Preparing plot data
+# Preparing plot data 
 VarSetMelt <- melt(StockSet, id = "Date") # bring data into right format
 
 # Plot the Stock set data
 dev.off() # get rid of previous plot configurations
 
+# Generate the plot
 pdf(file = "./Quantlet2 _ EDA/All_Stocks_plot.pdf", height = 3, width = 5.25)
 p <- ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, 
                                  colour=variable)) + geom_line(size = 0.75)
-# add legend configurations
+# Add legend configurations
 p = p + theme(legend.position="bottom", 
               legend.title=element_text(size = 0, colour = "white"))
-# adjust panel background
+# Adjust panel background and axis lines
 p = p + theme(panel.background = element_rect(fill="white"), 
               axis.line = element_line(colour = "black"))
+# Assing axis labels
 p = p + xlab("Year") + ylab("Index 1996 = 100")
 # Change appearence of x and y axes
 p = p + theme(axis.title.y = element_text(size = rel(1.1)), 
@@ -194,22 +191,17 @@ p = p + scale_color_manual(values=c("deeppink", "black", "darkgreen",
                                     "burlywood4", "darkmagenta", "darkgoldenrod1"))
 p
 dev.off()
-# remove help variables used
+# Remove auxiliary variables used
 rm(StockSet, VarSetMelt, p) # remove auxiliary variables
 dev.off()
 
 
-# === Plot common factors beside each other ===
+# === Plot common factors evolvement beside one another ===
 #  prepare the data
-
-
-
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,c(1,8:11)]
 
-
-
-# Set PDF recording and configurations
+# Generate PDF recording and configurations
 pdf(file = "./Quantlet2 _ EDA/Common_Factors_Development_better.pdf", 
     height = 4,     width = 10)
 VarNames = colnames(Sub1)
@@ -217,7 +209,7 @@ par(mfrow = c(1,4))
 par(cex = 0.95)
 par(mar = c(2,2,1.5,1), lwd = 2)
 
-# Execute the loop for plotting the variables of interes
+# Execute the loop for plotting the variables of interest 
 i = 2
 while(i < (ncol(Sub1) + 1)){
   YMinMax = c(min(Sub1[,i])*0.9, max(Sub1[,i])*1.1)
@@ -229,6 +221,7 @@ dev.off()
 # remove auxiliary variables used
 rm(VarNames, i, Sub1, YMinMax)
 
+
 # === Plot of development of specific and common factors by enterprise ===
 VarNames = colnames(data) # Store variable names for later purposes
 
@@ -239,9 +232,12 @@ while(i < 10){
   pdf(file = paste("./Quantlet2 _ EDA/Company_", 
       i, "_Specific_and_Common_Factors.pdf", sep = ""), 
       height = 2.35, width =11)
+  
   # Plot conficurations
   par(mfrow = c(1,9), cex = 0.8, cex.main = 0.85, cex.axis = 0.7)
+  # Extracting variable data for the respective company 'i'
   Sub1 = subset(data, data$Company == levels(data$Company)[i])
+  
   j = 3 # Execute the loop over the variables of interest
   while(j < 12){
     if(j < 11){
@@ -277,8 +273,8 @@ par(mar = c(1,1,1,1))
 par(cex = 1)
 par(lwd = 2)
 
-# Launch the aggregate function to perform histfun variables of interest
-# by enterprise
+# Launch the aggregate function to perform histfun over variables of interest
+# by company
 aggregate(data[,3:7], by = list(data$Company), FUN = histfun, simplify = FALSE)
 dev.off()
 
