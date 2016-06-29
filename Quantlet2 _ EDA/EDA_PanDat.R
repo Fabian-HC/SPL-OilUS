@@ -134,8 +134,8 @@ par(mar = c(2,2,1.5,1), lwd = 2)
 plot(Sub1$Date, Sub1$Stock, type = "l", main = "Stock", 
      xlab = "", ylab = "", yaxt = "n")
 axis(2, at=c(seq(0,60,20)) ,labels= TRUE , col.axis="black", las=2)
-plot(Sub1$Date, Sub1$A.MCAP, type = "l", main = "A.Mcap", yaxt = "n")
-axis(2, at=c(seq(0,30,10)) ,labels= TRUE, col.axis="black", las=2)
+plot(Sub1$Date, Sub1$D.MCAP, type = "l", main = "D.MCAP", yaxt = "n")
+axis(2, at = c(seq(100,300,100)), labels= TRUE, col.axis="black", las=2)
 dev.off()
 
 
