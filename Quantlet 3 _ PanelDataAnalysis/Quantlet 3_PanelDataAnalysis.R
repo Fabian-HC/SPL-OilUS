@@ -25,9 +25,9 @@ corrma = function(x){
   p = rcorr(x)$P 
   
   # Define notions for significance levels
-  stars = ifelse(p < .001, "***", ifelse(p < .01, "** ", ifelse(p < .05, "* ", " ")))
+  stars = ifelse(p < .01, "***", ifelse(p < .05, "** ", ifelse(p < .1, "* ", " ")))
   
-  # Trunctuate the matrix that holds the correlations to two decimal
+  # Truncates matrix that holds the correlations to two decimal
   R = format(round(cbind(rep(-1.11, ncol(x)), R), 2))[,-1] 
   
   # Build a new matrix that includes the correlations with their apropriate stars 
@@ -180,32 +180,6 @@ mat = cbind(mat)
 
 xtable(mat)
 print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/DriscollandKraymodel.txt")
-# GLS regression
-repggls = pggls(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas, 
-                model = "pooling", data=data)
-summary(repggls)
-
-# Output for LATEX
-mat                    = summary(repggls)$CoefTable
-mat                    = mat[, c(1, 4)]
-signif                 = rep("", dim(mat)[1])
-
-signif[mat[, 2] < 0.1]  = "*"
-signif[mat[, 2] < 0.05]  = "**"
-signif[mat[, 2] < 0.01] = "***"
-
-mat = as.data.frame(mat)
-
-mat[, 2] = signif
-
-names(mat) = c("Estimate", "")
-
-mat[, 1] = round(mat[, 1], 2)
-
-
-mat = cbind(mat)
-xtable(mat)
-print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/repggls.txt")
 
 # Pooltest
 pooltest(Stock~NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data,
