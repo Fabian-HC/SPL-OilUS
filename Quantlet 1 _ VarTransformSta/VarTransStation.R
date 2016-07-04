@@ -1,3 +1,9 @@
+# Better write ADF-Testresult for ADF
+# and KPSS-testresult for KPSS 
+
+
+
+
 # === Clearing the Environment ===
 # remove variables
 rm(list = ls())
