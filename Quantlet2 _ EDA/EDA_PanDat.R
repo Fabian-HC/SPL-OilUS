@@ -162,14 +162,14 @@ StockSet = cbind(data$Date[1:79], StockSet)
 colnames(StockSet) = c("Date", colnames(StockSet[,-1]))
 
 # Preparing plot data 
-VarSetMelt <- melt(StockSet, id = "Date") # bring data into right format
+VarSetMelt = melt(StockSet, id = "Date") # bring data into right format
 
 # Plot the Stock set data
 dev.off() # get rid of previous plot configurations
 
 # Generate the plot
 pdf(file = "./Quantlet2 _ EDA/All_Stocks_plot.pdf", height = 3, width = 5.25)
-p <- ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, 
+p = ggplot(data=VarSetMelt, aes(x = VarSetMelt$Date, y=value, 
                                  colour=variable)) + geom_line(size = 0.75)
 # Add legend configurations
 p = p + theme(legend.position="bottom", 

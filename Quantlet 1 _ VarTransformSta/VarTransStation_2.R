@@ -124,7 +124,7 @@ data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute_2.csv",
 
 # Convert Date such that R recognizes it as date
 class(data$Date)
-data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
+data$Date = as.Date(data$Date, format = "%d.%m.%Y")
 class(data$Date)
 
 # Order data adequately for subsequent transformations
@@ -220,7 +220,7 @@ print.xtable(xtable(KPSSTest, auto = TRUE), file = "./Stationarity-Tests/Station
 rm(KPSSTest) # remove auxiliary variable
 
 # Perform a panel unit root test
-object <- as.data.frame(split(data[,3:18], data$Company))
+object = as.data.frame(split(data[,3:18], data$Company))
 PanelUnitRootTest = purtest(object = object, test = "levinlin", 
                             exo = "trend", lags = "AIC", pmax = 5)
 sink(file = "./Stationarity-Tests/Stationarity__Absolute_Panel_Test.txt")
@@ -236,7 +236,7 @@ rm(object, PanelUnitRootTest)
 load(file = "./Data-Set/RegressionBase.RData", verbose = FALSE)
 
 # (1) Apply panel data unit root test
-object <- as.data.frame(split(data[,3:11], data$Company))
+object = as.data.frame(split(data[,3:11], data$Company))
 PanelUnitRootTest = purtest(object = object, test = "levinlin", 
                             exo = "trend", lags = "AIC", pmax = 5)
 sink(file = "./Stationarity-Tests/Stationarity__Return_Panel_Test.txt")

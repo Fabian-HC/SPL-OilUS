@@ -87,7 +87,7 @@ data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute_2.csv",
 
 # Convert Date such that R recognizes it as date
 class(data$Date)
-data$Date <- as.Date(data$Date, format = "%d.%m.%Y")
+data$Date = as.Date(data$Date, format = "%d.%m.%Y")
 class(data$Date)
 
 # Order data adequately for subsequent transformations
@@ -202,7 +202,7 @@ testresult = aggregate(data[,3:7], by = list(data$Company),
                        FUN = stattestFUN, simplify = FALSE)
 # Getting testresutls into shape for usage in report
 testresult = testresult[,-1]
-testresult <- do.call("rbind", lapply(testresult, as.data.frame))
+testresult = do.call("rbind", lapply(testresult, as.data.frame))
 colnames(testresult) = levels(data$Company) 
 testresult = as.data.frame(t(testresult))
 write.csv2(testresult, file = "./Stationarity-Tests/Z-Score_Stationarity__Absolute_Company_Specific_ADF.csv") # csv table export
@@ -213,7 +213,7 @@ rm(testresult) # remove auxiliary variable
 testresult2 = aggregate(data[,3:7], by = list(data$Company), FUN = stattestFUN2, simplify = FALSE)
 # Getting testresutls into shape for usage in report
 testresult2 = testresult2[,-1]
-testresult2 <- do.call("rbind", lapply(testresult2, as.data.frame)) 
+testresult2 = do.call("rbind", lapply(testresult2, as.data.frame)) 
 colnames(testresult2) = levels(data$Company)
 testresult2 = as.data.frame(t(testresult2))
 write.csv2(testresult2, file = "./Stationarity-Tests/Z-Score_Stationarity__Absolute_Company_Specific_KPSS.csv") # csv table export
@@ -221,7 +221,7 @@ print.xtable(xtable(testresult2, auto = TRUE), file = "./Stationarity-Tests/Z-Sc
 rm(testresult2) # remove auxiliary variable
 
 # Perform a panel unit root test
-object <- as.data.frame(split(data[,3:18], data$Company))
+object = as.data.frame(split(data[,3:18], data$Company))
 class(object)
 PanelUnitRootTest = purtest(object = object, test = "levinlin", 
                             exo = "trend", lags = "AIC", pmax = 5)
@@ -235,7 +235,7 @@ rm(object, PanelUnitRootTest)
 
 # === Stationarity Tests for transformed data ===
 # (1) Apply panel data unit root test
-object <- as.data.frame(split(data[,3:11], data$Company))
+object = as.data.frame(split(data[,3:11], data$Company))
 PanelUnitRootTest = purtest(object = object, test = "levinlin", 
                             exo = "trend", lags = "AIC", pmax = 5)
 sink(file = "./Stationarity-Tests/Stationarity__Return_Panel_Test.txt")
@@ -267,7 +267,7 @@ testresult = aggregate(data[,3:7], by = list(data$Company),
                        FUN = stattestFUN, simplify = FALSE)
 # Getting testresutls into shape for usage in report
 testresult = testresult[,-1]
-testresult <- do.call("rbind", lapply(testresult, as.data.frame)) 
+testresult = do.call("rbind", lapply(testresult, as.data.frame)) 
 colnames(testresult) = levels(data$Company) 
 testresult = as.data.frame(t(testresult))
 write.csv2(testresult, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_ADF.csv") # csv table export
@@ -280,7 +280,7 @@ testresult2 = aggregate(data[,3:7], by = list(data$Company),
                         FUN = stattestFUN2, simplify = FALSE)
 # Getting testresutls into shape for usage in report
 testresult2 = testresult2[,-1]
-testresult2 <- do.call("rbind", lapply(testresult2, as.data.frame)) 
+testresult2 = do.call("rbind", lapply(testresult2, as.data.frame)) 
 colnames(testresult2) = levels(data$Company) 
 testresult2 = as.data.frame(t(testresult2))
 write.csv2(testresult2, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_KPSS.csv") # csv table export
