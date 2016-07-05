@@ -19,6 +19,31 @@ rm(libraries)
 
 
 # === Define required functions ===
+# Derive Summary Statistics for comon factors
+SumCommonFun = function(data){
+  Sub1 = subset(data, data$Company == levels(data$Company)[1])
+  SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
+  SumCommonF = round(SumCommonF[,-c(1,2,5:7,10:13)], digits = 2)
+  return(SumCommonF)
+}
+
+
+# Derive company-specific variables' summary statistics by company
+SumSpecFun = function(data){
+  SumSpec = describeBy(data[,2:7], group = "Company", 
+                      mat = TRUE, digits = 2, trim = 0, type = 1)
+  # Extracting summary statistics of interest and cosmetic adjustments
+  SumSpec = SumSpec[-c(1:9),]
+  SumSpec = SumSpec[,-c(4,7:9,12:15)]
+  SumSpec = SumSpec[order(SumSpec$group1, SumSpec$vars),]
+  SumSpec$vars = factor(SumSpec$vars)
+  levels(SumSpec$vars) = colnames(data[,3:7])
+  SumSpec = SumSpec[,-1]
+  rownames(SumSpec) = NULL
+  return(SumSpec)
+}
+
+
 # Function for histograms of transformed variables
 histfun = function(x){
   g1 = seq(min(x), max(x), length = 100)
@@ -45,30 +70,15 @@ indexFUN = function(x){
 load("./Data-Set/InitialData_Panel.RData", verbose = FALSE)
 
 # Summary statistics for common factors
-Sub1 = subset(data, data$Company == levels(data$Company)[1])
-SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
-
-# Extract summary statistics of interest
-SumCommonF = round(SumCommonF[,-c(1,2,5:7,10:13)], digits = 2)
-
+SumCommonF = SumCommonFun(data)
 # Export as CSV
 write.csv2(SumCommonF, file = "./Quantlet2 _ EDA/Common_Factors_Absolute.csv")
 # Export as TexFile
 print.xtable(xtable(SumCommonF), file = "./Quantlet2 _ EDA/Common_Factors_Absolute.txt", size = "tiny")
-rm(SumCommonF, Sub1) # remove auxiliary variables
+rm(SumCommonF) # remove auxiliary variables
 
 # Summary statistics of company-specific variables
-SumSpecF = describeBy(data[,2:7], group = "Company", 
-                      mat = TRUE, digits = 2, trim = 0, type = 1)
-# Extracting summary statistics of interest and cosmetic adjustments
-SumSpecF = SumSpecF[-c(1:9),]
-SumSpecF = SumSpecF[,-c(4,7:9,12:15)]
-SumSpecF = SumSpecF[order(SumSpecF$group1, SumSpecF$vars),]
-SumSpecF$vars = factor(SumSpecF$vars)
-levels(SumSpecF$vars) = colnames(data[,3:7])
-SumSpecF = SumSpecF[,-1]
-rownames(SumSpecF) = NULL
-
+SumSpecF = SumSpecFun(data)
 # Export as CSV
 write.csv2(SumSpecF, file = "./Quantlet2 _ EDA/Specific_Factors_Absolute.csv")
 # Export as TexFile
@@ -80,35 +90,20 @@ rm(data, SumSpecF)
 load("./Data-Set/RegressionBase.RData", verbose = TRUE)
 
 # Summary statistics for common factors
-Sub1 = subset(data, data$Company == levels(data$Company)[1])
-SumCommonF = describe(Sub1[,8:ncol(data)], skew = TRUE, trim = 0, type = 1)
-SumCommonF = round(SumCommonF[,-c(1,2,6,7,10,13)], digits = 2)
-# Export as CSV
+SumCommonF = SumCommonFun(data)
+# Export as csv
 write.csv2(SumCommonF, file = "./Quantlet2 _ EDA/Common_Factors_returns.csv")
 # Export as TexFile
 print.xtable(xtable(SumCommonF), file = "./Quantlet2 _ EDA/Common_Factors_returns.txt", size = "tiny")
-rm(Sub1, SumCommonF)
+rm(SumCommonF)
 
 # Summary statistics of company-specific variables
-SumSpecF = describeBy(data[,2:7], group = "Company", mat = TRUE, digits = 2, 
-                      trim = 0, type = 1)
-SumSpecF = SumSpecF[-c(1:9),]
-SumSpecF = SumSpecF[,-c(4,8,9,12,15)]
-SumSpecF = SumSpecF[order(SumSpecF$group1, SumSpecF$vars),]
-SumSpecF$vars = factor(SumSpecF$vars)
-class(SumSpecF$vars)
-levels(SumSpecF$vars) = colnames(data[,3:7])
-SumSpecF = SumSpecF[,-1]
-rownames(SumSpecF) = NULL
+SumSpecF = SumSpecFun(data)
 write.csv2(SumSpecF, file = "./Quantlet2 _ EDA/Specific_Factors_returns.csv")
 # Export as TexFile
 print.xtable(xtable(SumSpecF), file = "./Quantlet2 _ EDA/Specific_Factors_returns.txt", size = "tiny")
-
-# remove the remaining variables
+# remove the auxiliary variables
 rm(data, SumSpecF)
-
-
-
 
 
 # ==============================================================
@@ -118,26 +113,26 @@ rm(data, SumSpecF)
 load("./Data-Set/InitialData_Panel.RData", 
      verbose = FALSE)
 
-
 # === Generation of plots for presentation ===
-class(data$Company)
-levels(data$Company)
 Sub1 = subset(data, data$Company == "Williams")
 
-# Generate PDF recording and configurations
+# Generate PDF 
 pdf(file = "./Quantlet2 _ EDA/C9_WilliamsPresentation.pdf", 
     height = 4, width = 10)
+# Plot configurations
 VarNames = colnames(Sub1)
 par(mfcol = c(1,2))
 par(cex = 1.5)
 par(mar = c(2,2,1.5,1), lwd = 2)
+# generating the plot
 plot(Sub1$Date, Sub1$Stock, type = "l", main = "Stock", 
      xlab = "", ylab = "", yaxt = "n")
 axis(2, at=c(seq(0,60,20)) ,labels= TRUE , col.axis="black", las=2)
 plot(Sub1$Date, Sub1$D.MCAP, type = "l", main = "D.MCAP", yaxt = "n")
 axis(2, at = c(seq(100,300,100)), labels= TRUE, col.axis="black", las=2)
+# concluding the procedure and save
 dev.off()
-
+rm(Sub1) # remove auxiliary variable
 
 # === Generation of plot comparing stock performances ===
 # Base: 1996-06-28 = 100%
@@ -192,7 +187,7 @@ p = p + scale_color_manual(values=c("deeppink", "black", "darkgreen",
 p
 dev.off()
 # Remove auxiliary variables used
-rm(StockSet, VarSetMelt, p) # remove auxiliary variables
+rm(StockSet, VarSetMelt, p, VarNames) # remove auxiliary variables
 dev.off()
 
 
@@ -203,7 +198,8 @@ Sub1 = Sub1[,c(1,8:11)]
 
 # Generate PDF recording and configurations
 pdf(file = "./Quantlet2 _ EDA/Common_Factors_Development_better.pdf", 
-    height = 4,     width = 10)
+    height = 4, width = 10)
+# Graph configurations
 VarNames = colnames(Sub1)
 par(mfrow = c(1,4))
 par(cex = 0.95)
@@ -268,13 +264,14 @@ load(file="./Data-Set/RegressionBase.RData", verbose = TRUE)
 # Set PDF rcording and configurations
 pdf(file = "./Quantlet2 _ EDA/Companies_Specific_factors_returns_Histograms.pdf", 
     height = 6.1, width = 11)
+# Plot configurations
 par(mfcol = c(9,5))
 par(mar = c(0.5,0.5,0.5,0.5))
 par(cex = 1)
 par(lwd = 2)
 
 # Launch the aggregate function to perform histfun over variables of interest
-# by company
+# companywise
 aggregate(data[,3:7], by = list(data$Company), FUN = histfun, simplify = FALSE)
 dev.off()
 
