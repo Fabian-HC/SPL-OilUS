@@ -260,7 +260,7 @@ rm(ADFTest)
 
 # Stationarity Test for company-specific factors as returns - KPSS Test
 KPSSTest = KPSSEntSpecTestFun(data[,3:7])
-write.csv2(testresult2, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_KPSS.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_Company-Specific_KPSS.txt")
+write.csv2(KPSSTest, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_KPSS.csv") # csv table export
+print.xtable(xtable(KPSSTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_Company-Specific_KPSS.txt")
 
 rm(list = ls())
