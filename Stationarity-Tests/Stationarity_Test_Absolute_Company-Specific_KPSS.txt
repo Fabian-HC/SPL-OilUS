@@ -1,10 +1,10 @@
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Thu Jun 23 19:00:08 2016
+% Tue Jul 05 12:30:46 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{llllll}
   \hline
- & Stock & Assets.to.Market.Cap & BV.Equity.to.Market.Cap & Debt.to.Equity & NI\_by\_Assets \\ 
+ & Stock & A.MCAP & BVE.MCAP & D.MCAP & NI \\ 
   \hline
 Exxon\_Mobil & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 
   Apache & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary & non (trend) stationary \\ 

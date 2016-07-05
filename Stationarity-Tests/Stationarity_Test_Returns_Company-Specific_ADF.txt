@@ -1,14 +1,14 @@
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Sun Jun 26 09:34:43 2016
+% Tue Jul 05 12:32:31 2016
 \begin{table}[ht]
 \centering
 \begin{tabular}{llllll}
   \hline
- & Stock & A-MCAP & BVE-MCAP & D-MCAP & NI \\ 
+ & Stock & A.MCAP & BVE.MCAP & D.MCAP & NI \\ 
   \hline
 Exxon\_Mobil & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
   Apache & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
-  CPEnergy & stationary & not\_stationary & stationary & not\_stationary & not\_stationary \\ 
+  CPEnergy & stationary & not\_stationary & not\_stationary & not\_stationary & stationary \\ 
   Chevron & stationary & stationary & not\_stationary & not\_stationary & not\_stationary \\ 
   Hess\_Corp & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
   Murphy\_Oil & stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 

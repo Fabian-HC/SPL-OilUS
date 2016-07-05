@@ -25,19 +25,6 @@ rm(libraries) # package loading done - not needed anymore
 
 
 # === Define required functions ===
-# Functions for variable transformations later on
-# Obtain log returns for variables of interest
-logreturnsfun = function(x){
-  n = length(x)
-  logreturn = diff(log(x), lag=1)
-  # AS numeric part added
-}
-
-# Obtain z-scores for other variables of interst
-scalefun = function(x){
-  ScaleVar = scale(x)
-}
-
 
 # Function for seperating the common factor developments apart from the others
 ComFSep = function(x){
@@ -51,6 +38,20 @@ ComFSep = function(x){
   }
 }
 
+
+
+# Functions for variable transformations later on
+# Obtain log returns for variables of interest
+logreturnsfun = function(x){
+  n = length(x)
+  logreturn = diff(log(x), lag=1)
+  # AS numeric part added
+}
+
+# Obtain z-scores for other variables of interst
+scalefun = function(x){
+  ScaleVar = scale(x)
+}
 
 # Stationarity Test - ADF TEst
 stattestFUN = function(x){
@@ -78,6 +79,42 @@ stattestFUN2 = function(x){
     ReturnResult ="(trend) stationary"
   }
 }
+
+CommonFStatTest = function(data){
+  Sub1 = ComFSep(data)
+  # ADF Test
+  ADFComTest = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
+  ADFComTest = data.frame(ADFComTest)
+  # KPSS Test
+  KPSSComTest = apply(Sub1, MARGIN = 2, FUN = stattestFUN2)
+  KPSSComTest = data.frame(KPSSComTest)
+  # Reunify findings in one table
+  TestComFSummary = cbind(ADFComTest, KPSSComTest)
+  colnames(TestComFSummary) = c("ADF-Test", "KPSS-Test")
+  return(TestComFSummary)
+}
+
+ADFEntSpecTestFun = function(x){
+  ADFTest = aggregate(x, by = list(data$Company), 
+                      FUN = stattestFUN, simplify = FALSE)
+  
+  ADFTest = ADFTest[,-1]
+  ADFTest = do.call("rbind", lapply(ADFTest, as.data.frame))
+  colnames(ADFTest) = levels(data$Company)
+  ADFTest = as.data.frame(t(ADFTest))
+  return(ADFTest)
+}
+
+KPSSEntSpecTestFun = function(x){
+  KPSSTest = aggregate(x, by = list(data$Company), 
+                       FUN = stattestFUN2, simplify = FALSE)
+  KPSSTest = KPSSTest[,-1]
+  KPSSTest = do.call("rbind", lapply(KPSSTest, as.data.frame))
+  colnames(KPSSTest) = levels(data$Company)
+  KPSSTest = as.data.frame(t(KPSSTest))
+  return(KPSSTest)
+}
+
 
 
 # ======= Initial data modifications =====
@@ -119,51 +156,26 @@ colnames(dataHelp) = colnames(data[,c(1:2, 4,6, 18)])
 # by variable and company
 LogR = aggregate(data[,c(3, 8:17)], by = list(data$Company), 
                    simplify = FALSE, FUN = logreturnsfun)
-A = unlist(LogR$Stock)
-A = as.matrix(cbind(A,unlist(LogR$Oil)))
-A = as.matrix(cbind(A,unlist(LogR$Gas)))
-A = as.matrix(cbind(A,unlist(LogR$Market)))
-A = as.matrix(cbind(A,unlist(LogR$EURUSD)))
-A = as.matrix(cbind(A,unlist(LogR$GBPUSD)))
-A = as.matrix(cbind(A,unlist(LogR$CNYUSD)))
-A = as.matrix(cbind(A,unlist(LogR$JPYUSD)))
-A = as.matrix(cbind(A,unlist(LogR$RUBUSD)))
-A = as.matrix(cbind(A,unlist(LogR$INRUSD)))
-A = as.matrix(cbind(A,unlist(LogR$BRLUSD)))
-colnames(A) = colnames(data[,c(3, 8:17)])
-
 # A more compact way to compile matrix A would be
-A1 = do.call("cbind", lapply(LogR, unlist))
-A1 = A1[,-1] # remove irrelevant variable 'group 1'
-
-# check whether the two yield the identical output
-any(A != A1)
-# Yes: argumentum e contrario
-
+A = do.call("cbind", lapply(LogR, unlist))
+A = A[,-1] # remove irrelevant variable 'group 1'
+rm(LogR)
 
 # Apply z-score transformation to predefinded variable set 
 # by variable and company
 ScaleD = aggregate(data[,c(5,7)], by = list(data$Company), 
                    simplify = FALSE, FUN = scale)
-B = unlist(ScaleD$BVE.MCAP)
-C = unlist(ScaleD$NI)
-D = as.matrix(cbind(B,C))
-rm(B, C)
-colnames(D) = colnames(data[,c(5,7)])
-
-# Again, this could be dome more compactly via
-D1 = do.call("cbind", lapply(ScaleD, unlist))
-D1 = D1[,-1] # remove irrelevant variable 'group 1'
-
-# Verify whether D and D1 are identical
-any(D != D1)
-# Yes, they are! (argumentum e contrario)
+D = do.call("cbind", lapply(ScaleD, unlist))
+D = D[,-1] # remove irrelevant variable 'group 1'
+rm(ScaleD) # remove auxiliary storage variable 'ScaleD'
 
 # Merge transformations applied to a new data set
 Datatrans = data.frame(cbind(dataHelp[-1,],D[-1,]))
 Datatrans = subset(Datatrans, as.Date("1996-06-30")<Datatrans$Date)
 Datatrans = data.frame(cbind(Datatrans, A))
 Datatrans = Datatrans[,colnames(data)]
+rm(A, D, dataHelp) # remove auxiliary variables composing Datatrans
+
 
 # Generate Market excess return
 Datatrans$Market = Datatrans$Market - Datatrans$T.Bill3M
@@ -172,60 +184,46 @@ Datatrans$T.Bill3M = NULL
 # Since Market Excess Return is a common factor
 Datatrans$Market = Datatrans$Market[1:78]
 
-data = Datatrans
+# data = Datatrans
 
 # Store transformed dataset for regression analysis and graphical analysis
-save(data, file="./Data-Set/RegressionBase.RData")
+save(Datatrans, file="./Data-Set/RegressionBase2.RData")
+rm(data, Datatrans)
+
+
+load(file="./Data-Set/RegressionBase2.RData", verbose = FALSE)
+load(file="./Data-Set/RegressionBase.RData", verbose = FALSE)
+
+any(data != Datatrans)
 
 
 # === Stationarity Tests for Variables before transformation(s) ===
 load(file = "./Data-Set/InitialData_Panel.RData")
 
-# Stationarity Test for common factors - ADF Test
-Sub1 = ComFSep(data)
-testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
-testresult = data.frame(testresult)
-write.csv2(testresult, file = "./Stationarity-Tests/Z-Score_Stationarity_CommonFactors_Absolute_ADF.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Z-Score_Stationarity_Test_CommonFactors_Absolute_ADF.txt")
-
-# KPSS-Test
-testresult2 = apply(Sub1, MARGIN = 2, FUN = stattestFUN2)
-testresult2 = data.frame(testresult2)
-write.csv2(testresult2, file = "./Stationarity-Tests/Z-Score_Stationarity_CommonFactors_Absolute_KPSS.csv") # csv table export
-print.xtable(xtable(testresult2, auto = TRUE), 
-             file = "./Stationarity-Tests/Z-Score_Stationarity_Test_CommonFactors_Absolute_KPSS.txt")
-rm(Sub1, testresult, testresult2) # remove auxiliary variables
-
+# Stationarity Test for common factors - ADF and KPSS Test
+CommonFTest = CommonFStatTest(data)
+write.csv2(CommonFTest, file = "./Stationarity-Tests/Stationarity_CommonFactors_Absolute.csv") # csv table export
+print.xtable(xtable(CommonFTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_CommonFactors_Absolute.txt")
+rm(CommonFTest)
 
 # Stationarity Test for company-specific factors - ADF Test
-testresult = aggregate(data[,3:7], by = list(data$Company), 
-                       FUN = stattestFUN, simplify = FALSE)
-# Getting testresutls into shape for usage in report
-testresult = testresult[,-1]
-testresult <- do.call("rbind", lapply(testresult, as.data.frame))
-colnames(testresult) = levels(data$Company) 
-testresult = as.data.frame(t(testresult))
-write.csv2(testresult, file = "./Stationarity-Tests/Z-Score_Stationarity__Absolute_Company_Specific_ADF.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Z-Score_Stationarity_Test_Absolute_Company-Specific_ADF.txt")
-rm(testresult) # remove auxiliary variable
+ADFTest = ADFEntSpecTestFun(data[,3:7])
+write.csv2(ADFTest, file = "./Stationarity-Tests/Stationarity__Absolute_Company_Specific_ADF.csv") # csv table export
+print.xtable(xtable(ADFTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Absolute_Company-Specific_ADF.txt")
+rm(ADFTest) # remove auxiliary variable
+
 
 # Statioinarity Test for company-specific factors - KPSS Test
-testresult2 = aggregate(data[,3:7], by = list(data$Company), FUN = stattestFUN2, simplify = FALSE)
-# Getting testresutls into shape for usage in report
-testresult2 = testresult2[,-1]
-testresult2 <- do.call("rbind", lapply(testresult2, as.data.frame)) 
-colnames(testresult2) = levels(data$Company)
-testresult2 = as.data.frame(t(testresult2))
-write.csv2(testresult2, file = "./Stationarity-Tests/Z-Score_Stationarity__Absolute_Company_Specific_KPSS.csv") # csv table export
-print.xtable(xtable(testresult2, auto = TRUE), file = "./Stationarity-Tests/Z-Score_Stationarity_Test_Absolute_Company-Specific_KPSS.txt")
-rm(testresult2) # remove auxiliary variable
+KPSSTest = KPSSEntSpecTestFun(data[,3:7])
+write.csv2(KPSSTest, file = "./Stationarity-Tests/Stationarity__Absolute_Company_Specific_KPSS.csv") # csv table export
+print.xtable(xtable(KPSSTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Absolute_Company-Specific_KPSS.txt")
+rm(KPSSTest) # remove auxiliary variable
 
 # Perform a panel unit root test
 object <- as.data.frame(split(data[,3:18], data$Company))
-class(object)
 PanelUnitRootTest = purtest(object = object, test = "levinlin", 
                             exo = "trend", lags = "AIC", pmax = 5)
-sink(file = "./Stationarity-Tests/Z-Score_Stationarity__Absolute_Panel_Test.txt")
+sink(file = "./Stationarity-Tests/Stationarity__Absolute_Panel_Test.txt")
 PanelUnitRootTest$statistic
 sink()
 
@@ -234,6 +232,9 @@ rm(object, PanelUnitRootTest)
 
 
 # === Stationarity Tests for transformed data ===
+# load transformed data
+load(file = "./Data-Set/RegressionBase.RData", verbose = FALSE)
+
 # (1) Apply panel data unit root test
 object <- as.data.frame(split(data[,3:11], data$Company))
 PanelUnitRootTest = purtest(object = object, test = "levinlin", 
@@ -242,47 +243,23 @@ sink(file = "./Stationarity-Tests/Stationarity__Return_Panel_Test.txt")
 PanelUnitRootTest$statistic
 sink()
 rm(object, PanelUnitRootTest)
-# result: According to this test, the variables in our panel are stationary
 
-# Stationarity Test for common factors- ADF
-Sub1 = ComFSep(data)
-testresult = apply(Sub1, MARGIN = 2, FUN = stattestFUN)
-testresult = data.frame(testresult)
+# Stationarity Test for common factors- ADF and KPSS
+CommonFTest = CommonFStatTest(data)
 # all values ok - all stationary
-write.csv2(testresult, file = "./Stationarity-Tests/Stationarity_CommonFactors_Returns_ADF.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_CommonFactors_ADF.txt")
-rm(testresult) # remove auxiliary variable
-
-# Stationarity Test for common factors- KPSS
-testresult2 = apply(Sub1, MARGIN = 2, FUN = stattestFUN2)
-testresult2 = data.frame(testresult2)
-# Note that H1: non-trend-stationarity of EUR/USD is accepted for EUR/USD at 10%,
-# but not at the 5% level
-write.csv2(testresult2, file = "./Stationarity-Tests/Stationarity_CommonFactors_Returns_KPSS.csv") # csv table export
-print.xtable(xtable(testresult2, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_CommonFactors_KPSS.txt")
-rm(Sub1, testresult2)# remove auxiliary variables
+write.csv2(CommonFTest, file = "./Stationarity-Tests/Stationarity_CommonFactors_Returns.csv") # csv table export
+print.xtable(xtable(CommonFTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_CommonFactors.txt")
+rm(CommonFTest) # remove auxiliary variable
 
 # Stationarity Test for company-specific factors as returns - ADF Test
-testresult = aggregate(data[,3:7], by = list(data$Company), 
-                       FUN = stattestFUN, simplify = FALSE)
-# Getting testresutls into shape for usage in report
-testresult = testresult[,-1]
-testresult <- do.call("rbind", lapply(testresult, as.data.frame)) 
-colnames(testresult) = levels(data$Company) 
-testresult = as.data.frame(t(testresult))
-write.csv2(testresult, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_ADF.csv") # csv table export
-print.xtable(xtable(testresult, auto = TRUE), 
+ADFTest = ADFEntSpecTestFun(data[,3:7])
+write.csv2(ADFTest, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_ADF.csv") # csv table export
+print.xtable(xtable(ADFTest, auto = TRUE), 
              file = "./Stationarity-Tests/Stationarity_Test_Returns_Company-Specific_ADF.txt")
-
+rm(ADFTest)
 
 # Stationarity Test for company-specific factors as returns - KPSS Test
-testresult2 = aggregate(data[,3:7], by = list(data$Company), 
-                        FUN = stattestFUN2, simplify = FALSE)
-# Getting testresutls into shape for usage in report
-testresult2 = testresult2[,-1]
-testresult2 <- do.call("rbind", lapply(testresult2, as.data.frame)) 
-colnames(testresult2) = levels(data$Company) 
-testresult2 = as.data.frame(t(testresult2))
+KPSSTest = KPSSEntSpecTestFun(data[,3:7])
 write.csv2(testresult2, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_KPSS.csv") # csv table export
 print.xtable(xtable(testresult, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_Company-Specific_KPSS.txt")
 
