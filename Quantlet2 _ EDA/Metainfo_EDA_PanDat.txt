@@ -1,17 +1,15 @@
-﻿Name of Quantlet: EDA_PanDat 
+Name of Quantlet: 'EDA_PanDat' 
 
-Published in: Statistical Programming Languages Seminar 2016; Ladislaus von Bortkiewicz Chair of Statistics, Humboldt University of Berlin
+Published in: 'Statistical Programming Languages Seminar 2016; Ladislaus von Bortkiewicz Chair of Statistics, Humboldt University of Berlin'
 
-Description: 
-This quantlet applies various basic tools of exploratory data analysis to our data used for analysis of the driving forces of stock returns of 9 US companies of the nonrenewable energy sector. Note that this explorative approach helps to identify two companies differing from the other seven. One of the two companies is an investment fund and the other produces electricity using nonrenewables. 
-Since our topic of interest were the driving forces of the oil price of both oil and gas exploring, extracting and processing companies, we decided to exclude the two deviating from the subsequent econometric analyses. 
-
-Keywords: explorative data analysis, panel data, oil industry, US market, CAPM, Fama French related factors, summary statistics, graphs
-
-Author: Tim Halbmann
-
-Input files: Set_Absolute.RData, Set_Transformed.RData
-Output:
+Description: '
+This quantlet applies various basic tools of exploratory data analysis 
+(summary statistics and time series plots) to our data used for analysis 
+of the driving forces of stock returns of 9 US companies of the nonrenewable energy sector. 
+Note that this explorative approach helps to identify two companies differing from the other seven. 
+The two companies produce electricity using nonrenewables. Since our topic of interest were the driving forces 
+of the stock price of both oil and gas exploring, extracting and processing companies, 
+we decided to treat the two deviating differently within the subsequent econometric analyses.
 
 Summary statistics for 
 (1) variables before application of transformations (computing logs, log-returns and z-scores)
@@ -22,5 +20,10 @@ Plots
 (2) Plot of the evolvement of common factors, i.e. market variables: WTI Oil price, Gas price, Market (Dow Jones Index) and exchange rates of the USD with respect to: Euro, British Pound, Chinese Yuan, Japanese Yen, Russian Rouble, Indian Rupee, Brazilan Real. 
 (3) Plots of dependent variable (Stock Price) and non-transformed enterprise-specific and shared variables by company. 
 (4) Histograms of the distribution of the transformed specific variables by company. 
-(5) Histograms of the common variables after the transformation has been applied. 
+(5) Histograms of the common variables after the transformation has been applied. '
 
+Keywords: ' descriptive-statistics, plot, panel-analysis, data visualization, stock-price '
+
+Author: Tim Halbmann
+
+Datafile: 'InitialData_Panel.RData, RegressionBase.RData'
