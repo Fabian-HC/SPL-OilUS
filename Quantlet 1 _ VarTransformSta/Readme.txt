@@ -31,7 +31,7 @@ might affect panel data regression procedures less if the panel dimensions (time
 Yet since the sample of this analysis is only (N=7 (9) and T = 80), nonstationary variables 
 might still adversely affect the regression results.'
 
-Keywords: 'transformation , panel-analysis, stationary'
+Keywords: 'transformation , panel-analysis, stationary, stock-price, data adjustment'
 
 Author: Tim Halbmann
 
