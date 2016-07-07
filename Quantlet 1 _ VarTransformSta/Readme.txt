@@ -1,14 +1,23 @@
 Name of Quantlet: VarTransStation
 
-Published in: Statistical Programming Languages Seminar 2016; Ladislaus von Bortkiewicz Chair of Statistics, Humboldt University of Berlin
+Published in: Statistical 'Programming Languages Seminar 2016; Ladislaus von Bortkiewicz Chair of Statistics, Humboldt University of Berlin'
 
-Description: 
+Description: '
 
-This quantlet reads in the previously compiled dataset obtained from Bloomberg (or an alternative source providing the same financial data). In a first step, the corresponding company names as well as more suitable shorthand variable names are added and the date variable is formatted adequately. Note that the panel data is NOT transformed into a pdata frame yet. This occurs only in the econometric analysis quantlets. 
+This quantlet reads in the previously compiled dataset obtained from Bloomberg (or an alternative source providing the same financial
+data). In a first step, the corresponding company names as well as more suitable shorthand variable names are added 
+and the date variable is formatted adequately. Note that the panel data is NOT transformed into a pdata frame yet. 
+This occurs only in the econometric analysis quantlets.
 
-Before the data is transformed according to AUTHORNAMES STILL TO BE INSERTED - TITLE AS WELL, let's check whether the panel data set is stationary according to the purtest() contained in the plm package. Since one can suspect nonstationarity to be more relevant for some variables (and their respective transformations), it is worthwhile to carry out the ADF-test and the KPSS-test (both of the plm package as well) per company and variable. All tests point to that the variables in our panel are nonstationarity. 
 
-Keeping the results of this quantlet in mind, one can then proceed to the explorative data analysis quantles - INSERT NAME - or the regression analyses quantlets (INSERT NAMES). 
+Before the data is transformed according to Bianconi and Yoshino (2014) , let's check whether the panel data set is stationary
+according to the purtest() contained in the plm package. Since one can suspect nonstationarity 
+to be more relevant for some variables (and their respective transformations), 
+it is worthwhile to carry out the ADF-test and the KPSS-test (both of the plm package as well) 
+per company and variable. All tests point to that the variables in our panel are nonstationarity. 
+
+Keeping the results of this quantlet in mind, one can then proceed to the explorative data analysis quantlet, 
+EDA_PanDat or the regression analyses quantlets (Quantlet 3_PanelDataAnalysis, Quantlet 4_TimeSeriesAnalysis). 
 
 Transformations of variables applied
 (1) Taking logs: Debt over Equity (D-MCAP), Assets over Market Cap (A-MCAP)
@@ -17,25 +26,16 @@ Transformations of variables applied
 
 Note that the fist and the last transformation, by just demeaning and scaling the variables are suspected to not remove the potential nonstationarity of these variables.
 
-Please note that, according to Phillips and Moon (2000) - STILL ADD PUBLICATION TITLE AND PAGES -, nonstationarity in panel data might affect panel data regression procedures less if the panel dimensions (time and individuals) grow larger. Yet since the sample of this analysis is only (N=7 (9) and T = 80), nonstationary variables might still adversely affect the regression results.   
+Please note that, according to Phillips and Moon (2000), nonstationarity in panel data 
+might affect panel data regression procedures less if the panel dimensions (time and individuals) grow larger. 
+Yet since the sample of this analysis is only (N=7 (9) and T = 80), nonstationary variables 
+might still adversely affect the regression results.'
 
-Keywords: data set transformation , panel data, oil industry, US market, stationarity, panel unit root test, adf test, kpss test
-
-See also: NAMES OF THE RELATED QUANTLETS
+Keywords: 'transformation , panel-analysis, stationary'
 
 Author: Tim Halbmann
 
-Input files: Set_Absolute.RData, Set_Transformed.RData - STILL SPECIFY CORRECT NAMES
-
-Output:
-
-Stationarity test results, before and after applying the data transformations mentioned, according to a panel unit root test (purtest of the plm package) as well as the ADF-test and the KPSS-test by both company and variable. 
-
-An RData file holding the pre-variable-transformation data ready for the exploratory data analysis. 
-Another RData file containing the data for the subsequant panel regression and time series analyses. 
-
-
-
+Datafile: 'Dataset-FINALupdated_absolute_2.csv'
 
 
  INSERT CODE
