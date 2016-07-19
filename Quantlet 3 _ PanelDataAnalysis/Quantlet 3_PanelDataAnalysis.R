@@ -15,26 +15,26 @@ data = subset(data, data$Company!="CPEnergy" & data$Company!="PG&E_Corp")
 
 # === Create unconditioned correlation matrix for variables ===
 # Excluding variables that are not interesting
-data2 = data[,c(3:10)]
+data2   = data[,c(3:10)]
 
 # Create funtion for matrix
-corrma = function(x){ 
+corrma  = function(x){ 
   require(Hmisc) 
-  x = as.matrix(x) 
-  R = rcorr(x)$r 
-  p = rcorr(x)$P 
+  x     = as.matrix(x) 
+  R     = rcorr(x)$r 
+  p     = rcorr(x)$P 
   
   # Define notions for significance levels
   stars = ifelse(p < .01, "***", ifelse(p < .05, "** ", ifelse(p < .1, "* ", " ")))
   
   # Truncates matrix that holds the correlations to two decimal
-  R = format(round(cbind(rep(-1.11, ncol(x)), R), 2))[,-1] 
+  R     = format(round(cbind(rep(-1.11, ncol(x)), R), 2))[,-1] 
   
   # Build a new matrix that includes the correlations with their apropriate stars 
-  Rnew = matrix(paste(R, stars, sep=""), ncol=ncol(x)) 
-  diag(Rnew) = paste(diag(R), " ", sep="") 
-  rownames(Rnew) = colnames(x) 
-  colnames(Rnew) = paste(colnames(x), "", sep="") 
+  Rnew            = matrix(paste(R, stars, sep=""), ncol=ncol(x)) 
+  diag(Rnew)      = paste(diag(R), " ", sep="") 
+  rownames(Rnew)  = colnames(x) 
+  colnames(Rnew)  = paste(colnames(x), "", sep="") 
   
   # Remove upper triangle
   Rnew = as.matrix(Rnew)
@@ -101,28 +101,22 @@ pdwtest(re)
 
 # Test for heteroskedasticity
 bptest(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+
-       factor(Company), data=data, studentize=F)
+      factor(Company), data=data, studentize=F)
 
 # Heteroskedasticity and serial correlation consistent coefficient
 arellano = coeftest(re, vcovHC(re,method="arellano"))
 arellano
 
 # Output for LATEX (function does not work here)
-mat                    = arellano[, c(1, 4)]
-signif                 = rep("", dim(mat)[1])
-
+mat                     = arellano[, c(1, 4)]
+signif                  = rep("", dim(mat)[1])
 signif[mat[, 2] < 0.1]  = "*"
-signif[mat[, 2] < 0.05]  = "**"
+signif[mat[, 2] < 0.05] = "**"
 signif[mat[, 2] < 0.01] = "***"
-
-mat = as.data.frame(mat)
-
-mat[, 2] = signif
-
-names(mat) = c("Estimate", "")
-
-mat[, 1] = round(mat[, 1], 2)
-
+mat                     = as.data.frame(mat)
+mat[, 2]                = signif
+names(mat)              = c("Estimate", "")
+mat[, 1]                = round(mat[, 1], 2)
 xtable(mat)
 print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/arellanomodel.txt")
 
@@ -134,21 +128,15 @@ DriscollandKray = coeftest(re, vcov=vcovSCC)
 DriscollandKray
 
 # Output for LATEX (function does not work here)
-mat                    = DriscollandKray[, c(1, 4)]
-signif                 = rep("", dim(mat)[1])
-
+mat                     = DriscollandKray[, c(1, 4)]
+signif                  = rep("", dim(mat)[1])
 signif[mat[, 2] < 0.1]  = "*"
-signif[mat[, 2] < 0.05]  = "**"
+signif[mat[, 2] < 0.05] = "**"
 signif[mat[, 2] < 0.01] = "***"
-
-mat = as.data.frame(mat)
-
-mat[, 2] = signif
-
-names(mat) = c("Estimate", "")
-
-mat[, 1] = round(mat[, 1], 2)
-
+mat                     = as.data.frame(mat)
+mat[, 2]                = signif
+names(mat)              = c("Estimate", "")
+mat[, 1]                = round(mat[, 1], 2)
 xtable(mat)
 print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/DriscollandKraymodel.txt")
 
