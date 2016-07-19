@@ -53,7 +53,7 @@ dwtest(lin.model.Apache)
 # Breusch-Pagan Test: Null is homosk.(which is the result)
 bptest(Stock~NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, data=ApacheCorp)
 
-# Output for LATEX
+# Output for LATEX (building a function is not necessary b/c it is being used only once)
 mat1                    = summary(lin.model.Apache)$coefficients
 mat1                    = mat1[, c(1, 4)]
 signif                 = rep("", dim(mat1)[1])

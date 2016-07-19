@@ -64,27 +64,23 @@ fe = plm(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market,
 summary(fe)
 
 # Output for LATEX
-mat                    = summary(fe)$coefficients
-mat                    = mat[, c(1, 4)]
-signif                 = rep("", dim(mat)[1])
-
-signif[mat[, 2] < 0.1]  = "*"
-signif[mat[, 2] < 0.05]  = "**"
-signif[mat[, 2] < 0.01] = "***"
-
-mat = as.data.frame(mat)
-
-mat[, 2] = signif
-
-names(mat) = c("Estimate", "")
-
-mat[, 1] = round(mat[, 1], 2)
-
-
-mat = cbind(mat)
-
-xtable(mat)
-print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/femodel.txt")
+Signif = function(a) {
+  mat                      = summary(a)$coefficients
+  mat                      = mat[, c(1, 4)]
+  signif                   = rep("", dim(mat)[1])
+  signif[mat[, 2] < 0.10]  = "*"
+  signif[mat[, 2] < 0.05]  = "**"
+  signif[mat[, 2] < 0.01]  = "***"
+  mat                      = as.data.frame(mat)
+  mat[, 2]                 = signif
+  names(mat)               = c("Estimate", "")
+  mat[, 1]                 = round(mat[, 1], 2)
+  return(mat)}
+ResultLatex1 = function(a) {
+  mat = Signif(a)
+  return (xtable(mat))}
+ResultLatex1(fe)
+print(ResultLatex1(fe), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/femodel.txt")
 
 # Do regression with random effects model
 re = plm(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
@@ -92,27 +88,8 @@ re = plm(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market,
 summary(re)
 
 # Output for LATEX
-mat                    = summary(re)$coefficients
-mat                    = mat[, c(1, 4)]
-signif                 = rep("", dim(mat)[1])
-
-signif[mat[, 2] < 0.1]  = "*"
-signif[mat[, 2] < 0.05]  = "**"
-signif[mat[, 2] < 0.01] = "***"
-
-mat = as.data.frame(mat)
-
-mat[, 2] = signif
-
-names(mat) = c("Estimate", "")
-
-mat[, 1] = round(mat[, 1], 2)
-
-
-mat = cbind(mat)
-
-xtable(mat)
-print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/remodel.txt")
+ResultLatex1(re)
+print(ResultLatex1(re), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/remodel.txt")
 
 # === Statistical Tests & robust estimators ===
 # Hausman test comparing RE and FE
@@ -130,7 +107,7 @@ bptest(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+
 arellano = coeftest(re, vcovHC(re,method="arellano"))
 arellano
 
-# Output for LATEX
+# Output for LATEX (function does not work here)
 mat                    = arellano[, c(1, 4)]
 signif                 = rep("", dim(mat)[1])
 
@@ -146,9 +123,6 @@ names(mat) = c("Estimate", "")
 
 mat[, 1] = round(mat[, 1], 2)
 
-
-mat = cbind(mat)
-
 xtable(mat)
 print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/arellanomodel.txt")
 
@@ -159,7 +133,7 @@ pcdtest(fe, test = c("lm"))
 DriscollandKray = coeftest(re, vcov=vcovSCC)
 DriscollandKray
 
-# Output for LATEX
+# Output for LATEX (function does not work here)
 mat                    = DriscollandKray[, c(1, 4)]
 signif                 = rep("", dim(mat)[1])
 
@@ -174,9 +148,6 @@ mat[, 2] = signif
 names(mat) = c("Estimate", "")
 
 mat[, 1] = round(mat[, 1], 2)
-
-
-mat = cbind(mat)
 
 xtable(mat)
 print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/DriscollandKraymodel.txt")
