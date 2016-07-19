@@ -36,7 +36,7 @@ coeftest1
 
 # Different company from oil sector
 ApacheCorp = subset(data, data$Company=="Apache") 
-ApacheCorp<-ApacheCorp[,-(1:2)]
+ApacheCorp = ApacheCorp[,-(1:2)]
 
 # Since we are working with Time Series now, convert the data to a time series object
 ApacheCorp = ts(ApacheCorp,start=c(1996,3), end=c(2015,4),frequency=4)
