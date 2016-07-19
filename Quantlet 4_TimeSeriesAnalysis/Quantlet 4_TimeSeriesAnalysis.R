@@ -54,38 +54,25 @@ dwtest(lin.model.Apache)
 bptest(Stock~NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, data=ApacheCorp)
 
 # Output for LATEX (building a function is not necessary b/c it is being used only once)
-mat1                    = summary(lin.model.Apache)$coefficients
-mat1                    = mat1[, c(1, 4)]
-signif                 = rep("", dim(mat1)[1])
-
-signif[mat1[, 2] < 0.1]  = "*"
+mat1                      = summary(lin.model.Apache)$coefficients
+mat1                      = mat1[, c(1, 4)]
+signif                    = rep("", dim(mat1)[1])
+signif[mat1[, 2] < 0.1]   = "*"
 signif[mat1[, 2] < 0.05]  = "**"
-signif[mat1[, 2] < 0.01] = "***"
-
-mat1 = as.data.frame(mat1)
-
-mat1[, 2] = signif
-
-names(mat1) = c("Estimate", "")
-
-mat1[, 1] = round(mat1[, 1], 2)
-
-mat2                    = coeftest1[, c(1, 4)]
-signif                 = rep("", dim(mat2)[1])
-
-signif[mat2[, 2] < 0.1]  = "*"
+signif[mat1[, 2] < 0.01]  = "***"
+mat1                      = as.data.frame(mat1)
+mat1[, 2]                 = signif
+names(mat1)               = c("Estimate", "")
+mat1[, 1]                 = round(mat1[, 1], 2)
+mat2                      = coeftest1[, c(1, 4)]
+signif                    = rep("", dim(mat2)[1])
+signif[mat2[, 2] < 0.1]   = "*"
 signif[mat2[, 2] < 0.05]  = "**"
-signif[mat2[, 2] < 0.01] = "***"
-
-mat2 = as.data.frame(mat2)
-
-mat2[, 2] = signif
-
-names(mat2) = c("Estimate", "")
-
-mat2[, 1] = round(mat2[, 1], 2)
-
-mat3 = cbind(mat1, mat2)
-
+signif[mat2[, 2] < 0.01]  = "***"
+mat2                      = as.data.frame(mat2)
+mat2[, 2]                 = signif
+names(mat2)               = c("Estimate", "")
+mat2[, 1]                 = round(mat2[, 1], 2)
+mat3                      = cbind(mat1, mat2)
 xtable(mat3)
-print(xtable(mat3), type = "latex", size = "tiny", file = "./Quantlet 4_TimeSeriesAnalysis/timeseries.txt")
+print(xtable(mat3), type  = "latex", size = "tiny", file = "./Quantlet 4_TimeSeriesAnalysis/timeseries.txt")
