@@ -91,7 +91,7 @@ ResultLatex1 = function(a) {
   mat = Signif(a)
   return (xtable(mat))}
 ResultLatex1(fe)
-print(ResultLatex1(fe), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/femodel.txt")
+print(ResultLatex1(fe), type = "latex", size = "tiny", file = "./femodel.txt")
 
 # Do regression with random effects model
 re = plm(Stock ~ NI + BVE.MCAP + D.MCAP+Oil+Gas+Market, 
