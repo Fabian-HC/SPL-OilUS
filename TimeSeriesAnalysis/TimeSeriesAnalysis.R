@@ -1,5 +1,16 @@
+# === Clearing the Environment ===
+# remove variables
+rm(list = ls(all = TRUE))
+
+# reset graphics
+graphics.off()
+
+# === Set your working directory ===
+setwd("~/GitHub/Test/SPL-OilUS_2/TimeSeriesAnalysis")
+
+
 # === Load data and install packages ===
-load("./Data-Set/RegressionBase.RData")
+load("./RegressionBase2.RData")
 
 # Install packages if not installed
 libraries = c("lmtest","sandwich","dyn","forecast","tseries","aod","foreign","plm","car","stargazer")
@@ -75,4 +86,4 @@ names(mat2)               = c("Estimate", "")
 mat2[, 1]                 = round(mat2[, 1], 2)
 mat3                      = cbind(mat1, mat2)
 xtable(mat3)
-print(xtable(mat3), type  = "latex", size = "tiny", file = "./Quantlet 4_TimeSeriesAnalysis/timeseries.txt")
+print(xtable(mat3), type  = "latex", size = "tiny", file = "./TimeSeriesAnalysis.txt")
