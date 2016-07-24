@@ -2,7 +2,7 @@
 load("./Data-Set/RegressionBase.RData")
 
 # Install packages if not installed
-libraries = c("lmtest","sandwich","dyn","forecast","tseries","aod","foreign","plm","car","stargazer")
+libraries = c("lmtest","sandwich","dyn","forecast","tseries","aod","foreign","plm","car","stargazer", "xtable")
 lapply(libraries, function(x) if (!(x %in% installed.packages())) {
   install.packages(x)
 })
