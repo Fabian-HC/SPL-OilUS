@@ -1,3 +1,9 @@
+# Tested With: 
+# R version 3.2.4 Revised (2016-03-16 r70336) -- "Very Secure Dishes"
+# Copyright (C) 2016 The R Foundation for Statistical Computing
+# Platform: i386-w64-mingw32/i386 (32-bit)
+
+
 # === Load data and install packages ===
 load("./Data-Set/RegressionBase.RData")
 
