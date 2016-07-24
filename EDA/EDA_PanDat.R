@@ -5,6 +5,9 @@ rm(list = ls(all = TRUE))
 # reset graphics
 graphics.off()
 
+# === Set your working directory ===
+setwd("~/GitHub/Test/SPL-OilUS_2/EDA")
+
 # === Packages ===
 # Install packages if not installed
 libraries = c("stats", "graphics", "timeSeries", "reshape2", "ggplot2", 
@@ -66,22 +69,22 @@ indexFUN = function(x){
 
 # === Summary Statistics of variables before transformation ===
 # Load respective dataset
-load("./Data-Set/InitialData_Panel.RData", verbose = FALSE)
+load("./InitialData_Panel.RData", verbose = FALSE)
 
 # Summary statistics for common factors
 SumCommonF = SumCommonFun(data)
 # Export as CSV
-write.csv2(SumCommonF, file = "./Quantlet2 _ EDA/Common_Factors_Absolute.csv")
+write.csv2(SumCommonF, file = "./Common_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "./Quantlet2 _ EDA/Common_Factors_Absolute.txt", size = "tiny")
+print.xtable(xtable(SumCommonF), file = "./Common_Factors_Absolute.txt", size = "tiny")
 rm(SumCommonF) # remove auxiliary variables
 
 # Summary statistics of company-specific variables
 SumSpecF = SumSpecFun(data)
 # Export as CSV
-write.csv2(SumSpecF, file = "./Quantlet2 _ EDA/Specific_Factors_Absolute.csv")
+write.csv2(SumSpecF, file = "./Specific_Factors_Absolute.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "./Quantlet2 _ EDA/Specific_Factors_Absolute.txt", size = "tiny")
+print.xtable(xtable(SumSpecF), file = "./Specific_Factors_Absolute.txt", size = "tiny")
 
 # Generate mean values for all company-specific summary statistics 
 # unweighted
@@ -92,8 +95,8 @@ SumSpecFAll$Group.1   = NULL
 SumSpecFAll           = do.call("cbind", lapply(SumSpecFAll, unlist))
 rownames(SumSpecFAll) = VarNames
 SumSpecFAll           = round(SumSpecFAll, digits = 2)
-write.csv2(SumSpecFAll, file = "./Quantlet2 _ EDA/Specific_Factors_Absolute_Summary.csv")
-print.xtable(xtable(SumSpecFAll), file = "./Quantlet2 _ EDA/Specific_Factors_Absolute_Summary.txt", size = "tiny")
+write.csv2(SumSpecFAll, file = "./Specific_Factors_Summary_Absolute.csv")
+print.xtable(xtable(SumSpecFAll), file = "./Specific_Factors_Summary_Absolute.txt", size = "tiny")
 
 rm(data, SumSpecF, SumSpecFAll)
 
@@ -101,21 +104,21 @@ rm(data, SumSpecF, SumSpecFAll)
 
 # === Summary Statistics of variables after transformations ===
 # load the respective dataset
-load("./Data-Set/RegressionBase.RData", verbose = TRUE)
+load("./RegressionBase2.RData", verbose = TRUE)
 
 # Summary statistics for common factors
 SumCommonF = SumCommonFun(data)
 # Export as csv
-write.csv2(SumCommonF, file = "./Quantlet2 _ EDA/Common_Factors_returns.csv")
+write.csv2(SumCommonF, file = "./Common_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumCommonF), file = "./Quantlet2 _ EDA/Common_Factors_returns.txt", size = "tiny")
+print.xtable(xtable(SumCommonF), file = "./Common_Factors_returns.txt", size = "tiny")
 rm(SumCommonF)
 
 # Summary statistics of company-specific variables
 SumSpecF = SumSpecFun(data)
-write.csv2(SumSpecF, file = "./Quantlet2 _ EDA/Specific_Factors_returns.csv")
+write.csv2(SumSpecF, file = "./Specific_Factors_returns.csv")
 # Export as TexFile
-print.xtable(xtable(SumSpecF), file = "./Quantlet2 _ EDA/Specific_Factors_returns.txt", size = "tiny")
+print.xtable(xtable(SumSpecF), file = "./Specific_Factors_returns.txt", size = "tiny")
 # remove the auxiliary variables
 rm(data, SumSpecF)
 
@@ -124,14 +127,13 @@ rm(data, SumSpecF)
 # GRAPHICAL ANALYSIS SECTION
 # ==============================================================
 # === Explorative Graphical Analyses of pre-transformed data ===
-load("./Data-Set/InitialData_Panel.RData", 
-     verbose = FALSE)
+load("./InitialData_Panel.RData", verbose = FALSE)
 
 # === Generation of plots for presentation ===
 Sub1 = subset(data, data$Company == "Williams")
 
 # Generate PDF 
-pdf(file = "./Quantlet2 _ EDA/C9_WilliamsPresentation.pdf", 
+pdf(file = "./C9_WilliamsPresentation.pdf", 
     height = 4, width = 10)
 # Plot configurations
 VarNames = colnames(Sub1)
@@ -173,10 +175,10 @@ colnames(StockSet) = c("Date", colnames(StockSet[,-1]))
 # Preparing plot data 
 VarSetMelt         = melt(StockSet, id = "Date") 
 # Plot the Stock set data
-dev.off() # get rid of previous plot configurations
+dev.off()
 
 # Generate the plot
-pdf(file = "./Quantlet2 _ EDA/All_Stocks_plot.pdf", 
+pdf(file = "./All_Stocks_plot.pdf", 
     height = 3, width = 5.25)
 p = ggplot(data=VarSetMelt, 
            aes(x = VarSetMelt$Date, y=value, colour=variable)) + geom_line(size = 0.75)
@@ -211,7 +213,7 @@ Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,c(1,8:11)]
 
 # Generate PDF recording and configurations
-pdf(file = "./Quantlet2 _ EDA/Common_Factors_Development_better.pdf", 
+pdf(file = "./Common_Factors_Development_better.pdf", 
     height = 4, width = 10)
 # Graph configurations
 VarNames  = colnames(Sub1)
@@ -239,8 +241,7 @@ VarNames = colnames(data) # Store variable names for later purposes
 i = 1
 while(i < 10){
     # generate the PDF containing the plots for company 'i'
-    pdf(file = paste("./Quantlet2 _ EDA/Company_", 
-        i, "_Specific_and_Common_Factors.pdf", sep = ""), 
+    pdf(file = paste("./Company_", i, "_Specific_and_Common_Factors.pdf", sep = ""), 
         height = 2.35, width =11)
   # Plot conficurations
     par(mfrow = c(1,9), cex = 0.8, cex.main = 0.85, cex.axis = 0.7)
@@ -271,11 +272,11 @@ rm(i, j, VarNames, YMinMax, data, Sub1)
 
 # === Histograms of transformed variables ===
 # Load data
-load(file="./Data-Set/RegressionBase.RData", verbose = TRUE)
+load(file="./RegressionBase2.RData", verbose = TRUE)
 
 # === Generate Histograms for Specific Factors by enterprise ===
 # Set PDF rcording and configurations
-pdf(file = "./Quantlet2 _ EDA/Companies_Specific_factors_returns_Histograms.pdf", 
+pdf(file = "./Companies_Specific_factors_returns_Histograms.pdf", 
     height = 6.1, width = 11)
 # Plot configurations
 par(mfcol = c(9,5))
@@ -291,7 +292,7 @@ dev.off()
 
 
 # === Generate histograms for common factors ===
-pdf(file = "./Quantlet2 _ EDA/Common_factors_returns_Histograms.pdf", 
+pdf(file = "./Common_factors_returns_Histograms.pdf", 
     height = 3, width = 7)
 Sub1 = subset(data, data$Company == levels(data$Company)[1])
 Sub1 = Sub1[,8:11]

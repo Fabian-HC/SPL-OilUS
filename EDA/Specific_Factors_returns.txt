@@ -1,5 +1,5 @@
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Tue Jul 05 14:01:22 2016
+% Sun Jul 24 16:11:59 2016
 \begin{table}[ht]
 \centering
 \begingroup\tiny
