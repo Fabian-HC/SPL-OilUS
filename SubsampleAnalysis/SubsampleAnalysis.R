@@ -56,7 +56,7 @@ stargazer(repre2008, rePost2008, type="latex",
           dep.var.labels=c("Stock return"), 
           font.size="tiny",
           no.space=TRUE,
-          out="./Quantlet 5/Regression-2008.LATEX")
+          out=".Regression-2008.LATEX")
 
 #using dummy varibales
 
@@ -83,7 +83,7 @@ stargazer(DumyReg,type="latex",
           dep.var.labels=c("Stock return"), 
           font.size="tiny",
           no.space=TRUE,
-          out="./Quantlet 5/Regression-Dummy2008.LATEX")
+          out="./Regression-Dummy2008.LATEX")
 
 ###############  SEASONALITY  #############
 
@@ -109,7 +109,7 @@ stargazer(Quarter,type="latex",
           dep.var.labels=c("Stock return"),
           font.size="tiny",
           no.space=TRUE,
-          out="./Quantlet 5/QuarterDummy.LATEX")
+          out="./QuarterDummy.LATEX")
 
 
 ###############  Type of Firm  #############
@@ -147,7 +147,7 @@ stargazer(reOilC, reOtherC, type="latex",
           dep.var.labels=c("Stock return"),
           font.size="tiny",
           no.space=TRUE,
-          out="./Quantlet 5/Regression.Oil-Other.LATEX")
+          out="./Regression.Oil-Other.LATEX")
 
 ############### Regression with a Dummy ################
 
@@ -167,7 +167,7 @@ stargazer(TypeFirm,type="latex",
           dep.var.labels=c("Stock return"), 
           font.size="tiny",
           no.space=TRUE,
-          out="./Quantlet 5/Regression.DummyOil-Other.LATEX")
+          out="./Regression.DummyOil-Other.LATEX")
 
 
 
@@ -189,16 +189,9 @@ stargazer(vif(VIFReg),type="latex",
           title="Variance Inflation Factor in the structural break regression with Specific and Common Factors", 
           font.size="tiny",
           no.space=TRUE,
-          out="./Quantlet 5/VIFComputation.LATEX")
+          out="./VIFComputation.LATEX")
 
 #In this example we could not compute the Random effect regression including the D.MCAP*DumP regressor due to Multicollinearity#
 
-
-
-
-
-
-
-
-
-
+# remove variables
+rm(list = ls())
