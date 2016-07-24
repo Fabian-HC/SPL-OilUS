@@ -6,6 +6,10 @@ rm(list = ls(all = TRUE))
 graphics.off()
 
 
+# === Set adequate working directory ===
+setwd("~/GitHub/Test/SPL-OilUS_2/VarTransformSta1")
+
+
 # === Packages ===
 # Install packages if not installed
 libraries = c("plyr","dplyr","data.table", "tseries", "xtable", 
@@ -112,7 +116,7 @@ KPSSEntSpecTestFun = function(x){
 
 # ======= Initial data modifications =====
 # loading data
-data = read.csv2("./Data-Set/Dataset-FINALupdated_absolute_2.csv", 
+data = read.csv2("./Dataset-FINALupdated_absolute_2.csv", 
                  stringsAsFactors = FALSE)
 
 # Convert Date such that R recognizes it as date
@@ -138,7 +142,7 @@ levels(data$Company) = c("Exxon_Mobil", "Apache",
                          "Occidental_Petroleum", "PG&E_Corp", "Williams")
 
 # Save the dataset - used by Quantlet2 _ EDA
-save(data, file="./Data-Set/InitialData_Panel.RData") 
+save(data, file="./InitialData_Panel.RData") 
 
 
 # === Apply Variable Transformations ==
@@ -177,39 +181,42 @@ Datatrans$T.Bill3M = NULL # Remove 3 Month T-Bill Rate
 # Since Market Excess Return is a common factor
 Datatrans$Market   = Datatrans$Market[1:78]
 
+data = Datatrans
+
 # Store transformed dataset for regression analysis and graphical analysis
-save(Datatrans, file="./Data-Set/RegressionBase2.RData")
+save(data, file="./RegressionBase2.RData")
 rm(data, Datatrans)
 
 
 
 # === Stationarity Tests for Variables before transformation(s) ===
-load(file = "./Data-Set/InitialData_Panel.RData")
+load(file = "./InitialData_Panel.RData")
 
 # Stationarity Test for common factors - ADF and KPSS Test
 CommonFTest = CommonFStatTest(data)
-write.csv2(CommonFTest, file = "./Stationarity-Tests/Stationarity_CommonFactors_Absolute.csv") # csv table export
-print.xtable(xtable(CommonFTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_CommonFactors_Absolute.txt")
+write.csv2(CommonFTest, file = "./Stationarity_CommonFactors_Absolute.csv") # csv table export
+print.xtable(xtable(CommonFTest, auto = TRUE), 
+             file = "./Stationarity_Test_CommonFactors_Absolute.txt")
 rm(CommonFTest)
 
 # Stationarity Test for company-specific factors - ADF Test
 ADFTest = ADFEntSpecTestFun(data[,3:7])
-write.csv2(ADFTest, file = "./Stationarity-Tests/Stationarity__Absolute_Company_Specific_ADF.csv") # csv table export
-print.xtable(xtable(ADFTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Absolute_Company-Specific_ADF.txt")
+write.csv2(ADFTest, file = "./Stationarity_Company_Specific_ADF__Absolute.csv") # csv table export
+print.xtable(xtable(ADFTest, auto = TRUE), file = "./Stationarity_Test_Company-Specific_ADF_Absolute.txt")
 rm(ADFTest) # remove auxiliary variable
 
 
 # Statioinarity Test for company-specific factors - KPSS Test
 KPSSTest = KPSSEntSpecTestFun(data[,3:7])
-write.csv2(KPSSTest, file = "./Stationarity-Tests/Stationarity__Absolute_Company_Specific_KPSS.csv") # csv table export
-print.xtable(xtable(KPSSTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Absolute_Company-Specific_KPSS.txt")
+write.csv2(KPSSTest, file = "./Stationarity_Company_Specific_KPSS_Absolute.csv") # csv table export
+print.xtable(xtable(KPSSTest, auto = TRUE), file = "./Stationarity_Test_Company-Specific_KPSS_Absolute.txt")
 rm(KPSSTest) # remove auxiliary variable
 
 # Perform a panel unit root test
 object            = as.data.frame(split(data[,3:18], data$Company))
 PanelUnitRootTest = purtest(object = object, test = "levinlin", 
                             exo = "trend", lags = "AIC", pmax = 5)
-sink(file = "./Stationarity-Tests/Stationarity__Absolute_Panel_Test.txt")
+sink(file = "./Stationarity_Panel_Test__Absolute.txt")
 PanelUnitRootTest$statistic
 sink()
 
@@ -219,13 +226,13 @@ rm(object, PanelUnitRootTest, data)
 
 # === Stationarity Tests for transformed data ===
 # load transformed data
-load(file = "./Data-Set/RegressionBase.RData", verbose = FALSE)
+load(file = "./RegressionBase2.RData", verbose = FALSE)
 
 # (1) Apply panel data unit root test
 object            = as.data.frame(split(data[,3:11], data$Company))
 PanelUnitRootTest = purtest(object = object, test = "levinlin", 
                             exo = "trend", lags = "AIC", pmax = 5)
-sink(file = "./Stationarity-Tests/Stationarity__Return_Panel_Test.txt")
+sink(file = "./Stationarity__Return_Panel_Test_Transformed.txt")
 PanelUnitRootTest$statistic
 sink()
 rm(object, PanelUnitRootTest)
@@ -233,20 +240,20 @@ rm(object, PanelUnitRootTest)
 # Stationarity Test for common factors- ADF and KPSS
 CommonFTest = CommonFStatTest(data)
 # all values ok - all stationary
-write.csv2(CommonFTest, file = "./Stationarity-Tests/Stationarity_CommonFactors_Returns.csv") # csv table export
-print.xtable(xtable(CommonFTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_CommonFactors.txt")
+write.csv2(CommonFTest, file = "./Stationarity_CommonFactors_Transformed.csv") # csv table export
+print.xtable(xtable(CommonFTest, auto = TRUE), file = "./Stationarity_Test_CommonFactors_Transformed.txt")
 rm(CommonFTest) # remove auxiliary variable
 
 # Stationarity Test for company-specific factors as returns - ADF Test
 ADFTest = ADFEntSpecTestFun(data[,3:7])
-write.csv2(ADFTest, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_ADF.csv") # csv table export
+write.csv2(ADFTest, file = "./Stationarity_Company_Specific_ADF_Transformed.csv") # csv table export
 print.xtable(xtable(ADFTest, auto = TRUE), 
-             file = "./Stationarity-Tests/Stationarity_Test_Returns_Company-Specific_ADF.txt")
+             file = "./Stationarity_Test_Returns_Company-Specific_ADF_Transformed.txt")
 rm(ADFTest)
 
 # Stationarity Test for company-specific factors as returns - KPSS Test
 KPSSTest = KPSSEntSpecTestFun(data[,3:7])
-write.csv2(KPSSTest, file = "./Stationarity-Tests/Stationarity__Returns_Company_Specific_KPSS.csv") # csv table export
-print.xtable(xtable(KPSSTest, auto = TRUE), file = "./Stationarity-Tests/Stationarity_Test_Returns_Company-Specific_KPSS.txt")
+write.csv2(KPSSTest, file = "./Stationarity_Company_Specific_KPSS_Transformed.csv") # csv table export
+print.xtable(xtable(KPSSTest, auto = TRUE), file = "./Stationarity_Test_Returns_Company-Specific_KPSS_Transformed.txt")
 
 rm(list = ls(all = TRUE))# Since Market Excess Return is a common factor
