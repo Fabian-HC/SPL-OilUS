@@ -1,11 +1,11 @@
-% latex table generated in R 3.2.5 by xtable 1.8-2 package
-% Sat Jul 02 12:41:12 2016
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Sun Jul 24 16:26:12 2016
 \begin{table}[ht]
 \centering
 \begingroup\tiny
 \begin{tabular}{rrl}
   \hline
- & Estimate & Var.2 \\ 
+ & Estimate &  \\ 
   \hline
 (Intercept) & 0.01 &  \\ 
   NI & 0.01 & *** \\ 

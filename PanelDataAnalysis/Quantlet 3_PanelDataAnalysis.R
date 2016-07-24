@@ -1,5 +1,16 @@
+# === Clearing the Environment ===
+# remove variables
+rm(list = ls(all = TRUE))
+
+# reset graphics
+graphics.off()
+
+# === Set your working directory here ===
+setwd("~/GitHub/Test/SPL-OilUS_2/PanelDataAnalysis")
+
+
 # === Load data and install packages ===
-load("./Data-Set/RegressionBase.RData")
+load("./RegressionBase2.RData")
 
 # Install packages if not installed
 libraries = c("sandwich","lmtest","foreign","plm","car","stargazer","xtable")
@@ -48,7 +59,7 @@ corrma  = function(x){
 
 # Apply function and get otput
 corrma(data2)
-print(xtable(corrma(data2)), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/corrma.txt")
+print(xtable(corrma(data2)), type = "latex", size = "tiny", file = "./corrma.txt")
 
 # === Regression Analysis ===
 # Declare data as panel data
@@ -89,7 +100,7 @@ summary(re)
 
 # Output for LATEX
 ResultLatex1(re)
-print(ResultLatex1(re), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/remodel.txt")
+print(ResultLatex1(re), type = "latex", size = "tiny", file = "./remodel.txt")
 
 # === Statistical Tests & robust estimators ===
 # Hausman test comparing RE and FE
@@ -118,7 +129,7 @@ mat[, 2]                = signif
 names(mat)              = c("Estimate", "")
 mat[, 1]                = round(mat[, 1], 2)
 xtable(mat)
-print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/arellanomodel.txt")
+print(xtable(mat), type = "latex", size = "tiny", file = "./arellanomodel.txt")
 
 # Cross-sectional dependence
 pcdtest(fe, test = c("lm"))
@@ -138,7 +149,7 @@ mat[, 2]                = signif
 names(mat)              = c("Estimate", "")
 mat[, 1]                = round(mat[, 1], 2)
 xtable(mat)
-print(xtable(mat), type = "latex", size = "tiny", file = "./Quantlet 3 _ PanelDataAnalysis/DriscollandKraymodel.txt")
+print(xtable(mat), type = "latex", size = "tiny", file = "./DriscollandKraymodel.txt")
 
 # Pooltest
 pooltest(Stock~NI + BVE.MCAP + D.MCAP+Oil+Gas+Market+ Oil+Gas,data=data,
