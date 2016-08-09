@@ -1,3 +1,6 @@
+# === Clear the screen ===
+cat("\014")
+
 # Tested With: 
 # R version 3.2.4 Revised (2016-03-16 r70336) -- "Very Secure Dishes"
 # Copyright (C) 2016 The R Foundation for Statistical Computing
