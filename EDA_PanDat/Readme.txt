@@ -28,6 +28,8 @@ Author: Tim Halbmann
 
 Datafile: 'InitialData_Panel.RData, RegressionBase.RData'
 
+See Also: 'PanelDataAnalysis, SubsampleAnalysis, TimeSeriesAnalysis, VarTransformSta'
+
 
 Quantlet Code
 
