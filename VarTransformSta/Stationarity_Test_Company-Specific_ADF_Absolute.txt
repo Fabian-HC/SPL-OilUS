@@ -1,0 +1,20 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Sun Jul 24 15:34:47 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{llllll}
+  \hline
+ & Stock & A.MCAP & BVE.MCAP & D.MCAP & NI \\ 
+  \hline
+Exxon\_Mobil & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Apache & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  CPEnergy & not\_stationary & not\_stationary & not\_stationary & not\_stationary & stationary \\ 
+  Chevron & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Hess\_Corp & not\_stationary & not\_stationary & not\_stationary & Critical a[0.1,0.2] & not\_stationary \\ 
+  Murphy\_Oil & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  Occidental\_Petroleum & not\_stationary & not\_stationary & not\_stationary & not\_stationary & not\_stationary \\ 
+  PG\&E\_Corp & not\_stationary & not\_stationary & stationary & not\_stationary & stationary \\ 
+  Williams & not\_stationary & not\_stationary & Critical a[0.1,0.2] & not\_stationary & Critical a[0.1,0.2] \\ 
+   \hline
+\end{tabular}
+\end{table}

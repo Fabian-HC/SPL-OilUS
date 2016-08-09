@@ -1,0 +1,15 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Sun Jul 24 15:33:33 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{lll}
+  \hline
+ & ADF-Test & KPSS-Test \\ 
+  \hline
+Oil & not\_stationary & non (trend) stationary \\ 
+  Gas & not\_stationary & non (trend) stationary \\ 
+  Market & not\_stationary & non (trend) stationary \\ 
+  EURUSD & not\_stationary & non (trend) stationary \\ 
+   \hline
+\end{tabular}
+\end{table}
