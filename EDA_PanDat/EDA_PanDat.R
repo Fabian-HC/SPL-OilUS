@@ -17,7 +17,7 @@ rm(list = ls(all = TRUE))
 graphics.off()
 
 # === Set your working directory ===
-setwd("~/GitHub/Test/SPL-OilUS_2/EDA")
+setwd("~/GitHub/Test/SPL-OilUS_2/EDA_PanDat")
 
 # === Packages ===
 # Install packages if not installed
@@ -145,18 +145,20 @@ Sub1 = subset(data, data$Company == "Williams")
 
 # Generate PDF 
 pdf(file = "./C9_WilliamsPresentation.pdf", 
-    height = 4, width = 10)
+    height = 4, width = 12)
 # Plot configurations
 VarNames = colnames(Sub1)
-par(mfcol = c(1,2))
+par(mfcol = c(1,3))
 par(cex   = 1.5)
 par(mar   = c(2,2,1.5,1), lwd = 2)
 # generating the plot
-plot(Sub1$Date, Sub1$Stock, type = "l", main = "Stock", 
+plot(Sub1$Date, Sub1$Stock, type = "l", main = "Stock $", 
      xlab = "", ylab = "", yaxt = "n")
 axis(2, at=c(seq(0,60,20)) ,labels= TRUE , col.axis="black", las=2)
-plot(Sub1$Date, Sub1$D.MCAP, type = "l", main = "D.MCAP", yaxt = "n")
+plot(Sub1$Date, Sub1$D.MCAP, type = "l", main = "D.MCAP %", yaxt = "n")
 axis(2, at = c(seq(100,300,100)), labels= TRUE, col.axis="black", las=2)
+plot(Sub1$Date, Sub1$BVE.MCAP, type = "l", main = "BVE.MCAP", yaxt = "n")
+axis(2, at = c(seq(0,5,1)), labels= TRUE, col.axis="black", las=2)
 # concluding the procedure and save
 dev.off()
 rm(Sub1) # remove auxiliary variable
@@ -253,18 +255,18 @@ i = 1
 while(i < 10){
     # generate the PDF containing the plots for company 'i'
     pdf(file = paste("./Company_", i, "_Specific_and_Common_Factors.pdf", sep = ""), 
-        height = 2.35, width =11)
+        height = 12, width =12)
   # Plot conficurations
-    par(mfrow = c(1,9), cex = 0.8, cex.main = 0.85, cex.axis = 0.7)
+    par(mfrow = c(3,3), cex = 1, cex.main = 1.3, cex.axis = 1.3)
   # Extracting variable data for the respective company 'i'
     Sub1 = subset(data, data$Company == levels(data$Company)[i])
   
         j = 3 # Execute the loop over the variables of interest
         while(j < 12){
-            if(j < 11){
-            par(mar = c(2,2,2,0))
+            if(j != 5 & j != 8 & j !=11){
+            par(mar = c(3,3,3,0))
             }else{
-            par(mar = c(2,2,2,0.7))
+            par(mar = c(3,3,3,1))
             }
         YMinMax = c(min(Sub1[,j])*0.9, max(Sub1[,j])*1.1)
         plot(Sub1$Date, Sub1[,j], type = "l", ylim = YMinMax, 
@@ -278,6 +280,7 @@ while(i < 10){
 dev.off() 
 
 # Remove auxiliary variables
+rm(i, j, VarNames, YMinMax, Sub1)
 rm(i, j, VarNames, YMinMax, data, Sub1)
 
 
