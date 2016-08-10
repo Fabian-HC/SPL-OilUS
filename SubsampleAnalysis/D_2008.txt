@@ -1,0 +1,23 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Wed Aug 10 10:46:32 2016
+\begin{table}[ht]
+\centering
+\begingroup\tiny
+\begin{tabular}{rrl}
+  \hline
+ & Estimate &  \\ 
+  \hline
+(Intercept) & 0.04 & *** \\ 
+  Oil & 0.24 & *** \\ 
+  Gas & 0.07 & ** \\ 
+  Market & 0.62 & *** \\ 
+  EURUSD & -0.33 & ** \\ 
+  DumP & -0.05 & *** \\ 
+  Oil:DumP & 0.01 &  \\ 
+  Gas:DumP & -0.00 &  \\ 
+  Market:DumP & 0.21 &  \\ 
+  EURUSD:DumP & 0.68 & *** \\ 
+   \hline
+\end{tabular}
+\endgroup
+\end{table}
