@@ -1,0 +1,18 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Wed Aug 10 10:50:41 2016
+\begin{table}[ht]
+\centering
+\begingroup\tiny
+\begin{tabular}{rrlrl}
+  \hline
+ & Estimate & Var.2 & Estimate & Var.4 \\ 
+  \hline
+(Intercept) & 0.02 & *** & 0.01 &  \\ 
+  Oil & 0.31 & *** & -0.10 & * \\ 
+  Gas & 0.07 & *** & 0.10 & ** \\ 
+  Market & 0.68 & *** & 0.60 & *** \\ 
+  EURUSD & 0.03 &  & -0.02 &  \\ 
+   \hline
+\end{tabular}
+\endgroup
+\end{table}
