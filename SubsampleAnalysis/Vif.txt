@@ -1,0 +1,17 @@
+% latex table generated in R 3.2.4 by xtable 1.8-2 package
+% Wed Aug 10 10:53:32 2016
+\begin{table}[ht]
+\centering
+\begingroup\tiny
+\begin{tabular}{rlllllll}
+  \hline
+ & V1 & V2 & V3 & V4 & V5 & V6 & V7 \\ 
+  \hline
+Variable & NI & BVE.MCAP & D.MCAP & Oil & Gas & Market & EURUSD \\ 
+  EstimatedVif & 3.96 & 2.76 & 2.14 & 3.52 & 1.71 & 1.95 & 1.2 \\ 
+  Variable & DumP & D*NI & D*BVE.MCAP & DumP*D.MCAP & DumP*Oil & DumP*Gas & DumP*Market \\ 
+  EstimatedVif & 22.32 & 4.03 & 2.66 & 18.38 & 3.78 & 1.75 & 2.42 \\ 
+   \hline
+\end{tabular}
+\endgroup
+\end{table}
