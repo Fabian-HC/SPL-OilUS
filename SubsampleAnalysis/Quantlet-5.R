@@ -1,4 +1,10 @@
+# === Clear the screen ===
+cat("\014")
 
+# Tested With: 
+# R version 3.2.4 Revised (2016-03-16 r70336) -- "Very Secure Dishes"
+# Copyright (C) 2016 The R Foundation for Statistical Computing
+# Platform: i386-w64-mingw32/i386 (32-bit)
 
 
 # === Clearing the Environment === remove variables
@@ -6,6 +12,9 @@ rm(list = ls())
 
 # reset graphics
 graphics.off()
+
+# === Set adequate working directory ===
+setwd("~/GitHub/Test/SPL-OilUS_2/SubsampleAnalysis")
 
 # === Packages === Install packages if not installed
 libraries = c("stargazer", "tseries", "plm", "car", "xtable")
@@ -18,7 +27,7 @@ lapply(libraries,
       character.only = TRUE)
 
 # === Load Data Set === load variable
-load("./Data-Set/RegressionBase.RData")
+load("./RegressionBase2.RData")
 
 data0 = data[!(data$Company == "CPEnergy" | data$Company == "PG&E_Corp"), ]
 class(data$Company)
@@ -76,7 +85,7 @@ R2_2008 = ResultLatex2(
                         b = rePost2008)
 print.xtable(xtable(R2_2008),
              type = "latex", 
-             file = "./Quantlet 5/2R2008.txt", 
+             file = "./2R2008.txt", 
              size = "tiny")
 
 # using dummy varibales
@@ -98,7 +107,7 @@ DumyReg = plm( Stock ~ Oil + Gas + Market + EURUSD + DumP + DumP * Oil + DumP * 
 D_2008 = ResultLatex1(a = DumyReg)
 print.xtable(xtable(D_2008),
              type = "latex", 
-             file = "./Quantlet 5/D_2008.txt", 
+             file = "./D_2008.txt", 
              size = "tiny")
 
 #===============  SEASONALITY  ===============#
@@ -128,7 +137,7 @@ Quarter = plm(Stock ~ Oil + Gas + Market + EURUSD + Quarter +
 D_Quarter = ResultLatex1(a = Quarter)
 print.xtable(xtable(D_Quarter),
              type = "latex", 
-             file = "./Quantlet 5/D_Q.txt", 
+             file = "./D_Q.txt", 
              size = "tiny")
 
 
@@ -163,7 +172,7 @@ R2_Ftype  = ResultLatex2(a = reOilC,
                         b = reOtherC)
 print.xtable(xtable(R2_Ftype),
              type = "latex", 
-             file = "./Quantlet 5/R2_Ftype.txt", 
+             file = "./R2_Ftype.txt", 
              size = "tiny")
 
 ############### Regression with a Dummy ################
@@ -184,7 +193,7 @@ TypeFirm = plm(Stock ~ Oil + Gas + Market + EURUSD + DumFirmT + DumFirmT * Oil +
 D_Ftype  = ResultLatex1(a = TypeFirm)
 print.xtable(xtable(D_Ftype),
              type = "latex", 
-             file = "./Quantlet 5/D_Ftype.txt", 
+             file = "./D_Ftype.txt", 
              size = "tiny")
 
 
@@ -214,7 +223,7 @@ mat2         = as.data.frame(mat2)
 
 print.xtable(xtable(mat2),
              type = "latex", 
-             file = "./Quantlet 5/Vif.txt", 
+             file = "./Vif.txt", 
              size = "tiny")
 
 
@@ -224,17 +233,3 @@ VIFReg2 = plm(Stock ~ Oil + Gas + Market + EURUSD + Quarter +
               model = "pooling", 
               data  = dataQ)
 vif(VIFReg2)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
