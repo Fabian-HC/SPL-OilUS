@@ -24,6 +24,8 @@ Plots
 
 Keywords: ' descriptive-statistics, plot, panel-analysis, data visualization, stock-price '
 
-Author: Tim Halbmann
+Author: 'Tim Halbmann'
 
 Datafile: 'InitialData_Panel.RData, RegressionBase.RData'
+
+See Also: 'PanelDataAnalysis, SubsampleAnalysis, TimeSeriesAnalysis, VarTransformSta'

@@ -36,3 +36,5 @@ Keywords: 'transformation , panel-analysis, stationary, stock-price, data adjust
 Author: Tim Halbmann
 
 Datafile: 'Dataset-FINALupdated_absolute_2.csv'
+
+See Also: 'PanelDataAnalysis, SubsampleAnalysis, TimeSeriesAnalysis, EDA_PanDat'
