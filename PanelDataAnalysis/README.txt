@@ -13,3 +13,5 @@ Author: Marcus Goossens
 Output:
 
 Table with correlation coefficients, regression tables for random effects, fixed effects, as well as Arellano-Bond estimator (heteroskedasticity and serial correlation consistent) and Driscoll and Kraay estimator (cross-sectional robust).
+
+See Also: SubsampleAnalysis, TimeSeriesAnalysis, VarTransformSta, EDA_PanDat
