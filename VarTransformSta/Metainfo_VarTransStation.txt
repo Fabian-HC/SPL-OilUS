@@ -10,7 +10,7 @@ and the date variable is formatted adequately. Note that the panel data is NOT t
 This occurs only in the econometric analysis quantlets.
 
 
-Before the data is transformed according to Bianconi and Yoshino (2014) , let's check whether the panel data set is stationary
+Before the data is transformed according to Bianconi and Yoshino (2014) , let us check whether the panel data set is stationary
 according to the purtest() contained in the plm package. Since one can suspect nonstationarity 
 to be more relevant for some variables (and their respective transformations), 
 it is worthwhile to carry out the ADF-test and the KPSS-test (both of the plm package as well) 
