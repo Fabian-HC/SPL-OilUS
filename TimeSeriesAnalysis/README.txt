@@ -13,3 +13,5 @@ Author: Marcus Goossens
 Output:
 
 Regression tables 
+
+See Also: 'PanelDataAnalysis, SubsampleAnalysis, EDA_PanDat, VarTransformSta'
