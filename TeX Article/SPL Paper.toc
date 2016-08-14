@@ -1,0 +1,18 @@
+\select@language {english}
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}
+\contentsline {section}{\numberline {2}Data Transformation Procedures}{3}{section.2}
+\contentsline {section}{\numberline {3}Exploratory Data Analysis}{9}{section.3}
+\contentsline {section}{\numberline {4}Econometric Approach}{13}{section.4}
+\contentsline {section}{\numberline {5}Empirical Results}{14}{section.5}
+\contentsline {subsection}{\numberline {5.1}Hypotheses}{14}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Correlation Coefficients}{14}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Panel Data Analysis}{16}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}Time Series Analysis}{18}{subsection.5.4}
+\contentsline {section}{\numberline {6}Sub-Sample Applications of the Panel Data Model}{19}{section.6}
+\contentsline {subsection}{\numberline {6.1}Econometric Approach}{19}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Global Financial Crisis 2008: Sample Effect}{20}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Oil-producers \& electricity providers - comparison}{21}{subsection.6.3}
+\contentsline {subsection}{\numberline {6.4}Seasonality}{22}{subsection.6.4}
+\contentsline {section}{\numberline {7}Conclusion}{23}{section.7}
+\contentsline {section}{\numberline {8}References}{25}{section.8}
+\contentsline {section}{\numberline {9}Appendix}{25}{section.9}
