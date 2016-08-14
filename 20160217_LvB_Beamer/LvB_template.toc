@@ -1,0 +1,8 @@
+\beamer@endinputifotherversion {3.36pt}
+\select@language {english}
+\beamer@sectionintoc {1}{Introduction}{3}{0}{1}
+\beamer@sectionintoc {2}{Transformation}{3}{0}{2}
+\beamer@sectionintoc {3}{Exploratory Analysis}{6}{0}{3}
+\beamer@sectionintoc {4}{Regression \& Results}{1}{0}{4}
+\beamer@sectionintoc {5}{Applications / Crisis 2008 Break}{2}{0}{5}
+\beamer@sectionintoc {6}{Conclusion \& Discussion}{5}{0}{6}
